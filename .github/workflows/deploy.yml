@@ -19,15 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.2.0
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6.2.0
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5.0.0
 
       - name: Install dependencies
         run: npm install
@@ -38,12 +38,38 @@ jobs:
         working-directory: ./p2026
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4.0.0
         with:
           path: ./p2026/dist
 
-  deploy:
+  lighthouse:
     needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.2.0
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: ./dist-artifact
+
+      - name: Extract artifact
+        run: |
+          mkdir -p ./p2026/dist
+          tar -xf ./dist-artifact/artifact.tar -C ./p2026/dist
+
+      - name: Run Lighthouse against build
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          staticDistDir: ./p2026/dist
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          budgetPath: ./p2026/lighthouse-limits.json
+
+  deploy:
+    needs: [build, lighthouse]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
