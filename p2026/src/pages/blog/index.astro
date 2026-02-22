@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<BaseLayout title="Blog" description="All posts — project logs, thoughts, and writeups.">
+  <div class="container">
+    <div class="page-header">
+      <span class="label">// blog</span>
+      <h1>Posts</h1>
+      <p>Project logs, thoughts, and occasional deep dives. {posts.length} entries so far.</p>
+    </div>
+
+    <div class="post-list">
+      {posts.map(post => (
+        <article class="post-card">
+          <time class="post-card-date" datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+          <div>
+            <a href={`/blog/${post.slug}`} class="post-card-title">{post.data.title}</a>
+            <p class="post-card-desc">{post.data.description}</p>
+            <div class="post-card-tags">
+              {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+              {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
