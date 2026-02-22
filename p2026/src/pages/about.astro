@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Your projects — update this list as you add subdomains/projects
+const projects: { name: string; desc: string; url?: string; status: 'live' | 'wip' | 'planned' }[] = [
+  { name: 'P2026', desc: 'This site. The hub.', url: '/', status: 'live' },
+  // Add more as you launch them:
+  // { name: 'myapp', desc: 'Description here.', url: 'https://myapp.yourdomain.com', status: 'live' },
+];
+
+const statusLabel: Record<string, string> = {
+  live: 'live',
+  wip: 'wip',
+  planned: 'planned',
+};
+
+const statusClass: Record<string, string> = {
+  live: 'tag-launch',
+  wip: 'tag-update',
+  planned: 'tag-note',
+};
+---
+
+<BaseLayout title="About" description="About this site and the projects behind it.">
+  <div class="container" style="max-width: 52rem;">
+    <div class="page-header">
+      <span class="label">// about</span>
+      <h1>About</h1>
+    </div>
+
+    <div class="prose" style="margin-bottom: 3rem;">
+      <p>
+        P2026 is my personal hub for the year — a place to log what I'm building,
+        link out to projects, and keep a running record of ideas and launches.
+      </p>
+      <p>
+        I'm not a developer by trade, but I build things. This site is the connective
+        tissue between those experiments. Update this section to say whatever you want about yourself.
+      </p>
+      <p>
+        The site is built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>,
+        deployed on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>,
+        and written in plain markdown. No CMS, no database — just files.
+      </p>
+    </div>
+
+    <section>
+      <h2 style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:1.25rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">
+        Projects
+      </h2>
+      <div>
+        {projects.map(p => (
+          <div style="display:flex; justify-content:space-between; align-items:baseline; padding:0.9rem 0; border-bottom:1px solid var(--bg-3);">
+            <div>
+              {p.url
+                ? <a href={p.url} style="font-family:var(--font-mono); font-size:0.88rem; color:#e8e8f0;">{p.name}</a>
+                : <span style="font-family:var(--font-mono); font-size:0.88rem; color:#e8e8f0;">{p.name}</span>
+              }
+              <span style="display:block; font-size:0.83rem; color:var(--text-muted); margin-top:0.15rem;">{p.desc}</span>
+            </div>
+            <span class={`tag ${statusClass[p.status]}`}>{statusLabel[p.status]}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section style="margin-top: 3rem;">
+      <h2 style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">
+        Contact
+      </h2>
+      <p class="text-muted" style="font-size:0.9rem;">
+        Find me on
+        <a href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank" rel="noopener">GitHub</a>.
+        <!-- Add more links here -->
+      </p>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('timeline'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const byYear: Record<string, typeof entries> = {};
+for (const entry of entries) {
+  const year = entry.data.date.getFullYear().toString();
+  if (!byYear[year]) byYear[year] = [];
+  byYear[year].push(entry);
+}
+const years = Object.keys(byYear).sort((a, b) => Number(b) - Number(a));
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+---
+
+<BaseLayout title="Timeline" description="A chronological log of everything launched and shipped.">
+  <div class="container">
+    <div class="page-header">
+      <span class="label">// timeline</span>
+      <h1>Log</h1>
+      <p>Chronological record of launches, milestones, and updates across all projects.</p>
+    </div>
+
+    {years.map(year => (
+      <section style="margin-bottom: 3.5rem;">
+        <h2 style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:1.5rem;">
+          — {year} —
+        </h2>
+        <div class="timeline">
+          {byYear[year].map(entry => (
+            <div class={`timeline-entry ${entry.data.type}`}>
+              <div class="timeline-meta">
+                <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+                <span class={`tag tag-${entry.data.type}`}>{entry.data.type}</span>
+                {entry.data.project && (
+                  <span style="color:var(--text-dim); font-size:0.7rem;">{entry.data.project}</span>
+                )}
+              </div>
+              <div class="timeline-title">
+                {entry.data.link
+                  ? <a href={entry.data.link}>{entry.data.title}</a>
+                  : entry.data.title}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

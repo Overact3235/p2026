@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Edit this data directly to add/remove resources
+const resources = [
+  {
+    category: 'Frameworks & Tools',
+    items: [
+      { name: 'Astro', desc: 'Static site framework — what this site is built on.', url: 'https://astro.build' },
+      { name: 'Tailwind CSS', desc: 'Utility-first CSS. Pairs great with Astro.', url: 'https://tailwindcss.com' },
+      { name: 'Vite', desc: 'Lightning fast dev server and bundler.', url: 'https://vitejs.dev' },
+    ],
+  },
+  {
+    category: 'Deployment & Infra',
+    items: [
+      { name: 'GitHub Pages', desc: 'Free static hosting directly from a repo.', url: 'https://pages.github.com' },
+      { name: 'Cloudflare', desc: 'DNS, CDN, and edge compute.', url: 'https://cloudflare.com' },
+    ],
+  },
+  {
+    category: 'Learning',
+    items: [
+      { name: 'MDN Web Docs', desc: 'The definitive web reference.', url: 'https://developer.mozilla.org' },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Resources" description="Tools, links, and references I keep coming back to.">
+  <div class="container" style="max-width: 52rem;">
+    <div class="page-header">
+      <span class="label">// resources</span>
+      <h1>Resources</h1>
+      <p>Tools, references, and links I keep coming back to. Curated, not exhaustive.</p>
+    </div>
+
+    {resources.map(group => (
+      <div class="resource-group">
+        <h2 class="resource-group-title">{group.category}</h2>
+        {group.items.map(item => (
+          <div class="resource-item">
+            <div>
+              <a href={item.url} target="_blank" rel="noopener" class="resource-item-name">{item.name}</a>
+              <span class="resource-item-desc">{item.desc}</span>
+            </div>
+            <a href={item.url} target="_blank" rel="noopener" class="resource-item-link">
+              {new URL(item.url).hostname.replace('www.', '')} ↗
+            </a>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+</BaseLayout>

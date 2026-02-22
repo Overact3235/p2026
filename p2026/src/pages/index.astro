@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+
+const timeline = (await getCollection('timeline'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<BaseLayout title="Home" description="Project 2026 — personal tech log and project hub.">
+  <div class="container">
+
+    <!-- Hero -->
+    <section class="hero">
+      <span class="hero-eyebrow">// project-2026</span>
+      <h1>Building in public.<br />Logging everything.</h1>
+      <p class="hero-sub">
+        A running log of projects, launches, and experiments. Part personal journal,
+        part tech hub — linking out to everything I'm shipping this year.
+      </p>
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <span class="hero-stat-num">{posts.length}</span>
+          <span class="hero-stat-label">Posts</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">{timeline.length}</span>
+          <span class="hero-stat-label">Log entries</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent posts -->
+    <section style="margin-bottom: 4rem;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1.5rem;">
+        <h2 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-dim);">Recent posts</h2>
+        <a href="/blog" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">All posts →</a>
+      </div>
+      <div class="post-list">
+        {posts.map(post => (
+          <article class="post-card">
+            <time class="post-card-date" datetime={post.data.pubDate.toISOString()}>
+              {formatDate(post.data.pubDate)}
+            </time>
+            <div>
+              <a href={`/blog/${post.slug}`} class="post-card-title">{post.data.title}</a>
+              <p class="post-card-desc">{post.data.description}</p>
+              <div class="post-card-tags">
+                {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Recent timeline -->
+    <section>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1.5rem;">
+        <h2 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-dim);">Recent log</h2>
+        <a href="/timeline" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">Full timeline →</a>
+      </div>
+      <div class="timeline">
+        {timeline.map(entry => (
+          <div class={`timeline-entry ${entry.data.type}`}>
+            <div class="timeline-meta">
+              <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+              <span class={`tag tag-${entry.data.type}`}>{entry.data.type}</span>
+            </div>
+            <div class="timeline-title">
+              {entry.data.link
+                ? <a href={entry.data.link}>{entry.data.title}</a>
+                : entry.data.title}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
