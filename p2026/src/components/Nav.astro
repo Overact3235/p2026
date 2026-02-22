@@ -1,29 +1,30 @@
 ---
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { href: `${base}`, label: 'Home' },
-  { href: `${base}blog`, label: 'Blog' },
-  { href: `${base}timeline`, label: 'Timeline' },
-  { href: `${base}resources`, label: 'Resources' },
-  { href: `${base}about`, label: 'About' },
+  { href: `${base}/`, label: 'Home' },
+  { href: `${base}/blog`, label: 'Blog' },
+  { href: `${base}/timeline`, label: 'Timeline' },
+  { href: `${base}/resources`, label: 'Resources' },
+  { href: `${base}/about`, label: 'About' },
 ];
 ---
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/" class="nav-logo">P<span>2026</span></a>
+    <a href={base} class="nav-logo">P<span>2026</span></a>
     <ul class="nav-links">
-      {navLinks.map(link => (
-        <li>
-          <a
-            href={link.href}
-            aria-current={currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) ? 'page' : undefined}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+      {navLinks.map(link => {
+        const isActive = currentPath === link.href || (link.href !== base && currentPath.startsWith(link.href));
+        return (
+          <li>
+            <a href={link.href} aria-current={isActive ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   </div>
 </nav>
