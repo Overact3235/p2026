@@ -3,6 +3,9 @@
         "collect": {
             "staticDistDir": "./p2026/dist"
         },
+        "upload": {
+            "target": "temporary-public-storage"
+        },
         "assert": {
             "budgetFile": "./p2026/lighthouse-limits.json"
         }

@@ -1,7 +1,8 @@
 /* ── P2026 Global Styles ───────────────────────────────────────── */
 /* Aesthetic: terminal-editorial dark. Amber accent. Mono headings. */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+/* Fonts loaded via <link> in BaseLayout.astro for non-render-blocking async load */
+/* @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap'); */
 
 /* ── Variables ───────────────────────────────────────────────────── */
 :root {
@@ -12,9 +13,9 @@
   --text: #d8d8e8;
   /* was #c9c9d6 */
   --text-muted: #9898b0;
-  /* was #8888a0 */
+  /* was #8888a0, original #5c5c72 */
   --text-dim: #6a6a82;
-  /* was #5c5c72 */
+  /* was #5c5c72, original #3a3a50 */
   --accent: #e8a020;
   --accent-dim: #a06a10;
   --accent-glow: rgba(232, 160, 32, 0.15);
@@ -643,8 +644,10 @@ main {
     /* was #5a5a6e */
     --text-dim: #787890;
     /* was #9090a0 */
-    --accent: #b06010;
-    --accent-dim: #804010;
+    --accent: #8a4800;
+    /* was #b06010, darkened to pass 4.5:1 contrast on light bg */
+    --accent-dim: #6a3600;
+    /* was #804010 */
     --accent-glow: rgba(176, 96, 16, 0.12);
   }
 
