@@ -1,13 +1,13 @@
 ---
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/timeline', label: 'Timeline' },
-  { href: '/resources', label: 'Resources' },
-  { href: '/about', label: 'About' },
-];
+const base = import.meta.env.BASE_URL;
 
-const currentPath = Astro.url.pathname;
+const navLinks = [
+  { href: `${base}`, label: 'Home' },
+  { href: `${base}blog`, label: 'Blog' },
+  { href: `${base}timeline`, label: 'Timeline' },
+  { href: `${base}resources`, label: 'Resources' },
+  { href: `${base}about`, label: 'About' },
+];
 ---
 
 <nav class="nav">
