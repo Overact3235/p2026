@@ -1,0 +1,10 @@
+{
+    "ci": {
+        "collect": {
+            "staticDistDir": "./p2026/dist"
+        },
+        "assert": {
+            "budgetFile": "./p2026/lighthouse-limits.json"
+        }
+    }
+}

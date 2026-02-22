@@ -63,10 +63,9 @@ jobs:
       - name: Run Lighthouse against build
         uses: treosh/lighthouse-ci-action@v12
         with:
-          staticDistDir: ./p2026/dist
+          configPath: ./p2026/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
-          budgetPath: ./p2026/lighthouse-limits.json
 
   deploy:
     needs: [build, lighthouse]
