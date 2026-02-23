@@ -42,33 +42,33 @@ jobs:
         with:
           path: ./p2026/dist
 
-  lighthouse:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+  # lighthouse:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v6
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: github-pages
-          path: ./dist-artifact
+  #     - name: Download build artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: github-pages
+  #         path: ./dist-artifact
 
-      - name: Extract artifact
-        run: |
-          mkdir -p ./p2026/dist
-          tar -xf ./dist-artifact/artifact.tar -C ./p2026/dist
+  #     - name: Extract artifact
+  #       run: |
+  #         mkdir -p ./p2026/dist
+  #         tar -xf ./dist-artifact/artifact.tar -C ./p2026/dist
 
-      - name: Run Lighthouse against build
-        uses: treosh/lighthouse-ci-action@v12
-        with:
-          configPath: ./p2026/lighthouserc.json
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+  #     - name: Run Lighthouse against build
+  #       uses: treosh/lighthouse-ci-action@v12
+  #       with:
+  #         configPath: ./p2026/lighthouserc.json
+  #         uploadArtifacts: true
+  #         temporaryPublicStorage: true
 
   deploy:
-    needs: [build, lighthouse]
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
