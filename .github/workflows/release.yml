@@ -19,8 +19,8 @@ jobs:
       - name: Checkout (blobless shallow clone)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          filter: blob:none  # skips file blobs, keeps all commits + tags
+          fetch-depth: 1     # shallow clone — only needs latest commit, not full history
+          filter: blob:none  # skips file blobs, keeps commits + tags
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
