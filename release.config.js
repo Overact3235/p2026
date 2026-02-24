@@ -11,17 +11,17 @@ module.exports = {
       preset: 'angular',
       releaseRules: [
         { breaking: true, release: 'patch' },  // would normally be major
-        { type: 'feat',   release: 'patch' },  // would normally be minor
-        { type: 'fix',    release: 'patch' },
-        { type: 'perf',   release: 'patch' },
+        { type: 'feat', release: 'patch' },  // would normally be minor
+        { type: 'fix', release: 'patch' },
+        { type: 'perf', release: 'patch' },
         { type: 'revert', release: 'patch' },
-        { type: 'docs',   release: 'patch' },
-        { type: 'style',  release: 'patch' },
-        { type: 'chore',  release: 'patch' },
+        { type: 'docs', release: 'patch' },
+        { type: 'style', release: 'patch' },
+        { type: 'chore', release: 'patch' },
         { type: 'refactor', release: 'patch' },
-        { type: 'test',   release: 'patch' },
-        { type: 'build',  release: 'patch' },
-        { type: 'ci',     release: 'patch' },
+        { type: 'test', release: 'patch' },
+        { type: 'build', release: 'patch' },
+        { type: 'ci', release: 'patch' },
       ]
     }],
 
@@ -30,7 +30,7 @@ module.exports = {
 
     // Step 3: Create the GitHub Release + tag
     ['@semantic-release/github', {
-      // successComment: false,  // disable PR/issue comments on release (remove if you want them)
+      // successComment: false,  // uncomment to disable comments on PRs/issues when a release ships
     }],
   ]
 }
