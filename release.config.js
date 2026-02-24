@@ -30,7 +30,7 @@ module.exports = {
 
     // Step 3: Create the GitHub Release + tag
     ['@semantic-release/github', {
-      successComment: false,  // disable PR/issue comments on release (remove if you want them)
+      // successComment: false,  // disable PR/issue comments on release (remove if you want them)
     }],
   ]
 }
