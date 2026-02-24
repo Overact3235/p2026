@@ -24,8 +24,8 @@
   --red: #f26c6c;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-body: 'Lora', Georgia, serif;
-  --max-w: 72rem;
-  --col: 42rem;
+  --max-w: 82rem;
+  --col: 54rem;
 }
 
 /* ── Reset ───────────────────────────────────────────────────────── */
@@ -45,6 +45,26 @@ html {
   line-height: 1.7;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
 }
 
 body {
@@ -547,6 +567,8 @@ main {
 /* ── Prose (blog post body) ──────────────────────────────────────── */
 .prose {
   max-width: var(--col);
+  font-size: 1.05rem;
+  line-height: 1.85;
 }
 
 .prose h2 {

@@ -1,0 +1,208 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <div class="blog-layout container">
+    <!-- Main content -->
+    <article class="blog-article">
+      <slot />
+    </article>
+
+    <!-- Sidebar ToC (populated by JS from rendered headings) -->
+    <aside class="blog-toc" id="blog-toc" aria-label="Table of contents">
+      <p class="blog-toc-label">// on this page</p>
+      <nav id="toc-nav"></nav>
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  function buildToc() {
+    const article = document.querySelector('.blog-article');
+    const nav = document.getElementById('toc-nav');
+    if (!article || !nav) return;
+
+    const headings = Array.from(article.querySelectorAll('h2, h3'));
+    if (headings.length < 2) {
+      const sidebar = document.getElementById('blog-toc');
+      if (sidebar) sidebar.style.display = 'none';
+      return;
+    }
+
+    const ul = document.createElement('ul');
+    ul.className = 'toc-list';
+
+    headings.forEach((h, i) => {
+      // Ensure each heading has an id for anchor links
+      if (!h.id) {
+        h.id = 'heading-' + i;
+      }
+
+      const li = document.createElement('li');
+      li.className = h.tagName === 'H3' ? 'toc-item toc-sub' : 'toc-item';
+
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent ?? '';
+      a.className = 'toc-link';
+
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+
+    nav.appendChild(ul);
+
+    // Highlight active section on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.getAttribute('id');
+          const link = nav.querySelector(`a[href="#${id}"]`);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            nav.querySelectorAll('.toc-link').forEach((l) => l.classList.remove('toc-active'));
+            link.classList.add('toc-active');
+          }
+        });
+      },
+      { rootMargin: '-10% 0px -80% 0px' }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  }
+
+  buildToc();
+</script>
+
+<style>
+  /* ─── Heading accent colours ─────────────────────────────────────────────────
+     Two complementary colours for h2/h3, adapting to colour scheme.
+
+     Light:
+       h2 → slate blue  — structured, distinct from body
+       h3 → teal        — softer, clearly subordinate
+
+     Dark:
+       h2 → sky blue    — readable against dark bg
+       h3 → seafoam     — warm counterpart to the blue
+  ────────────────────────────────────────────────────────────────────────────── */
+  :root {
+    --blog-h2: #3d6b9e;
+    --blog-h3: #2a8a7e;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --blog-h2: #7db8e8;
+      --blog-h3: #5ecdb8;
+    }
+  }
+
+  /* ─── Layout ─────────────────────────────────────────────────────────────── */
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 14rem;
+    gap: 4rem;
+    align-items: start;
+    max-width: 80rem;
+  }
+
+  .blog-article {
+    min-width: 0; /* prevent grid blowout */
+  }
+
+  /* ─── Heading styles ─────────────────────────────────────────────────────── */
+  .blog-article :global(h2) {
+    color: var(--blog-h2);
+    font-size: 2.0rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-article :global(h3) {
+    color: var(--blog-h3);
+    font-size: 1.5rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ─── Sidebar ────────────────────────────────────────────────────────────── */
+  .blog-toc {
+    position: sticky;
+    top: 5.5rem;
+    padding-top: 0.25rem;
+  }
+
+  .blog-toc-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.toc-list) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  :global(.toc-item) {
+    margin: 0;
+  }
+
+  :global(.toc-sub) {
+    padding-left: 0.85rem;
+  }
+
+  :global(.toc-link) {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    display: block;
+    padding: 0.2rem 0.6rem;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    text-decoration: none;
+  }
+
+  :global(.toc-link:hover) {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  :global(.toc-link.toc-active) {
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+
+  /* ─── Responsive — collapse sidebar below 900px ──────────────────────────── */
+  @media (max-width: 900px) {
+    .blog-layout {
+      grid-template-columns: 1fr;
+    }
+    .blog-toc {
+      display: none;
+    }
+  }
+</style>

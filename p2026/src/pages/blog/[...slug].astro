@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -20,23 +20,21 @@ function formatDate(date: Date) {
 }
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
-  <div class="container">
-    <div class="post-header col">
-      <div class="post-header-meta">
-        <a href="/blog" style="color:var(--text-dim);">← Blog</a>
-        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-        {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
-      </div>
-      <h1>{post.data.title}</h1>
-      <p class="post-header-desc">{post.data.description}</p>
-      <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-        {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
-      </div>
+<BlogLayout title={post.data.title} description={post.data.description}>
+  <div class="post-header">
+    <div class="post-header-meta">
+      <a href="/blog" style="color:var(--text-dim);">← Blog</a>
+      <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+      {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
     </div>
-
-    <div class="prose">
-      <Content />
+    <h1>{post.data.title}</h1>
+    <p class="post-header-desc">{post.data.description}</p>
+    <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+      {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
     </div>
   </div>
-</BaseLayout>
+
+  <div class="prose">
+    <Content />
+  </div>
+</BlogLayout>

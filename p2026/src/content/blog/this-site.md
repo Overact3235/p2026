@@ -1,7 +1,7 @@
 ---
 title: "Why I chose Astro for this site"
 description: "A structured framework that stays out of your way and ships almost nothing to the browser."
-pubDate: 2026-02-23
+pubDate: 2026-02-22
 tags: ["astro", "meta"]
 project: "p2026"
 ---
