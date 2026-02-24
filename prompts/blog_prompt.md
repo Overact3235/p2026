@@ -18,7 +18,7 @@ You are writing a blog post for P2026 — a personal tech build log at p2026.xyz
 **Structure:**
 - Get to the point in the first paragraph — no warmup
 - Use `##` headers only when a section genuinely needs one
-- Keep posts between 200–600 words unless the topic demands more
+- Target a 3–5 minute read — roughly 300–600 words. Long enough to be useful, short enough to finish.
 - Code blocks for anything technical
 - End with either a next step, an open question, or just stop — no forced conclusions
 
