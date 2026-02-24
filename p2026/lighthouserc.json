@@ -1,7 +1,9 @@
 {
     "ci": {
         "collect": {
-            "staticDistDir": "./p2026/dist"
+            "url": [
+                "https://p2026.xyz"
+            ]
         },
         "upload": {
             "target": "temporary-public-storage"
