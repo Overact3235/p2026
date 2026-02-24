@@ -26,10 +26,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 'lts/*'
+          node-version: 24 # 'lts/*'
           cache: 'npm'
+          cache-dependency-path: p2026/package-lock.json
 
       - name: Install semantic-release dependencies
+        working-directory: p2026
         run: |
           npm install --save-dev \
             semantic-release \
@@ -38,6 +40,7 @@ jobs:
             @semantic-release/github
 
       - name: Run semantic-release
+        working-directory: p2026
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
