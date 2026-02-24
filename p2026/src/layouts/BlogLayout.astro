@@ -1,0 +1,165 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <div class="blog-layout container">
+    <!-- Main content -->
+    <article class="blog-article">
+      <slot />
+    </article>
+
+    <!-- Sidebar ToC (populated by JS from rendered headings) -->
+    <aside class="blog-toc" id="blog-toc" aria-label="Table of contents">
+      <p class="blog-toc-label">// on this page</p>
+      <nav id="toc-nav"></nav>
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  function buildToc() {
+    const article = document.querySelector('.blog-article');
+    const nav = document.getElementById('toc-nav');
+    if (!article || !nav) return;
+
+    const headings = Array.from(article.querySelectorAll('h2, h3'));
+    if (headings.length < 2) {
+      const sidebar = document.getElementById('blog-toc');
+      if (sidebar) sidebar.style.display = 'none';
+      return;
+    }
+
+    const ul = document.createElement('ul');
+    ul.className = 'toc-list';
+
+    headings.forEach((h, i) => {
+      // Ensure each heading has an id for anchor links
+      if (!h.id) {
+        h.id = 'heading-' + i;
+      }
+
+      const li = document.createElement('li');
+      li.className = h.tagName === 'H3' ? 'toc-item toc-sub' : 'toc-item';
+
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent ?? '';
+      a.className = 'toc-link';
+
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+
+    nav.appendChild(ul);
+
+    // Highlight active section on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.getAttribute('id');
+          const link = nav.querySelector(`a[href="#${id}"]`);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            nav.querySelectorAll('.toc-link').forEach((l) => l.classList.remove('toc-active'));
+            link.classList.add('toc-active');
+          }
+        });
+      },
+      { rootMargin: '-10% 0px -80% 0px' }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  }
+
+  buildToc();
+</script>
+
+<style>
+  /* Blog two-column layout */
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 14rem;
+    gap: 4rem;
+    align-items: start;
+    max-width: 80rem;
+  }
+
+  .blog-article {
+    min-width: 0; /* prevent grid blowout */
+  }
+
+  /* Sidebar */
+  .blog-toc {
+    position: sticky;
+    top: 5.5rem;
+    padding-top: 0.25rem;
+  }
+
+  .blog-toc-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.toc-list) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  :global(.toc-item) {
+    margin: 0;
+  }
+
+  :global(.toc-sub) {
+    padding-left: 0.85rem;
+  }
+
+  :global(.toc-link) {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    display: block;
+    padding: 0.2rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 0.6rem;
+    transition: color 0.15s, border-color 0.15s;
+    text-decoration: none;
+  }
+
+  :global(.toc-link:hover) {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  :global(.toc-link.toc-active) {
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+
+  /* Collapse sidebar on smaller screens */
+  @media (max-width: 900px) {
+    .blog-layout {
+      grid-template-columns: 1fr;
+    }
+    .blog-toc {
+      display: none;
+    }
+  }
+</style>

@@ -7,32 +7,30 @@ const resources = [
     category: 'Frameworks & Tools',
     items: [
       { name: 'Astro', desc: 'Static site framework — what this site is built on.', url: 'https://astro.build' },
-      { name: 'Tailwind CSS', desc: 'Utility-first CSS. Pairs great with Astro.', url: 'https://tailwindcss.com' },
-      { name: 'Vite', desc: 'Lightning fast dev server and bundler.', url: 'https://vitejs.dev' },
     ],
   },
   {
     category: 'Deployment & Infra',
     items: [
       { name: 'GitHub Pages', desc: 'Free static hosting directly from a repo.', url: 'https://pages.github.com' },
-      { name: 'Cloudflare', desc: 'DNS, CDN, and edge compute.', url: 'https://cloudflare.com' },
     ],
   },
   {
-    category: 'Learning',
+    category: 'Cheatsheets',
     items: [
-      { name: 'MDN Web Docs', desc: 'The definitive web reference.', url: 'https://developer.mozilla.org' },
+      { name: 'DevHints', desc: 'Cheatsheets for commands, tools, and languages.', url: 'https://devhints.io' },
+      { name: 'DevSheets', desc: 'Quick reference sheets for developers.', url: 'https://www.devsheets.io' },
     ],
   },
 ];
 ---
 
-<BaseLayout title="Resources" description="Tools, links, and references I keep coming back to.">
+<BaseLayout title="Resources" description="Tools, cheatsheets, and references I keep coming back to.">
   <div class="container" style="max-width: 52rem;">
     <div class="page-header">
       <span class="label">// resources</span>
       <h1>Resources</h1>
-      <p>Tools, references, and links I keep coming back to. Curated, not exhaustive.</p>
+      <p>Tools, cheatsheets, and links I keep coming back to. Curated, not exhaustive.</p>
     </div>
 
     {resources.map(group => (
