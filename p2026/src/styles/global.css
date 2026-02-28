@@ -759,11 +759,11 @@ main {
   /* was #5a5a6e */
   --text-dim: #787890;
   /* was #9090a0 */
-  --accent: #8a4800;
-  /* was #b06010, darkened to pass 4.5:1 contrast on light bg */
-  --accent-dim: #6a3600;
+  --accent: #9f4f00;
+  /* slightly more vibrant while retaining strong contrast on light bg */
+  --accent-dim: #7b3b00;
   /* was #804010 */
-  --accent-glow: rgba(176, 96, 16, 0.12);
+  --accent-glow: rgba(159, 79, 0, 0.13);
 }
 
 html[data-theme='light'] {
@@ -806,11 +806,11 @@ html[data-theme='light'] strong {
     /* was #5a5a6e */
     --text-dim: #787890;
     /* was #9090a0 */
-    --accent: #8a4800;
-    /* was #b06010, darkened to pass 4.5:1 contrast on light bg */
-    --accent-dim: #6a3600;
+    --accent: #9f4f00;
+    /* slightly more vibrant while retaining strong contrast on light bg */
+    --accent-dim: #7b3b00;
     /* was #804010 */
-    --accent-glow: rgba(176, 96, 16, 0.12);
+    --accent-glow: rgba(159, 79, 0, 0.13);
   }
 
   html:not([data-theme]) {
