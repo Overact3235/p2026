@@ -64,6 +64,6 @@ Next decision: keep this as a private friend server, or open it up and add a pub
 
 ## References
 
+- [My Resources Page](https://p2026.xyz/resources)
 - [itzg/minecraft-server Docker image](https://github.com/itzg/docker-minecraft-server)
 - [TCPShield](https://tcpshield.com/)
-- [my resources page](https://p2026.xyz/resources)

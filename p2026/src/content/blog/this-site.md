@@ -44,7 +44,7 @@ That is the main reason I standardized on it for P2026 and other personal builds
 
 ## References
 
+- [My Resources Page](https://p2026.xyz/resources)
 - [Astro](https://astro.build/)
 - [Astro Docs](https://docs.astro.build/)
 - [Astro Islands Architecture](https://docs.astro.build/en/concepts/islands/)
-- [my resources page](https://p2026.xyz/resources)
