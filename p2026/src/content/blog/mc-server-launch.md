@@ -32,12 +32,19 @@ The rule was simple: each plugin needs a clear operational or gameplay reason. I
 
 ## Backup and recovery strategy
 
-I enabled native scheduled backups every four hours and retained the most recent recovery window (`SIMPLE_BACKUP_MAX_BACKUPS: "20"`). That gives me fast rollback options for world-level failures.
+I enabled native scheduled backups with a cron cadence of `0 */4 * * *` (every four hours) and retained the most recent recovery window (`SIMPLE_BACKUP_MAX_BACKUPS: "20"`).
+
+That cadence was a deliberate tradeoff: frequent enough to limit rollback loss, but not so aggressive that backup activity creates unnecessary I/O pressure during normal play.
+
+I also added a **weekly offline full backup** of the entire game directory. That serves a different purpose: disaster recovery when the live data path itself is corrupted or lost.
 
 The important distinction is scope:
 
 - Snapshot backups handle broad recovery.
 - Block-level logging tools handle targeted rollback.
+- Weekly offline full-directory backups cover catastrophic failure scenarios.
+
+Storage is the hard constraint here. This VPS has only `50GB`, and Chunky pre-generation already adds several gigabytes to world data. Full backups are expensive, so retention has to stay conservative and intentional rather than unlimited.
 
 That layered approach is more practical than expecting one mechanism to solve every failure mode.
 
