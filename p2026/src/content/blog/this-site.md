@@ -1,49 +1,50 @@
 ---
 title: "Why I chose Astro for this site"
-description: "A structured framework that stays out of your way and ships almost nothing to the browser."
+description: "Why Astro fits my build-first workflow and ships fast static pages."
 pubDate: 2026-02-22
 tags: ["astro", "meta"]
 project: "p2026"
 ---
 
-I've been using Astro since early 2024. Not because I evaluated it against a dozen alternatives — because it solved a specific problem I kept running into with other approaches: I wanted a real framework, not a config file.
+I started using Astro because I wanted structure without heavy abstraction. I wanted to write real HTML and CSS, keep JavaScript optional, and still have a framework I could scale across projects.
 
-## Starting from scratch
+## Why Astro fits how I build
 
-I came into this wanting to actually learn web development — not just use a tool that abstracts it away. That meant I needed something that would let me write real HTML, real CSS, and real JavaScript without hiding what was happening underneath.
+The best part of Astro is that it feels close to the platform. `.astro` files are readable on day one if you already know HTML. That mattered to me because I wanted to learn the fundamentals first, then add complexity only when needed.
 
-A lot of frameworks make that harder than it should be. You end up fighting the abstraction before you understand what you're abstracting. Astro was different — `.astro` files are essentially HTML files with a script block at the top. If you know HTML, you can read an Astro component on day one.
+I also wanted a repeatable system, not just a one-off blog setup. Astro gave me reusable layouts, predictable routing, and content collections with schema validation. That means less glue code, fewer silent content errors, and a cleaner path when spinning up the next project.
 
-That mattered because I wanted a path. Start with HTML and CSS, get comfortable with vanilla JavaScript, then move into TypeScript when the project warranted it. Astro doesn't force any of that — but it supports all of it. I could grow into the stack without having to switch tools halfway through.
+## Performance model
 
-## What I actually wanted from a framework
+Astro’s default model matches how I think about content sites: ship static HTML first, add interactivity only where it earns its cost. For most pages, that means no client-side JavaScript by default.
 
-Most static site tools give you a folder structure and a templating system. That's fine until you want to build more than one thing. I wanted something I could use as a base — a proper component model, content collections with schema validation, layouts I could extend — so that spinning up a new site meant starting from a solid foundation rather than reinventing the same structure every time.
+In practice, this leads to a simpler performance baseline:
 
-Astro gave me that. Build a pattern once, reuse it across projects. The same component model, the same deployment pipeline, the same CSS approach — regardless of what the site is for.
+- less JavaScript parse/execute work on first load
+- fewer moving parts on weaker mobile connections
+- easier optimization because the output is mostly HTML and CSS
 
-## Zero JS by default
+When I do need interactivity, I can add it at the component level with islands instead of hydrating the entire page. That keeps performance decisions local and explicit.
 
-This is the thing that keeps me here. Astro ships no JavaScript to the browser unless you explicitly add it. For content-focused sites — blogs, docs, portfolios — this means the output is essentially HTML and CSS. Nothing to parse, nothing to execute, nothing blocking render.
+## Content workflow
 
-On desktop this barely matters. On mobile on a slow connection, it's the difference between a page that loads instantly and one that makes someone wait. I build sites that real people use on real phones with real network conditions. Shipping zero JS by default is the right starting point.
+Content collections are one of the most useful features in day-to-day use. Frontmatter is validated against a schema, so malformed dates, missing fields, or wrong types fail during build instead of leaking into production.
 
-## Mobile load time
+For this site, that makes publishing calmer. I can treat markdown files as data with guardrails, not just loose text documents.
 
-A page with no JavaScript, self-hosted fonts, and clean CSS has almost nothing to slow it down. Lighthouse scores in the high 90s aren't something to tune for — they're just what you get when you don't add unnecessary weight. GitHub Pages serves the static output over a CDN, so the first byte is fast regardless of where the visitor is.
+## Why I keep using it
 
-The goal was always a site that loads on the first tap, not the second.
+Astro gives me a good balance:
 
-## Islands when you need them
+- framework-level structure
+- low runtime overhead
+- flexible enough for blogs, docs, and project sites
 
-The zero JS default doesn't mean you're locked out of interactivity. Astro's island architecture lets you hydrate individual components on demand — drop in a React, Svelte, or vanilla JS component exactly where you need it, and the rest of the page stays static.
+That is the main reason I standardized on it for P2026 and other personal builds: it scales from simple static pages to more interactive work without forcing a full rewrite of the stack.
 
-That's the right mental model. Interactivity is opt-in at the component level, not a global setting you toggle for the whole site. Want an animated hero section or an interactive demo? Add it. Everything else stays as fast HTML. You never have to choose between a good-looking site and a performant one.
+## References
 
-## Content collections
-
-Defining a schema for your content and having the build fail on malformed frontmatter is underrated. It means typos in a date field or a missing required description break the build locally, not silently in production. For a blog where posts are just markdown files, that's exactly the right guardrail.
-
-## Flexibility
-
-Because Astro is a framework rather than an opinionated blogging tool, you can build anything with it. This site is a blog and project log. The next one could be a landing page, a documentation site, or something with a completely different structure — same tooling, same component patterns, same deployment pipeline. That composability is what makes it worth investing in.
+- [Astro](https://astro.build/)
+- [Astro Docs](https://docs.astro.build/)
+- [Astro Islands Architecture](https://docs.astro.build/en/concepts/islands/)
+- [my resources page](https://p2026.xyz/resources)

@@ -24,6 +24,7 @@ function formatDate(date: Date) {
   <div class="post-header">
     <div class="post-header-meta">
       <a href="/blog" style="color:var(--text-dim);">← Blog</a>
+      <a href="/resources" style="color:var(--text-dim);">Resources</a>
       <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
       {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
     </div>
