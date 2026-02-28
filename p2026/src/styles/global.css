@@ -759,11 +759,11 @@ main {
   /* was #5a5a6e */
   --text-dim: #787890;
   /* was #9090a0 */
-  --accent: #9f4f00;
+  --accent: #ba5f00;
   /* slightly more vibrant while retaining strong contrast on light bg */
-  --accent-dim: #7b3b00;
+  --accent-dim: #8f4500;
   /* was #804010 */
-  --accent-glow: rgba(159, 79, 0, 0.13);
+  --accent-glow: rgba(186, 95, 0, 0.16);
 }
 
 html[data-theme='light'] {
@@ -806,11 +806,11 @@ html[data-theme='light'] strong {
     /* was #5a5a6e */
     --text-dim: #787890;
     /* was #9090a0 */
-    --accent: #9f4f00;
+    --accent: #ba5f00;
     /* slightly more vibrant while retaining strong contrast on light bg */
-    --accent-dim: #7b3b00;
+    --accent-dim: #8f4500;
     /* was #804010 */
-    --accent-glow: rgba(159, 79, 0, 0.13);
+    --accent-glow: rgba(186, 95, 0, 0.16);
   }
 
   html:not([data-theme]) {
