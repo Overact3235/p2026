@@ -243,11 +243,42 @@ main {
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  transition: color 0.15s;
+  transition: color 0.15s, border-color 0.15s;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.2rem;
 }
 
 .nav-links a:hover,
 .nav-links a[aria-current="page"] {
+  color: var(--accent);
+  opacity: 1;
+  border-bottom-color: var(--accent);
+}
+
+/* ── Section headers ────────────────────────────────────────────── */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+.section-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.section-link:hover {
   color: var(--accent);
   opacity: 1;
 }
@@ -300,6 +331,11 @@ main {
   color: var(--blue);
 }
 
+.tag-service {
+  border-color: var(--red);
+  color: var(--red);
+}
+
 .tag-note {
   border-color: var(--text-dim);
   color: var(--text-dim);
@@ -347,7 +383,13 @@ main {
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--border);
   align-items: start;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.post-card:hover,
+.post-card:focus-within {
+  background: rgba(255, 255, 255, 0.015);
+  border-color: var(--accent-dim);
 }
 
 .post-card:first-child {
@@ -438,6 +480,11 @@ main {
   border-color: var(--blue);
 }
 
+.timeline-entry.service::before {
+  background: var(--red);
+  border-color: var(--red);
+}
+
 .timeline-meta {
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -483,6 +530,13 @@ main {
   grid-template-columns: 1fr auto;
   align-items: baseline;
   gap: 1rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.resource-item:hover,
+.resource-item:focus-within {
+  background: rgba(255, 255, 255, 0.015);
+  border-color: var(--accent-dim);
 }
 
 .resource-item-name {
@@ -704,13 +758,31 @@ main {
 
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .post-card {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  .nav-inner {
+    align-items: flex-start;
+    gap: 0.65rem;
+    flex-direction: column;
   }
 
   .nav-links {
-    gap: 1.25rem;
+    width: 100%;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 0.3rem;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-links a {
+    white-space: nowrap;
+  }
+
+  .post-card {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 
   .hero-stat-row {
@@ -719,5 +791,9 @@ main {
 
   .resource-item {
     grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    align-items: center;
   }
 }

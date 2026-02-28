@@ -1,7 +1,7 @@
 ---
 title: "Launched mc.p2026.xyz"
 date: 2026-02-28
-type: launch
+type: service
 project: "p2026"
 link: "/blog/mc-server-launch"
 ---
