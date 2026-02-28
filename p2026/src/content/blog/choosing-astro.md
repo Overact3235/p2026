@@ -1,5 +1,5 @@
 ---
-title: "Why I chose Astro for this site"
+title: "Choosing Astro for P2026"
 description: "Why Astro fits my build-first workflow and ships fast static pages."
 pubDate: 2026-02-22
 tags: ["astro", "meta"]
