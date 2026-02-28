@@ -15,10 +15,10 @@ const { Content } = await post.render();
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const currentIndex = allPosts.findIndex(entry => entry.id === post.id);
-const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
-const olderPost = currentIndex >= 0 && currentIndex < allPosts.length - 1
+const previousPost = currentIndex >= 0 && currentIndex < allPosts.length - 1
   ? allPosts[currentIndex + 1]
   : undefined;
+const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -48,14 +48,14 @@ function formatDate(date: Date) {
 
   <div style="margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
     <div>
-      {newerPost
-        ? <a href={`/blog/${newerPost.slug}`} style="color:var(--text-dim);">← {newerPost.data.title}</a>
+      {previousPost
+        ? <a href={`/blog/${previousPost.slug}`} style="color:var(--text-dim);">← {previousPost.data.title}</a>
         : <span style="color:var(--text-dim); opacity:0.6;">&nbsp;</span>}
     </div>
     <a href="/blog" style="color:var(--text-dim);">Back to Blog</a>
     <div style="text-align:right;">
-      {olderPost
-        ? <a href={`/blog/${olderPost.slug}`} style="color:var(--text-dim);">{olderPost.data.title} →</a>
+      {newerPost
+        ? <a href={`/blog/${newerPost.slug}`} style="color:var(--text-dim);">{newerPost.data.title} →</a>
         : <span style="color:var(--text-dim); opacity:0.6;">&nbsp;</span>}
     </div>
   </div>
