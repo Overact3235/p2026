@@ -267,8 +267,16 @@ main {
   border-bottom-color: var(--accent);
 }
 
+.theme-toggle-input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .theme-toggle {
-  display: none;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   line-height: 1;
@@ -286,18 +294,20 @@ main {
   transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 
-.js .theme-toggle {
-  display: inline-flex;
-}
-
 .theme-toggle:hover {
   color: var(--accent);
   border-color: var(--accent-dim);
 }
 
-.theme-toggle:focus-visible {
+.theme-toggle-input:focus-visible + .theme-toggle {
   outline: 1px solid var(--accent);
   outline-offset: 2px;
+}
+
+.theme-toggle-input:checked + .theme-toggle {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  background: var(--bg-3);
 }
 
 /* ── Section headers ────────────────────────────────────────────── */
@@ -753,7 +763,7 @@ main {
 }
 
 /* ── Light mode ──────────────────────────────────────────────────── */
-:root[data-theme='light'] {
+:root:has(#theme-toggle:checked) {
   --bg: #f5f5f0;
   --bg-2: #eeede8;
   --bg-3: #e5e4df;
@@ -764,43 +774,43 @@ main {
   /* was #5a5a6e */
   --text-dim: #787890;
   /* was #9090a0 */
-  --accent: #cc7000;
+  --accent: #d57600;
   /* slightly more vibrant while retaining strong contrast on light bg */
-  --accent-dim: #a85d00;
+  --accent-dim: #b46500;
   /* was #804010 */
-  --accent-glow: rgba(204, 112, 0, 0.15);
+  --accent-glow: rgba(213, 118, 0, 0.15);
 }
 
-html[data-theme='light'] {
+html:has(#theme-toggle:checked) {
   background: var(--bg);
 }
 
-html[data-theme='light'] .nav {
+html:has(#theme-toggle:checked) .nav {
   background: rgba(245, 245, 240, 0.88);
 }
 
-html[data-theme='light'] h1,
-html[data-theme='light'] h2,
-html[data-theme='light'] h3,
-html[data-theme='light'] h4,
-html[data-theme='light'] h5,
-html[data-theme='light'] h6 {
+html:has(#theme-toggle:checked) h1,
+html:has(#theme-toggle:checked) h2,
+html:has(#theme-toggle:checked) h3,
+html:has(#theme-toggle:checked) h4,
+html:has(#theme-toggle:checked) h5,
+html:has(#theme-toggle:checked) h6 {
   color: #1a1a25;
 }
 
-html[data-theme='light'] .nav-logo,
-html[data-theme='light'] .post-card-title,
-html[data-theme='light'] .timeline-title,
-html[data-theme='light'] .resource-item-name {
+html:has(#theme-toggle:checked) .nav-logo,
+html:has(#theme-toggle:checked) .post-card-title,
+html:has(#theme-toggle:checked) .timeline-title,
+html:has(#theme-toggle:checked) .resource-item-name {
   color: #1a1a25;
 }
 
-html[data-theme='light'] strong {
+html:has(#theme-toggle:checked) strong {
   color: #1a1a25;
 }
 
 @media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
+  :root:not(:has(#theme-toggle:checked)) {
     --bg: #f5f5f0;
     --bg-2: #eeede8;
     --bg-3: #e5e4df;
@@ -811,38 +821,51 @@ html[data-theme='light'] strong {
     /* was #5a5a6e */
     --text-dim: #787890;
     /* was #9090a0 */
-    --accent: #cc7000;
+    --accent: #d57600;
     /* slightly more vibrant while retaining strong contrast on light bg */
-    --accent-dim: #a85d00;
+    --accent-dim: #b46500;
     /* was #804010 */
-    --accent-glow: rgba(204, 112, 0, 0.15);
+    --accent-glow: rgba(213, 118, 0, 0.15);
   }
 
-  html:not([data-theme]) {
+  :root:has(#theme-toggle:checked) {
+    --bg: #0b0b12;
+    --bg-2: #11111b;
+    --bg-3: #191924;
+    --border: #272738;
+    --text: #dddded;
+    --text-muted: #acacc0;
+    --text-dim: #80809a;
+    --accent: #d9a14a;
+    --accent-dim: #aa7930;
+    --accent-glow: rgba(217, 161, 74, 0.13);
+  }
+
+  html:not(:has(#theme-toggle:checked)) {
     background: var(--bg);
   }
 
-  html:not([data-theme]) .nav {
+  html:not(:has(#theme-toggle:checked)) .nav {
     background: rgba(245, 245, 240, 0.88);
   }
 
-  html:not([data-theme]) h1,
-  html:not([data-theme]) h2,
-  html:not([data-theme]) h3,
-  html:not([data-theme]) h4,
-  html:not([data-theme]) h5,
-  html:not([data-theme]) h6 {
+  html:not(:has(#theme-toggle:checked)) h1,
+  html:not(:has(#theme-toggle:checked)) h2,
+  html:not(:has(#theme-toggle:checked)) h3,
+  html:not(:has(#theme-toggle:checked)) h4,
+  html:not(:has(#theme-toggle:checked)) h5,
+  html:not(:has(#theme-toggle:checked)) h6 {
     color: #1a1a25;
   }
 
-  html:not([data-theme]) .nav-logo,
-  html:not([data-theme]) .post-card-title,
-  html:not([data-theme]) .timeline-title,
-  html:not([data-theme]) .resource-item-name {
+  html:not(:has(#theme-toggle:checked)) .nav-logo,
+  html:not(:has(#theme-toggle:checked)) .post-card-title,
+  html:not(:has(#theme-toggle:checked)) .timeline-title,
+  html:not(:has(#theme-toggle:checked)) .resource-item-name {
     color: #1a1a25;
   }
 
-  html:not([data-theme]) strong {
+  html:not(:has(#theme-toggle:checked)) strong {
     color: #1a1a25;
   }
 }
