@@ -71,8 +71,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* subtle noise texture */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: radial-gradient(circle at 20% -10%, rgba(232, 160, 32, 0.04), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(110, 180, 247, 0.03), transparent 24%);
 }
 
 /* ── Typography ──────────────────────────────────────────────────── */
@@ -202,10 +202,16 @@ main {
 .nav {
   border-bottom: 1px solid var(--border);
   background: rgba(7, 7, 13, 0.85);
-  backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+@supports ((-webkit-backdrop-filter: blur(12px)) or (backdrop-filter: blur(12px))) {
+  .nav {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
 }
 
 .nav-inner {
@@ -795,5 +801,16 @@ main {
 
   .section-head {
     align-items: center;
+  }
+}
+
+@media (max-width: 900px), (prefers-reduced-data: reduce) {
+  .nav {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  body {
+    background-image: none;
   }
 }
