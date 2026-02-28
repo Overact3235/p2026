@@ -8,11 +8,14 @@ project: "p2026"
 
 I added a Minecraft server at `mc.p2026.xyz` and put TCPShield in front of it so the real server IP stays hidden. That was the whole goal: make it easy for friends to join, without exposing a raw game port directly to the internet.
 
-The base setup is simple. Minecraft clients connect to `mc.p2026.xyz`, TCPShield receives that traffic, and TCPShield forwards clean traffic to my backend game host. In practice, this gives me one extra network layer between random internet noise and my actual box.
+This deployment had two priorities: preserve ease of access and reduce direct exposure of the host. Players connect to `mc.p2026.xyz`, TCPShield terminates inbound game traffic, and only proxied traffic is forwarded to the backend server. In operational terms, that introduces a controlled network boundary between public traffic and the origin.
 
 ## What changed
 
-I set up the DNS record to point the Minecraft hostname at the TCPShield endpoint, not my origin. Then I configured TCPShield to map that hostname to my real server address.
+I made two infrastructure changes:
+
+- DNS now points the Minecraft hostname to the TCPShield endpoint rather than the origin.
+- TCPShield maps that hostname to the backend game server on port `25565`.
 
 ```txt
 # DNS
@@ -24,20 +27,20 @@ Backend: <origin-ip>:25565
 Proxy protocol: disabled (default)
 ```
 
-From there, I restarted the server and tested from a clean client using only the hostname.
+After applying those changes, I restarted the service and validated connectivity from a clean client using only the hostname.
 
 ## Why the extra DDoS layer matters
 
-Before this change, anyone who knew my origin IP and port could hit it directly. That means scanners, noisy bots, and random bursts all land on the same host that runs the game.
+Before this setup, anyone with the origin IP and open port could target the host directly. In practice, that puts routine scanning and bursty connection noise on the same machine responsible for gameplay.
 
-With TCPShield in front, direct origin details are no longer public by default. The hostname resolves to the proxy network, not the backend. That does not make the setup invincible, but it improves the baseline a lot for low-effort attacks and constant background probing.
+With TCPShield in front, the public hostname resolves to the proxy layer instead of the backend. This does not eliminate risk, but it significantly improves the baseline against low-effort disruption and continuous background probing.
 
-For me, this is mostly about resilience and less about huge traffic events. Minecraft servers get weird connection spam even when they are small. Taking that junk off the origin path keeps performance more stable.
+For this project, the objective is resilience rather than large-scale traffic absorption. Even small Minecraft servers attract irregular connection behavior; offloading that noise from the origin path improves stability and keeps troubleshooting simpler.
 
 ## Practical notes
 
-- I kept this rollout minimal: hostname, proxy mapping, verify login path.
-- I did not stack extra plugins or edge logic yet.
-- I checked join latency after the switch; it was still acceptable for normal play.
+- Scope remained intentionally narrow: hostname, proxy mapping, and connection validation.
+- I avoided additional edge plugins during the initial rollout to keep failure modes limited.
+- Post-change latency remained acceptable for normal play sessions.
 
-Next step is deciding whether to keep this as a private server for friends or open it up a bit and add a proper status page for uptime and player count.
+Next decision: keep this instance private for friends, or open access and add a basic public status page for uptime and player count.
