@@ -3,6 +3,7 @@ title: "Launching P2026 — A Hub for What I'm Building"
 description: "Why I started this site and what you can expect: project logs, launches, and the occasional rabbit hole."
 pubDate: 2026-02-21
 tags: ["meta", "projects"]
+project: "p2026"
 ---
 
 Welcome to **Project 2026** — or P2026 for short.

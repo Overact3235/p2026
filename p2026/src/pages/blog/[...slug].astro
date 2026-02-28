@@ -12,6 +12,13 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const currentIndex = allPosts.findIndex(entry => entry.id === post.id);
+const previousPost = currentIndex >= 0 && currentIndex < allPosts.length - 1
+  ? allPosts[currentIndex + 1]
+  : undefined;
+const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -24,6 +31,7 @@ function formatDate(date: Date) {
   <div class="post-header">
     <div class="post-header-meta">
       <a href="/blog" style="color:var(--text-dim);">← Blog</a>
+      <a href="/resources" style="color:var(--text-dim);">Resources</a>
       <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
       {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
     </div>
@@ -36,5 +44,19 @@ function formatDate(date: Date) {
 
   <div class="prose">
     <Content />
+  </div>
+
+  <div style="margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
+    <div>
+      {previousPost
+        ? <a href={`/blog/${previousPost.slug}`} style="color:var(--text-dim);">← {previousPost.data.title}</a>
+        : <span style="color:var(--text-dim); opacity:0.6;">&nbsp;</span>}
+    </div>
+    <a href="/blog" style="color:var(--text-dim);">Back to Blog</a>
+    <div style="text-align:right;">
+      {newerPost
+        ? <a href={`/blog/${newerPost.slug}`} style="color:var(--text-dim);">{newerPost.data.title} →</a>
+        : <span style="color:var(--text-dim); opacity:0.6;">&nbsp;</span>}
+    </div>
   </div>
 </BlogLayout>

@@ -1,6 +1,12 @@
 ---
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = base || '/';
 const currentPath = Astro.url.pathname;
+
+function normalizePath(path: string) {
+  const normalized = path.replace(/\/+$/, '');
+  return normalized === '' ? '/' : normalized;
+}
 
 const navLinks = [
   { href: `${base}/`, label: 'Home' },
@@ -13,10 +19,14 @@ const navLinks = [
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href={base} class="nav-logo">P<span>2026</span></a>
+    <a href={homeHref} class="nav-logo">P<span>2026</span></a>
     <ul class="nav-links">
       {navLinks.map(link => {
-        const isActive = currentPath === link.href || (link.href !== base && currentPath.startsWith(link.href));
+        const current = normalizePath(currentPath);
+        const href = normalizePath(link.href);
+        const isActive = href === '/'
+          ? current === '/'
+          : current === href || current.startsWith(`${href}/`);
         return (
           <li>
             <a href={link.href} aria-current={isActive ? 'page' : undefined}>

@@ -40,9 +40,9 @@ function formatDate(date: Date) {
 
     <!-- Recent posts -->
     <section style="margin-bottom: 4rem;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1.5rem;">
-        <h2 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-dim);">Recent posts</h2>
-        <a href="/blog" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">All posts →</a>
+      <div class="section-head">
+        <h2 class="section-title">Recent posts</h2>
+        <a href="/blog" class="section-link">All posts →</a>
       </div>
       <div class="post-list">
         {posts.map(post => (
@@ -64,9 +64,9 @@ function formatDate(date: Date) {
 
     <!-- Recent timeline -->
     <section>
-      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1.5rem;">
-        <h2 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-dim);">Recent log</h2>
-        <a href="/timeline" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">Full timeline →</a>
+      <div class="section-head">
+        <h2 class="section-title">Recent log</h2>
+        <a href="/timeline" class="section-link">Full timeline →</a>
       </div>
       <div class="timeline">
         {timeline.map(entry => (

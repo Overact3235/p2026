@@ -17,7 +17,7 @@ const timeline = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    type: z.enum(['launch', 'milestone', 'post', 'update', 'note']),
+    type: z.enum(['launch', 'milestone', 'post', 'update', 'service', 'note']),
     project: z.string().optional(),
     link: z.string().optional(),
   }),
