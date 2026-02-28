@@ -6,6 +6,8 @@ import '@fontsource/jetbrains-mono/latin-700.css';
 import '@fontsource/lora/latin-400.css';
 import '@fontsource/lora/latin-500.css';
 import '@fontsource/lora/latin-400-italic.css';
+import jetbrainsMonoLatin400Woff2 from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
+import loraLatin400Woff2 from '@fontsource/lora/files/lora-latin-400-normal.woff2?url';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
@@ -37,6 +39,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preload" href={loraLatin400Woff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={jetbrainsMonoLatin400Woff2} as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <Nav />
