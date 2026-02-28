@@ -54,6 +54,8 @@ I run uptime checks and service visibility through Uptime Kuma so I can catch av
 
 On networking, the visible endpoint is `mc.p2026.xyz`, but the security decision is the key point: the hostname resolves to **TCPShield**, not directly to the origin host. TCPShield forwards valid traffic to the backend server.
 
+I also enforce whitelist-only access (`ENABLE_WHITELIST: "TRUE"`), so only approved players can join even if the address is shared. That keeps access control simple and lowers moderation overhead for a private server.
+
 That does not make the deployment immune to abuse. It does, however, materially improve the baseline by reducing direct origin exposure and absorbing routine garbage traffic that small game servers receive constantly.
 
 Next step is deciding whether this remains a private friend server or grows into a lightly public instance with a simple status page and clearer operational SLOs.
