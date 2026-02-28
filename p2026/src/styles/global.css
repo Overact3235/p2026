@@ -14,8 +14,8 @@
   /* was #c9c9d6 */
   --text-muted: #acacc0;
   /* was #8888a0, original #5c5c72 */
-  --text-dim: #80809a;
-  /* was #5c5c72, original #3a3a50 */
+  --text-dim: #9090aa;
+  /* was #80809a — bumped for WCAG AA on dark bg */
   --accent: #d9a14a;
   --accent-dim: #aa7930;
   --accent-glow: rgba(217, 161, 74, 0.13);
@@ -323,13 +323,15 @@ main {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--text-dim);
+  color: var(--text-muted);
+  /* was --text-dim — bumped for WCAG AA on small text */
 }
 
 .section-link {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--text-dim);
+  color: var(--text-muted);
+  /* was --text-dim — bumped for WCAG AA on small text */
   white-space: nowrap;
 }
 
@@ -670,7 +672,8 @@ main {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-dim);
+  color: var(--text-muted);
+  /* was --text-dim — bumped for WCAG AA on small text */
 }
 
 /* ── Prose (blog post body) ──────────────────────────────────────── */
@@ -772,12 +775,10 @@ main {
   /* was #1a1a28 */
   --text-muted: #39394a;
   /* was #4a4a6e */
-  --text-dim: #5a5a6e;
-  /* was #787898 */
+  --text-dim: #4a4a60;
+  /* was #5a5a6e — darkened for WCAG AA on light bg */
   --accent: #d57600;
-  /* slightly more vibrant while retaining strong contrast on light bg */
   --accent-dim: #b46500;
-  /* was #804010 */
   --accent-glow: rgba(213, 118, 0, 0.15);
 }
 
@@ -819,12 +820,10 @@ html:has(#theme-toggle:checked) strong {
     /* was #2a2a35 */
     --text-muted: #39394a;
     /* was #5a5a6e */
-    --text-dim: #5a5a6e;
-    /* was #9090a0 */
+    --text-dim: #4a4a60;
+    /* was #5a5a6e — darkened for WCAG AA on light bg */
     --accent: #d57600;
-    /* slightly more vibrant while retaining strong contrast on light bg */
     --accent-dim: #b46500;
-    /* was #804010 */
     --accent-glow: rgba(213, 118, 0, 0.15);
   }
 
@@ -835,7 +834,8 @@ html:has(#theme-toggle:checked) strong {
     --border: #272738;
     --text: #dddded;
     --text-muted: #acacc0;
-    --text-dim: #80809a;
+    --text-dim: #9090aa;
+    /* was #80809a — bumped for WCAG AA on dark bg */
     --accent: #d9a14a;
     --accent-dim: #aa7930;
     --accent-glow: rgba(217, 161, 74, 0.13);
