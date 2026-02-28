@@ -45,6 +45,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <script is:inline>
       (() => {
+        document.documentElement.classList.add('js');
         try {
           const storedTheme = localStorage.getItem('theme');
           if (storedTheme === 'light' || storedTheme === 'dark') {

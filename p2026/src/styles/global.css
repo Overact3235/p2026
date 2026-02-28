@@ -268,6 +268,7 @@ main {
 }
 
 .theme-toggle {
+  display: none;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   line-height: 1;
@@ -283,6 +284,10 @@ main {
   padding: 0;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.js .theme-toggle {
+  display: inline-flex;
 }
 
 .theme-toggle:hover {
@@ -759,11 +764,11 @@ main {
   /* was #5a5a6e */
   --text-dim: #787890;
   /* was #9090a0 */
-  --accent: #c36800;
+  --accent: #cc7000;
   /* slightly more vibrant while retaining strong contrast on light bg */
-  --accent-dim: #9a5200;
+  --accent-dim: #a85d00;
   /* was #804010 */
-  --accent-glow: rgba(195, 104, 0, 0.15);
+  --accent-glow: rgba(204, 112, 0, 0.15);
 }
 
 html[data-theme='light'] {
@@ -806,11 +811,11 @@ html[data-theme='light'] strong {
     /* was #5a5a6e */
     --text-dim: #787890;
     /* was #9090a0 */
-    --accent: #c36800;
+    --accent: #cc7000;
     /* slightly more vibrant while retaining strong contrast on light bg */
-    --accent-dim: #9a5200;
+    --accent-dim: #a85d00;
     /* was #804010 */
-    --accent-glow: rgba(195, 104, 0, 0.15);
+    --accent-glow: rgba(204, 112, 0, 0.15);
   }
 
   html:not([data-theme]) {
