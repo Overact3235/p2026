@@ -20,21 +20,50 @@ const navLinks = [
 <nav class="nav">
   <div class="nav-inner">
     <a href={homeHref} class="nav-logo">P<span>2026</span></a>
-    <ul class="nav-links">
-      {navLinks.map(link => {
-        const current = normalizePath(currentPath);
-        const href = normalizePath(link.href);
-        const isActive = href === '/'
-          ? current === '/'
-          : current === href || current.startsWith(`${href}/`);
-        return (
-          <li>
-            <a href={link.href} aria-current={isActive ? 'page' : undefined}>
-              {link.label}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        {navLinks.map(link => {
+          const current = normalizePath(currentPath);
+          const href = normalizePath(link.href);
+          const isActive = href === '/'
+            ? current === '/'
+            : current === href || current.startsWith(`${href}/`);
+          return (
+            <li>
+              <a href={link.href} aria-current={isActive ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+        ◐
+      </button>
+    </div>
   </div>
 </nav>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const button = document.querySelector('[data-theme-toggle]');
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    const getTheme = () =>
+      root.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+    button.setAttribute('aria-pressed', String(getTheme() === 'light'));
+
+    button.addEventListener('click', () => {
+      const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', nextTheme);
+      button.setAttribute('aria-pressed', String(nextTheme === 'light'));
+      try {
+        localStorage.setItem('theme', nextTheme);
+      } catch {
+      }
+    });
+  })();
+</script>
