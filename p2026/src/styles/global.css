@@ -299,12 +299,12 @@ main {
   border-color: var(--accent-dim);
 }
 
-.theme-toggle-input:focus-visible + .theme-toggle {
+.theme-toggle-input:focus-visible+.theme-toggle {
   outline: 1px solid var(--accent);
   outline-offset: 2px;
 }
 
-.theme-toggle-input:checked + .theme-toggle {
+.theme-toggle-input:checked+.theme-toggle {
   color: var(--accent);
   border-color: var(--accent-dim);
   background: var(--bg-3);
@@ -768,12 +768,12 @@ main {
   --bg-2: #eeede8;
   --bg-3: #e5e4df;
   --border: #d0cfc8;
-  --text: #1a1a28;
-  /* was #2a2a35 */
-  --text-muted: #4a4a60;
-  /* was #5a5a6e */
-  --text-dim: #787890;
-  /* was #9090a0 */
+  --text: #181820;
+  /* was #1a1a28 */
+  --text-muted: #39394a;
+  /* was #4a4a6e */
+  --text-dim: #5a5a6e;
+  /* was #787898 */
   --accent: #d57600;
   /* slightly more vibrant while retaining strong contrast on light bg */
   --accent-dim: #b46500;
@@ -815,11 +815,11 @@ html:has(#theme-toggle:checked) strong {
     --bg-2: #eeede8;
     --bg-3: #e5e4df;
     --border: #d0cfc8;
-    --text: #1a1a28;
+    --text: #181820;
     /* was #2a2a35 */
-    --text-muted: #4a4a60;
+    --text-muted: #39394a;
     /* was #5a5a6e */
-    --text-dim: #787890;
+    --text-dim: #5a5a6e;
     /* was #9090a0 */
     --accent: #d57600;
     /* slightly more vibrant while retaining strong contrast on light bg */
@@ -919,7 +919,8 @@ html:has(#theme-toggle:checked) strong {
   }
 }
 
-@media (max-width: 900px), (prefers-reduced-data: reduce) {
+@media (max-width: 900px),
+(prefers-reduced-data: reduce) {
   .nav {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
