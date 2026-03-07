@@ -21,21 +21,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: 'pnpm'
+          cache-dependency-path: './p2026/pnpm-lock.yaml'
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
         working-directory: ./p2026
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
         working-directory: ./p2026
+
+      # - name: Install dependencies
+      #   run: npm install
+      #   working-directory: ./p2026
+
+      # - name: Build
+      #   run: npm run build
+      #   working-directory: ./p2026
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
