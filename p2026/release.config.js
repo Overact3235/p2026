@@ -20,6 +20,7 @@ export default {
         { type: 'test', release: 'patch' },
         { type: 'build', release: 'patch' },
         { type: 'ci', release: 'patch' },
+        { release: 'patch' }, // catch-all for squash merges with non-conventional PR titles
       ]
     }],
     '@semantic-release/release-notes-generator',
