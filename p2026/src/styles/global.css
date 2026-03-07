@@ -2,9 +2,7 @@
 /* Aesthetic: terminal-editorial dark. Amber accent. Mono headings. */
 /* Dark mode  → main branch palette  (#07070d bg, #e8a020 accent)  */
 /* Light mode → tweaked branch palette (#f5f5f0 bg, #d57600 accent) */
-
-/* Fonts loaded via <link> in BaseLayout.astro for non-render-blocking async load */
-/* @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap'); */
+/* Theme persisted via data-theme attr on <html>, set by localStorage */
 
 /* ── Variables (dark default — main branch) ──────────────────────── */
 :root {
@@ -13,11 +11,8 @@
   --bg-3: #15151f;
   --border: #1e1e2e;
   --text: #d8d8e8;
-  /* was #c9c9d6 */
   --text-muted: #9898b0;
-  /* was #8888a0, original #5c5c72 */
   --text-dim: #6a6a82;
-  /* was #5c5c72, original #3a3a50 */
   --accent: #e8a020;
   --accent-dim: #a06a10;
   --accent-glow: rgba(232, 160, 32, 0.15);
@@ -269,16 +264,7 @@ main {
   border-bottom-color: var(--accent);
 }
 
-/* ── Theme toggle (CSS-only, checkbox trick) ─────────────────────── */
-.theme-toggle-input {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
+/* ── Theme toggle ────────────────────────────────────────────────── */
 .theme-toggle {
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -297,20 +283,16 @@ main {
   transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 
-.theme-toggle:hover {
-  color: var(--accent);
-  border-color: var(--accent-dim);
-}
-
-.theme-toggle-input:focus-visible+.theme-toggle {
-  outline: 1px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.theme-toggle-input:checked+.theme-toggle {
+.theme-toggle:hover,
+.theme-toggle[aria-pressed="true"] {
   color: var(--accent);
   border-color: var(--accent-dim);
   background: var(--bg-3);
+}
+
+.theme-toggle:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ── Section headers ────────────────────────────────────────────── */
@@ -767,13 +749,14 @@ main {
 
 /* ─────────────────────────────────────────────────────────────────
    LIGHT MODE
-   Priority order (highest wins):
-   1. Toggle explicitly set to light  → :root:has(#theme-toggle:checked)
-   2. System prefers light, no toggle → @media (prefers-color-scheme: light)
+   Two entry points, same variables:
+   1. [data-theme="light"]  — toggle explicitly set, persisted via localStorage
+   2. @media prefers light  — system preference, no stored value
+   dark mode always wins if data-theme="dark" is present.
    ───────────────────────────────────────────────────────────────── */
 
-/* Toggle → light (overrides system default of dark) */
-:root:has(#theme-toggle:checked) {
+/* 1. Explicit toggle → light */
+[data-theme="light"] {
   --bg: #f5f5f0;
   --bg-2: #eeede8;
   --bg-3: #e5e4df;
@@ -786,42 +769,37 @@ main {
   --accent-glow: rgba(213, 118, 0, 0.15);
 }
 
-html:has(#theme-toggle:checked) {
+html[data-theme="light"] {
   background: var(--bg);
 }
 
-html:has(#theme-toggle:checked) .nav {
+html[data-theme="light"] .nav {
   background: rgba(245, 245, 240, 0.88);
 }
 
-html:has(#theme-toggle:checked) h1,
-html:has(#theme-toggle:checked) h2,
-html:has(#theme-toggle:checked) h3,
-html:has(#theme-toggle:checked) h4,
-html:has(#theme-toggle:checked) h5,
-html:has(#theme-toggle:checked) h6 {
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6,
+html[data-theme="light"] .nav-logo,
+html[data-theme="light"] .post-card-title,
+html[data-theme="light"] .timeline-title,
+html[data-theme="light"] .resource-item-name,
+html[data-theme="light"] strong {
   color: #1a1a25;
 }
 
-html:has(#theme-toggle:checked) .nav-logo,
-html:has(#theme-toggle:checked) .post-card-title,
-html:has(#theme-toggle:checked) .timeline-title,
-html:has(#theme-toggle:checked) .resource-item-name {
-  color: #1a1a25;
-}
-
-html:has(#theme-toggle:checked) strong {
-  color: #1a1a25;
-}
-
-html:has(#theme-toggle:checked) body {
-  background-image: radial-gradient(circle at 20% -10%, rgba(213, 118, 0, 0.04), transparent 28%),
+html[data-theme="light"] body {
+  background-image:
+    radial-gradient(circle at 20% -10%, rgba(213, 118, 0, 0.04), transparent 28%),
     radial-gradient(circle at 80% 0%, rgba(110, 180, 247, 0.03), transparent 24%);
 }
 
-/* System → light (only when toggle is NOT checked) */
+/* 2. System preference → light (only when not explicitly set to dark) */
 @media (prefers-color-scheme: light) {
-  :root:not(:has(#theme-toggle:checked)) {
+  :root:not([data-theme="dark"]) {
     --bg: #f5f5f0;
     --bg-2: #eeede8;
     --bg-3: #e5e4df;
@@ -834,83 +812,31 @@ html:has(#theme-toggle:checked) body {
     --accent-glow: rgba(213, 118, 0, 0.15);
   }
 
-  html:not(:has(#theme-toggle:checked)) {
+  html:not([data-theme="dark"]) {
     background: var(--bg);
   }
 
-  html:not(:has(#theme-toggle:checked)) .nav {
+  html:not([data-theme="dark"]) .nav {
     background: rgba(245, 245, 240, 0.88);
   }
 
-  html:not(:has(#theme-toggle:checked)) h1,
-  html:not(:has(#theme-toggle:checked)) h2,
-  html:not(:has(#theme-toggle:checked)) h3,
-  html:not(:has(#theme-toggle:checked)) h4,
-  html:not(:has(#theme-toggle:checked)) h5,
-  html:not(:has(#theme-toggle:checked)) h6 {
+  html:not([data-theme="dark"]) h1,
+  html:not([data-theme="dark"]) h2,
+  html:not([data-theme="dark"]) h3,
+  html:not([data-theme="dark"]) h4,
+  html:not([data-theme="dark"]) h5,
+  html:not([data-theme="dark"]) h6,
+  html:not([data-theme="dark"]) .nav-logo,
+  html:not([data-theme="dark"]) .post-card-title,
+  html:not([data-theme="dark"]) .timeline-title,
+  html:not([data-theme="dark"]) .resource-item-name,
+  html:not([data-theme="dark"]) strong {
     color: #1a1a25;
   }
 
-  html:not(:has(#theme-toggle:checked)) .nav-logo,
-  html:not(:has(#theme-toggle:checked)) .post-card-title,
-  html:not(:has(#theme-toggle:checked)) .timeline-title,
-  html:not(:has(#theme-toggle:checked)) .resource-item-name {
-    color: #1a1a25;
-  }
-
-  html:not(:has(#theme-toggle:checked)) strong {
-    color: #1a1a25;
-  }
-
-  html:not(:has(#theme-toggle:checked)) body {
-    background-image: radial-gradient(circle at 20% -10%, rgba(213, 118, 0, 0.04), transparent 28%),
-      radial-gradient(circle at 80% 0%, rgba(110, 180, 247, 0.03), transparent 24%);
-  }
-
-  /* Toggle → dark when system is light */
-  :root:has(#theme-toggle:checked) {
-    --bg: #07070d;
-    --bg-2: #0e0e1a;
-    --bg-3: #15151f;
-    --border: #1e1e2e;
-    --text: #d8d8e8;
-    --text-muted: #9898b0;
-    --text-dim: #6a6a82;
-    --accent: #e8a020;
-    --accent-dim: #a06a10;
-    --accent-glow: rgba(232, 160, 32, 0.15);
-  }
-
-  html:has(#theme-toggle:checked) {
-    background: var(--bg);
-  }
-
-  html:has(#theme-toggle:checked) .nav {
-    background: rgba(7, 7, 13, 0.85);
-  }
-
-  html:has(#theme-toggle:checked) h1,
-  html:has(#theme-toggle:checked) h2,
-  html:has(#theme-toggle:checked) h3,
-  html:has(#theme-toggle:checked) h4,
-  html:has(#theme-toggle:checked) h5,
-  html:has(#theme-toggle:checked) h6 {
-    color: #e8e8f0;
-  }
-
-  html:has(#theme-toggle:checked) .nav-logo,
-  html:has(#theme-toggle:checked) .post-card-title,
-  html:has(#theme-toggle:checked) .timeline-title,
-  html:has(#theme-toggle:checked) .resource-item-name {
-    color: #e8e8f0;
-  }
-
-  html:has(#theme-toggle:checked) strong {
-    color: #e8e8f0;
-  }
-
-  html:has(#theme-toggle:checked) body {
-    background-image: radial-gradient(circle at 20% -10%, rgba(232, 160, 32, 0.04), transparent 28%),
+  html:not([data-theme="dark"]) body {
+    background-image:
+      radial-gradient(circle at 20% -10%, rgba(213, 118, 0, 0.04), transparent 28%),
       radial-gradient(circle at 80% 0%, rgba(110, 180, 247, 0.03), transparent 24%);
   }
 }

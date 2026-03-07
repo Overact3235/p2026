@@ -37,8 +37,31 @@ const navLinks = [
           );
         })}
       </ul>
-      <input class="theme-toggle-input" type="checkbox" id="theme-toggle" aria-label="Toggle light and dark theme" />
-      <label class="theme-toggle" for="theme-toggle" title="Toggle theme" aria-hidden="true">◐</label>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+        ◐
+      </button>
     </div>
   </div>
 </nav>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const button = document.querySelector('[data-theme-toggle]');
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    const getTheme = () =>
+      root.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+    // Sync button pressed state on every page load
+    button.setAttribute('aria-pressed', String(getTheme() === 'light'));
+
+    button.addEventListener('click', () => {
+      const next = getTheme() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      button.setAttribute('aria-pressed', String(next === 'light'));
+      try { localStorage.setItem('theme', next); } catch {}
+    });
+  })();
+</script>
