@@ -42,6 +42,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <link rel="preload" href={loraLatin400Woff2} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={jetbrainsMonoLatin400Woff2} as="font" type="font/woff2" crossorigin />
+
+    <!-- Theme: runs synchronously before first paint — no flash, persists across pages -->
+    <script is:inline>
+      (() => {
+        document.documentElement.classList.add('js');
+        try {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark') {
+            document.documentElement.setAttribute('data-theme', stored);
+          }
+        } catch {}
+      })();
+    </script>
   </head>
   <body>
     <Nav />
