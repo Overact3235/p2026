@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P2026 — Something shipped. Something broken. Something learned.</title>
+  <meta name="description" content="A running log of projects, launches, and experiments. Self-hosting, networking, and the tools I ship — documented in public." />
+  <meta property="og:title" content="P2026" />
+  <meta property="og:description" content="Something shipped. Something broken. Something learned. — a public dev log." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://p2026.dev" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="P2026" />
+  <meta name="twitter:description" content="Something shipped. Something broken. Something learned." />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f6f3ed;
+      --bg-alt: #efebe3;
+      --ink: #1a1814;
+      --ink-muted: #6b6457;
+      --ink-faint: #7a716a;
+      --amber: #b86e12;
+      --amber-dim: rgba(184,110,18,0.08);
+      --rule: #ddd8cc;
+      --serif: 'Lora', Georgia, serif;
+      --mono: 'JetBrains Mono', monospace;
+      --now-bg: #1a1814;
+      --now-text: #c47a1e;
+    }
+
+    [data-theme="dark"] {
+      --bg: #100f0d;
+      --bg-alt: #1a1814;
+      --ink: #e5e0d8;
+      --ink-muted: #9e968a;
+      --ink-faint: #8a8178;
+      --amber: #d4891a;
+      --amber-dim: rgba(212,137,26,0.1);
+      --rule: #252320;
+      --now-bg: #c47a1e;
+      --now-text: #100f0d;
+    }
+
+    html { font-size: 16px; }
+
+    /* ── GRAIN TEXTURE ─────────────────────────────────────────────────── */
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      line-height: 1.7;
+      transition: background 0.3s, color 0.3s;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 180px;
+    }
+
+    [data-theme="dark"] body::before { opacity: 0.055; }
+
+    /* Everything stacks above grain */
+    nav, .now-strip, header, main, footer { position: relative; z-index: 1; }
+
+    /* ── NOW STRIP ─────────────────────────────────────────────────────── */
+    .now-strip {
+      background: var(--now-bg);
+      color: var(--now-text);
+      text-align: center;
+      padding: 0.55rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .now-strip-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.7;
+      animation: blink 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 0.2; }
+    }
+
+    /* ── NAV ───────────────────────────────────────────────────────────── */
+    nav {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.75rem 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span { color: var(--amber); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--amber); }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      border-radius: 100px;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--ink-muted);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      padding: 0.4rem 0.85rem;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .theme-btn:hover {
+      color: var(--amber);
+      border-color: var(--amber);
+      background: var(--amber-dim);
+    }
+
+    /* ── HERO ──────────────────────────────────────────────────────────── */
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem 3.5rem;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .hero-content { display: flex; flex-direction: column; }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── DISPLAY SERIF for h1 ── */
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    h1 em {
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .hero-sub {
+      font-family: var(--serif);
+      font-size: 0.975rem;
+      color: var(--ink-muted);
+      max-width: 48ch;
+      line-height: 1.8;
+      margin-bottom: 2.25rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .hero-stat-num {
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--amber);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .hero-divider {
+      width: 1px;
+      height: 1.75rem;
+      background: var(--rule);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--ink-muted);
+    }
+
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    /* ── ASCII ACCENT ──────────────────────────────────────────────────── */
+    .ascii-block {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      line-height: 1.4;
+      color: var(--rule);
+      user-select: none;
+      white-space: pre;
+      margin-top: 1rem;
+      transition: color 0.3s;
+      letter-spacing: 0.05em;
+    }
+
+    [data-theme="dark"] .ascii-block { color: #2e2b25; }
+
+    /* ── CONTENT ───────────────────────────────────────────────────────── */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .section {
+      padding: 2.75rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .section-link {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--amber);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .section-link:hover {
+      color: var(--amber);
+      border-bottom-color: var(--amber);
+    }
+
+    /* ── POST ROWS with amber border hover ────────────────────────────── */
+    .post-list { display: flex; flex-direction: column; }
+
+    .post-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 1.5rem;
+      padding: 1.4rem 0 1.4rem 0.75rem;
+      border-top: 1px solid var(--rule);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .post-row:first-child { border-top: none; }
+
+    /* Amber left border slide-in */
+    .post-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--amber);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.2s ease;
+      border-radius: 1px;
+    }
+
+    .post-row:hover::before { transform: scaleY(1); }
+    .post-row:hover { background: var(--amber-dim); }
+
+    .post-date {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      padding-top: 0.3rem;
+      line-height: 1.5;
+    }
+
+    .post-info { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    /* ── DISPLAY SERIF for post titles ── */
+    .post-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .post-desc {
+      font-family: var(--serif);
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+    }
+
+    /* ── PROJECT ROWS with amber border hover ─────────────────────────── */
+    .project-list { display: flex; flex-direction: column; }
+
+    .project-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.25rem 0 1.25rem 0.75rem;
+      border-top: 1px solid var(--rule);
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-row:first-child { border-top: none; }
+
+    .project-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--amber);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.2s ease;
+      border-radius: 1px;
+    }
+
+    .project-row:hover::before { transform: scaleY(1); }
+    .project-row:hover { background: var(--amber-dim); }
+
+    .project-left { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .project-name {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .project-desc {
+      font-family: var(--serif);
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      max-width: 44ch;
+    }
+
+    .project-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge-shipped { color: #16a34a; }
+    .badge-building { color: var(--amber); }
+    .badge-archived { color: var(--ink-faint); }
+
+    .project-metric {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────────────────── */
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.25rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--amber); }
+
+    /* ── MOBILE NAV ────────────────────────────────────────────────────── */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--ink-muted);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.35rem 0.6rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .mobile-menu-btn:hover { color: var(--amber); border-color: var(--amber); }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule);
+      padding: 1rem 1rem;
+      gap: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mobile-nav a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-decoration: none;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--rule);
+      transition: color 0.2s;
+    }
+
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a:hover, .mobile-nav a.active { color: var(--amber); }
+    .mobile-nav.open { display: flex; }
+
+    /* ── CTA STRIP ─────────────────────────────────────────────────────── */
+    .cta-strip {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-rss {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      border: 1px solid var(--rule);
+      padding: 0.4rem 0.85rem;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .cta-rss:hover {
+      color: var(--amber);
+      border-color: var(--amber);
+      background: var(--amber-dim);
+    }
+
+    .cta-about {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px;
+    }
+
+    .cta-about:hover {
+      color: var(--amber);
+      border-bottom-color: var(--amber);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-label  { animation: fadeUp 0.4s ease both 0.05s; }
+    h1           { animation: fadeUp 0.4s ease both 0.12s; }
+    .hero-sub    { animation: fadeUp 0.4s ease both 0.2s; }
+    .hero-meta   { animation: fadeUp 0.4s ease both 0.28s; }
+    .ascii-block { animation: fadeUp 0.4s ease both 0.1s; }
+
+    /* ── SCROLL FADE-IN (JS-driven) ────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE ────────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 1.25rem 1rem 0; }
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: flex; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 1rem 2.5rem;
+      }
+
+      .ascii-block { display: none; }
+
+      .content { padding: 0 1rem; }
+      .post-row { grid-template-columns: 55px 1fr; gap: 1rem; }
+      .project-row { flex-direction: column; gap: 0.4rem; }
+      .project-right { align-items: flex-start; }
+
+      footer { padding: 1.75rem 1rem; flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NOW STRIP ─────────────────────────────────────────────────────── -->
+  <div class="now-strip">
+    <span class="now-strip-dot"></span>
+    something shipped. something broken. something learned.
+  </div>
+
+  <!-- ── NAV ───────────────────────────────────────────────────────────── -->
+  <nav>
+    <a href="/" class="nav-logo">P<span>2026</span></a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/writing">Writing</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/about">About & CV</a></li>
+      </ul>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu">☰</button>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle light and dark theme">◑</button>
+    </div>
+  </nav>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <a href="/" class="active">Home</a>
+    <a href="/writing">Writing</a>
+    <a href="/projects">Projects</a>
+    <a href="/about">About & CV</a>
+  </nav>
+
+  <!-- ── HERO ──────────────────────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="hero-content">
+      <p class="hero-label">Project-2026</p>
+      <h1>Something shipped.<br>Something broken.<br><em>Something learned.</em></h1>
+      <p class="hero-sub">A public dev log by a software engineer who documents everything. Self-hosting, networking, and the tools I ship — written as I build.</p>
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <span class="hero-stat-num">3</span>
+          <span class="hero-stat-label">Posts</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">2</span>
+          <span class="hero-stat-label">Log entries</span>
+        </div>
+        <div class="hero-divider"></div>
+        <span class="status-pill">
+          <span class="status-dot"></span>
+          Shipped: Minecraft infra
+        </span>
+      </div>
+      <div class="cta-strip">
+        <a href="/rss.xml" class="cta-rss" aria-label="Subscribe via RSS feed">⊕ Subscribe via RSS</a>
+        <a href="/about" class="cta-about">About the builder →</a>
+      </div>
+    </div>
+
+    <!-- ASCII ACCENT -->
+    <div class="ascii-block" aria-hidden="true">┌─────────────┐
+│ P2026       │
+│ ░░░░░░░░░░░ │
+│ ship · log  │
+│ build · doc │
+└─────────────┘</div>
+  </header>
+
+  <!-- ── MAIN ──────────────────────────────────────────────────────────── -->
+  <main class="content">
+
+    <section class="section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Recent writing</h2>
+        <a href="/writing" class="section-link">All posts →</a>
+      </div>
+      <div class="post-list">
+
+        <a class="post-row reveal" href="/blog/minecraft-server">
+          <span class="post-date">Feb 28<br>2026</span>
+          <div class="post-info">
+            <p class="post-title">Hosting a Minecraft server</p>
+            <p class="post-desc">How I designed a private host for resilience, recoverability, and safer network exposure.</p>
+          </div>
+        </a>
+
+        <a class="post-row reveal" href="/blog/choosing-astro">
+          <span class="post-date">Feb 22<br>2026</span>
+          <div class="post-info">
+            <p class="post-title">Choosing Astro for P2026</p>
+            <p class="post-desc">Why Astro fits my build-first workflow and ships fast static pages with zero friction.</p>
+          </div>
+        </a>
+
+        <a class="post-row reveal" href="/blog/launching-p2026">
+          <span class="post-date">Feb 21<br>2026</span>
+          <div class="post-info">
+            <p class="post-title">Launching P2026 — A Hub for What I'm Building</p>
+            <p class="post-desc">Why I started this site and what you can expect: project logs, launches, and rabbit holes.</p>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Projects</h2>
+        <a href="/projects" class="section-link">All projects →</a>
+      </div>
+      <div class="project-list">
+
+        <a class="project-row reveal" href="/projects/minecraft-server">
+          <div class="project-left">
+            <p class="project-name">Minecraft Server Infrastructure</p>
+            <p class="project-desc">Self-hosted, resilient server with TCPShield proxy and automated Docker backups.</p>
+          </div>
+          <div class="project-right">
+            <span class="badge badge-shipped">Shipped</span>
+            <span class="project-metric">14 days uptime</span>
+          </div>
+        </a>
+
+        <a class="project-row reveal" href="/projects/p2026">
+          <div class="project-left">
+            <p class="project-name">P2026 — This Site</p>
+            <p class="project-desc">Public dev log built with Astro. Currently revamping the design.</p>
+          </div>
+          <div class="project-right">
+            <span class="badge badge-shipped">Shipped</span>
+            <span class="project-metric">redesign in progress</span>
+          </div>
+        </a>
+
+        <a class="project-row reveal" href="/projects/homelab">
+          <div class="project-left">
+            <p class="project-name">Home Lab Setup</p>
+            <p class="project-desc">Proxmox-based homelab for self-hosting services and networking experiments.</p>
+          </div>
+          <div class="project-right">
+            <span class="badge badge-building">Building</span>
+            <span class="project-metric">Phase 1 done</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-copy">© Project 2026</span>
+    <ul class="footer-links">
+      <li><a href="https://github.com">GitHub</a></li>
+      <li><a href="/rss.xml">RSS</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Theme toggle
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    if (localStorage.getItem('theme') === 'dark') root.setAttribute('data-theme', 'dark');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        var dark = root.getAttribute('data-theme') === 'dark';
+        root.setAttribute('data-theme', dark ? 'light' : 'dark');
+        localStorage.setItem('theme', dark ? 'light' : 'dark');
+      });
+    }
+
+    // Mobile menu toggle
+    var menuBtn = document.getElementById('mobileMenuBtn');
+    var mobileNav = document.getElementById('mobileNav');
+    if (menuBtn && mobileNav) {
+      menuBtn.addEventListener('click', function() {
+        var open = mobileNav.classList.toggle('open');
+        menuBtn.setAttribute('aria-expanded', String(open));
+        menuBtn.textContent = open ? '✕' : '☰';
+      });
+    }
+
+    // Scroll fade-ins
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var parent = entry.target.parentElement;
+          if (parent) {
+            var siblings = Array.from(parent.querySelectorAll('.reveal'));
+            var idx = siblings.indexOf(entry.target);
+            entry.target.style.transitionDelay = (idx * 0.06) + 's';
+          }
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
