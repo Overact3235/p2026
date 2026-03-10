@@ -46,14 +46,14 @@
 
 html {
   background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
+  color: var(--ink);
+  font-family: var(--serif);
   font-size: 16px;
   line-height: 1.7;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--rule) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -66,12 +66,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--rule);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
+  background: var(--ink-faint);
 }
 
 body {
@@ -118,7 +118,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-weight: 500;
   line-height: 1.2;
   color: #e8e8f0;
@@ -139,7 +139,7 @@ h3 {
 
 p {
   margin-bottom: 1.25rem;
-  color: var(--text);
+  color: var(--ink);
 }
 
 p:last-child {
@@ -147,7 +147,7 @@ p:last-child {
 }
 
 a {
-  color: var(--accent);
+  color: var(--amber);
   text-decoration: none;
   transition: color 0.15s, opacity 0.15s;
 }
@@ -166,19 +166,19 @@ em {
 }
 
 code {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.85em;
-  background: var(--bg-3);
-  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
   padding: 0.1em 0.4em;
   border-radius: 3px;
-  color: var(--accent);
+  color: var(--amber);
 }
 
 pre {
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--amber);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
   border-radius: 4px;
@@ -190,20 +190,20 @@ pre code {
   border: none;
   padding: 0;
   font-size: 0.88rem;
-  color: var(--text);
+  color: var(--ink);
 }
 
 blockquote {
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--amber);
   margin: 1.5rem 0;
   padding: 0.5rem 0 0.5rem 1.5rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   font-style: italic;
 }
 
 hr {
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--rule);
   margin: 2.5rem 0;
 }
 
@@ -318,20 +318,20 @@ nav {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   /* was --text-dim — bumped for WCAG AA on small text */
 }
 
 .section-link {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   /* was --text-dim — bumped for WCAG AA on small text */
   white-space: nowrap;
 }
 
 .section-link:hover {
-  color: var(--accent);
+  color: var(--amber);
   opacity: 1;
 }
 
@@ -373,21 +373,21 @@ footer {
 
 /* ── Tags ────────────────────────────────────────────────────────── */
 .tag {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.7rem;
   padding: 0.15em 0.6em;
-  border: 1px solid var(--border);
+  border: 1px solid var(--rule);
   border-radius: 2px;
-  color: var(--text-muted);
-  background: var(--bg-2);
+  color: var(--ink-muted);
+  background: var(--bg-alt);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   display: inline-block;
 }
 
 .tag-launch {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--amber);
+  color: var(--amber);
 }
 
 .tag-milestone {
@@ -406,26 +406,26 @@ footer {
 }
 
 .tag-note {
-  border-color: var(--text-dim);
-  color: var(--text-dim);
+  border-color: var(--ink-faint);
+  color: var(--ink-faint);
 }
 
 .tag-post {
-  border-color: var(--text-muted);
-  color: var(--text-muted);
+  border-color: var(--ink-muted);
+  color: var(--ink-muted);
 }
 
 /* ── Page header ─────────────────────────────────────────────────── */
 .page-header {
   padding-bottom: 2.5rem;
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
 }
 
 .page-header .label {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.72rem;
-  color: var(--accent);
+  color: var(--amber);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-bottom: 0.75rem;
@@ -433,7 +433,7 @@ footer {
 }
 
 .page-header p {
-  color: var(--text-muted);
+  color: var(--ink-muted);
   font-size: 1.05rem;
   max-width: 36rem;
 }
@@ -450,7 +450,7 @@ footer {
   grid-template-columns: 7rem 1fr;
   gap: 1.5rem;
   padding: 1.5rem 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
   align-items: start;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -458,22 +458,22 @@ footer {
 .post-card:hover,
 .post-card:focus-within {
   background: rgba(255, 255, 255, 0.015);
-  border-color: var(--accent-dim);
+  border-color: var(--amber);
 }
 
 .post-card:first-child {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--rule);
 }
 
 .post-card-date {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.75rem;
-  color: var(--text-dim);
+  color: var(--ink-faint);
   padding-top: 0.25rem;
 }
 
 .post-card-title {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 1rem;
   font-weight: 500;
   color: #e8e8f0;
@@ -483,15 +483,15 @@ footer {
 }
 
 .post-card-title:hover {
-  color: var(--accent);
+  color: var(--amber);
   opacity: 1;
 }
 
 .post-card-desc {
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   margin-bottom: 0.6rem;
-  font-family: var(--font-body);
+  font-family: var(--serif);
 }
 
 .post-card-tags {
@@ -513,7 +513,7 @@ footer {
   top: 0.5rem;
   bottom: 0;
   width: 1px;
-  background: var(--border);
+  background: var(--rule);
 }
 
 .timeline-entry {
@@ -529,14 +529,14 @@ footer {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--bg-3);
-  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
   transform: translateX(-3px);
 }
 
 .timeline-entry.launch::before {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--amber);
+  border-color: var(--amber);
 }
 
 .timeline-entry.milestone::before {
@@ -555,9 +555,9 @@ footer {
 }
 
 .timeline-meta {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.72rem;
-  color: var(--text-dim);
+  color: var(--ink-faint);
   margin-bottom: 0.3rem;
   display: flex;
   align-items: center;
@@ -565,7 +565,7 @@ footer {
 }
 
 .timeline-title {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.95rem;
   color: #e8e8f0;
   margin-bottom: 0.3rem;
@@ -573,7 +573,7 @@ footer {
 
 .timeline-body {
   font-size: 0.88rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
 }
 
 /* ── Resources ───────────────────────────────────────────────────── */
@@ -582,19 +582,19 @@ footer {
 }
 
 .resource-group-title {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--accent);
+  color: var(--amber);
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
 }
 
 .resource-item {
   padding: 0.9rem 0;
-  border-bottom: 1px solid var(--bg-3);
+  border-bottom: 1px solid var(--bg-alt);
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: baseline;
@@ -605,11 +605,11 @@ footer {
 .resource-item:hover,
 .resource-item:focus-within {
   background: rgba(255, 255, 255, 0.015);
-  border-color: var(--accent-dim);
+  border-color: var(--amber);
 }
 
 .resource-item-name {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.88rem;
   color: #e8e8f0;
   display: block;
@@ -618,32 +618,32 @@ footer {
 
 .resource-item-desc {
   font-size: 0.83rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
 }
 
 .resource-item-link {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.7rem;
-  color: var(--text-dim);
+  color: var(--ink-faint);
   white-space: nowrap;
 }
 
 .resource-item-link:hover {
-  color: var(--accent);
+  color: var(--amber);
   opacity: 1;
 }
 
 /* ── Home hero ───────────────────────────────────────────────────── */
 .hero {
   padding: 4rem 0 3rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
   margin-bottom: 3rem;
 }
 
 .hero-eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.72rem;
-  color: var(--accent);
+  color: var(--amber);
   text-transform: uppercase;
   letter-spacing: 0.18em;
   margin-bottom: 1rem;
@@ -656,7 +656,7 @@ footer {
 
 .hero-sub {
   font-size: 1.05rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   max-width: 36rem;
   margin-bottom: 2rem;
 }
@@ -668,13 +668,13 @@ footer {
 }
 
 .hero-stat {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
 }
 
 .hero-stat-num {
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--amber);
   display: block;
   line-height: 1;
   margin-bottom: 0.2rem;
@@ -684,7 +684,7 @@ footer {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   /* was --text-dim — bumped for WCAG AA on small text */
 }
 
@@ -717,11 +717,11 @@ footer {
 }
 
 .prose a {
-  border-bottom: 1px solid var(--accent-dim);
+  border-bottom: 1px solid var(--amber);
 }
 
 .prose a:hover {
-  border-color: var(--accent);
+  border-color: var(--amber);
   opacity: 1;
 }
 
@@ -729,13 +729,13 @@ footer {
 .post-header {
   padding-bottom: 2rem;
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
 }
 
 .post-header-meta {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.75rem;
-  color: var(--text-dim);
+  color: var(--ink-faint);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -748,7 +748,7 @@ footer {
 
 .post-header-desc {
   font-size: 1.05rem;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   margin-bottom: 1rem;
 }
 
@@ -762,19 +762,19 @@ footer {
 }
 
 .text-mono {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
 }
 
 .text-muted {
-  color: var(--text-muted);
+  color: var(--ink-muted);
 }
 
 .text-dim {
-  color: var(--text-dim);
+  color: var(--ink-faint);
 }
 
 .text-accent {
-  color: var(--accent);
+  color: var(--amber);
 }
 
 

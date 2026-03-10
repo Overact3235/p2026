@@ -51,25 +51,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </main>
     <Footer />
 
-    <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
-    <script lang="ts">
-      // Scroll fade-ins
-      const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const parent = entry.target.parentElement;
-            if (parent) {
-              const siblings = Array.from(parent.querySelectorAll('.reveal'));
-              const idx = siblings.indexOf(entry.target);
-              (entry.target as HTMLElement).style.transitionDelay = `${idx * 0.06}s`;
+    <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+    <script is:inline>
+      (function() {
+        var els = document.querySelectorAll('.reveal');
+        if (!els.length) return;
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var parent = entry.target.parentElement;
+              if (parent) {
+                var siblings = Array.from(parent.querySelectorAll('.reveal'));
+                var idx = siblings.indexOf(entry.target);
+                entry.target.style.transitionDelay = (idx * 0.06) + 's';
+              }
+              entry.target.classList.add('visible');
+              io.unobserve(entry.target);
             }
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+          });
+        }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+        els.forEach(function(el) { io.observe(el); });
+      })();
     </script>
   </body>
 </html>
