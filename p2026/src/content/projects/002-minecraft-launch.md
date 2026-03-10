@@ -1,8 +1,7 @@
 ---
-title: "Launched mc.p2026.xyz"
-date: 2026-02-28
-type: service
-project: "p2026"
+name: "mc.p2026.xyz"
+description: "Launched a private Minecraft server at mc.p2026.xyz."
+status: "shipped"
 link: "/blog/mc-server-launch"
 ---
 
