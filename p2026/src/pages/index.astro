@@ -6,84 +6,91 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 5);
 
-const timeline = (await getCollection('timeline'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 5);
+const projects = await getCollection('projects');
+const shippedProjects = projects.filter(p => p.data.status === 'shipped');
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+function formatPostDate(date: Date) {
+  const parts = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).split(', ');
+  // parts[0] is "Feb 28", parts[1] is "2026"
+  return `${parts[0]}<br>${parts[1]}`;
 }
 ---
 
 <BaseLayout title="Home" description="Project 2026 — personal tech log and project hub.">
-  <div class="container">
-
-    <!-- Hero -->
-    <section class="hero">
-      <span class="hero-eyebrow">// project-2026</span>
-      <h1>Building in public.<br />Logging everything.</h1>
-      <p class="hero-sub">
-        A running log of projects, launches, and experiments. Part personal journal,
-        part tech hub — linking out to everything I'm shipping this year.
-      </p>
-      <div class="hero-stat-row">
+  <header class="hero">
+    <div class="hero-content">
+      <p class="hero-label">Project-2026</p>
+      <h1>Something shipped.<br>Something broken.<br><em>Something learned.</em></h1>
+      <p class="hero-sub">A public dev log by a software engineer who documents everything. Self-hosting, networking, and the tools I ship — written as I build.</p>
+      <div class="hero-meta">
         <div class="hero-stat">
           <span class="hero-stat-num">{posts.length}</span>
           <span class="hero-stat-label">Posts</span>
         </div>
+        <div class="hero-divider"></div>
         <div class="hero-stat">
-          <span class="hero-stat-num">{timeline.length}</span>
+          <span class="hero-stat-num">{projects.length}</span>
           <span class="hero-stat-label">Log entries</span>
         </div>
+        <div class="hero-divider"></div>
+        <span class="status-pill">
+          <span class="status-dot"></span>
+          {shippedProjects.length > 0 ? `Shipped: ${shippedProjects[0].data.name}` : `Shipped: P2026`}
+        </span>
       </div>
-    </section>
+      <div class="cta-strip">
+        <a href="/rss.xml" class="cta-rss" aria-label="Subscribe via RSS feed">⊕ Subscribe via RSS</a>
+        <a href="/about" class="cta-about">About the builder →</a>
+      </div>
+    </div>
 
-    <!-- Recent posts -->
-    <section style="margin-bottom: 4rem;">
-      <div class="section-head">
-        <h2 class="section-title">Recent posts</h2>
+    <!-- ASCII ACCENT -->
+    <div class="ascii-block" aria-hidden="true">┌─────────────┐
+│ P2026       │
+│ ░░░░░░░░░░░ │
+│ ship · log  │
+│ build · doc │
+└─────────────┘</div>
+  </header>
+
+  <main class="content">
+    <section class="section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Recent writing</h2>
         <a href="/blog" class="section-link">All posts →</a>
       </div>
       <div class="post-list">
         {posts.map(post => (
-          <article class="post-card">
-            <time class="post-card-date" datetime={post.data.pubDate.toISOString()}>
-              {formatDate(post.data.pubDate)}
-            </time>
-            <div>
-              <a href={`/blog/${post.slug}`} class="post-card-title">{post.data.title}</a>
-              <p class="post-card-desc">{post.data.description}</p>
-              <div class="post-card-tags">
-                {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
-              </div>
+          <a class="post-row reveal" href={`/blog/${post.slug}`}>
+            <span class="post-date" set:html={formatPostDate(post.data.pubDate)}></span>
+            <div class="post-info">
+              <p class="post-title">{post.data.title}</p>
+              <p class="post-desc">{post.data.description}</p>
             </div>
-          </article>
+          </a>
         ))}
       </div>
     </section>
 
-    <!-- Recent timeline -->
-    <section>
-      <div class="section-head">
-        <h2 class="section-title">Recent log</h2>
-        <a href="/timeline" class="section-link">Full timeline →</a>
+    <section class="section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Projects</h2>
+        <a href="/projects" class="section-link">All projects →</a>
       </div>
-      <div class="timeline">
-        {timeline.map(entry => (
-          <div class={`timeline-entry ${entry.data.type}`}>
-            <div class="timeline-meta">
-              <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
-              <span class={`tag tag-${entry.data.type}`}>{entry.data.type}</span>
+      <div class="project-list">
+        {projects.map(project => (
+          <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
+            <div class="project-left">
+              <p class="project-name">{project.data.name}</p>
+              <p class="project-desc">{project.data.description}</p>
             </div>
-            <div class="timeline-title">
-              {entry.data.link
-                ? <a href={entry.data.link}>{entry.data.title}</a>
-                : entry.data.title}
+            <div class="project-right">
+              <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
+              {project.data.metric && <span class="project-metric">{project.data.metric}</span>}
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </section>
-
-  </div>
+  </main>
 </BaseLayout>
