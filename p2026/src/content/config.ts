@@ -12,15 +12,16 @@ const blog = defineCollection({
   }),
 });
 
-const timeline = defineCollection({
+const projects = defineCollection({
   type: 'content',
   schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    type: z.enum(['launch', 'milestone', 'post', 'update', 'service', 'note']),
-    project: z.string().optional(),
+    name: z.string(),
+    description: z.string(),
+    status: z.enum(['shipped', 'building', 'archived']),
+    metric: z.string().optional(),
+    stack: z.array(z.string()).optional(),
     link: z.string().optional(),
   }),
 });
 
-export const collections = { blog, timeline };
+export const collections = { blog, projects };
