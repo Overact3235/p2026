@@ -5,34 +5,34 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+function formatPostDate(date: Date) {
+  const parts = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).split(', ');
+  return `${parts[0]}<br>${parts[1] ?? ''}`;
 }
 ---
 
 <BaseLayout title="Blog" description="All posts — project logs, thoughts, and writeups.">
-  <div class="container">
-    <div class="page-header">
-      <span class="label">// blog</span>
-      <h1>Posts</h1>
-      <p>Project logs, thoughts, and occasional deep dives. {posts.length} entries so far.</p>
+  <div class="content">
+    <div class="page-header" style="margin-top: 3rem; margin-bottom: 2rem;">
+      <span class="hero-label">// writing</span>
+      <h1 style="margin-top: 1rem; margin-bottom: 1rem;">Posts</h1>
+      <p class="hero-sub" style="margin-bottom: 0;">Project logs, thoughts, and occasional deep dives. {posts.length} entries so far.</p>
     </div>
 
     <div class="post-list">
       {posts.map(post => (
-        <article class="post-card">
-          <time class="post-card-date" datetime={post.data.pubDate.toISOString()}>
-            {formatDate(post.data.pubDate)}
-          </time>
-          <div>
-            <a href={`/blog/${post.slug}`} class="post-card-title">{post.data.title}</a>
-            <p class="post-card-desc">{post.data.description}</p>
-            <div class="post-card-tags">
-              {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
-              {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
-            </div>
+        <a class="post-row" href={`/blog/${post.slug}`}>
+          <span class="post-date" set:html={formatPostDate(post.data.pubDate)}></span>
+          <div class="post-info">
+            <p class="post-title">{post.data.title}</p>
+            <p class="post-desc">{post.data.description}</p>
+            {post.data.tags.length > 0 && (
+              <div class="post-card-tags" style="margin-top: 0.35rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
+                {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+              </div>
+            )}
           </div>
-        </article>
+        </a>
       ))}
     </div>
   </div>
