@@ -121,7 +121,7 @@ h6 {
   font-family: var(--mono);
   font-weight: 500;
   line-height: 1.2;
-  color: #e8e8f0;
+  color: var(--ink);
   letter-spacing: -0.02em;
 }
 
@@ -157,7 +157,7 @@ a:hover {
 }
 
 strong {
-  color: #e8e8f0;
+  color: var(--ink);
   font-weight: 500;
 }
 
@@ -476,7 +476,7 @@ footer {
   font-family: var(--mono);
   font-size: 1rem;
   font-weight: 500;
-  color: #e8e8f0;
+  color: var(--ink);
   margin-bottom: 0.4rem;
   display: block;
   transition: color 0.15s;
@@ -567,7 +567,7 @@ footer {
 .timeline-title {
   font-family: var(--mono);
   font-size: 0.95rem;
-  color: #e8e8f0;
+  color: var(--ink);
   margin-bottom: 0.3rem;
 }
 
@@ -611,7 +611,7 @@ footer {
 .resource-item-name {
   font-family: var(--mono);
   font-size: 0.88rem;
-  color: #e8e8f0;
+  color: var(--ink);
   display: block;
   margin-bottom: 0.2rem;
 }
