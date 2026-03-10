@@ -771,8 +771,8 @@ main {
   /* was #1a1a28 */
   --text-muted: #39394a;
   /* was #4a4a6e */
-  --text-dim: #4a4a60;
-  /* was #5a5a6e — darkened for WCAG AA on light bg */
+  --text-dim: #404058;
+  /* was #4a4a60, #5a5a6e — darkened to WCAG AAA on light bg */
   --accent: #d57600;
   --accent-dim: #b46500;
   --accent-glow: rgba(213, 118, 0, 0.15);
@@ -817,8 +817,8 @@ html[data-theme="light"] body {
     /* was #2a2a35 */
     --text-muted: #39394a;
     /* was #5a5a6e */
-    --text-dim: #4a4a60;
-    /* was #5a5a6e — darkened for WCAG AA on light bg */
+    --text-dim: #404058;
+    /* was #4a4a60, #5a5a6e — darkened to WCAG AAA on light bg */
     --accent: #d57600;
     --accent-dim: #b46500;
     --accent-glow: rgba(213, 118, 0, 0.15);
