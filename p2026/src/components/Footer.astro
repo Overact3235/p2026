@@ -2,10 +2,10 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <p>
-    &copy; Project {year}
-    <!-- <a href="https://github.com/Overact3235" target="_blank" rel="noopener">GitHub</a> -->
-   <!-- &mdash; built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> -->
-  </p>
+<footer>
+  <span class="footer-copy">© Project {year}</span>
+  <ul class="footer-links">
+    <li><a href="https://github.com">GitHub</a></li>
+    <li><a href="/rss.xml">RSS</a></li>
+  </ul>
 </footer>
