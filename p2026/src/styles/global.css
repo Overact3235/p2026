@@ -14,8 +14,8 @@
   /* was #dddded */
   --text-muted: #9898b0;
   /* was #acacc0, original #5c5c72 */
-  --text-dim: #6a6a82;
-  /* was #9090aa — bumped for WCAG AA on dark bg */
+  --text-dim: #a8a8c0;
+  /* was #9090aa, #6a6a82 — bumped to WCAG AAA on dark bg */
   --accent: #e8a020;
   --accent-dim: #a06a10;
   --accent-glow: rgba(232, 160, 32, 0.15);
