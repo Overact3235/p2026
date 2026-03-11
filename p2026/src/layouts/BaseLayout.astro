@@ -1,13 +1,5 @@
 ---
 import '../styles/global.css';
-import '@fontsource/jetbrains-mono/latin-400.css';
-import '@fontsource/jetbrains-mono/latin-500.css';
-import '@fontsource/jetbrains-mono/latin-700.css';
-import '@fontsource/lora/latin-400.css';
-import '@fontsource/lora/latin-500.css';
-import '@fontsource/lora/latin-400-italic.css';
-import jetbrainsMonoLatin400Woff2 from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
-import loraLatin400Woff2 from '@fontsource/lora/files/lora-latin-400-normal.woff2?url';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
@@ -28,39 +20,58 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} · P2026</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-
-    <!-- Open Graph -->
     <meta property="og:title" content={`${title} · P2026`} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="robots" content="index, follow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="canonical" href={canonicalURL} />
     {ogImage && <meta property="og:image" content={ogImage} />}
-
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <link rel="preload" href={loraLatin400Woff2} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={jetbrainsMonoLatin400Woff2} as="font" type="font/woff2" crossorigin />
-
-    <!-- Theme: runs synchronously before first paint — no flash, persists across pages -->
+    <!-- IMPORTANT: theme flash prevention — must be in <head>, not body -->
     <script is:inline>
-      (() => {
-        document.documentElement.classList.add('js');
-        try {
-          const stored = localStorage.getItem('theme');
-          if (stored === 'light' || stored === 'dark') {
-            document.documentElement.setAttribute('data-theme', stored);
-          }
-        } catch {}
-      })();
+      var t = localStorage.getItem('theme');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
     </script>
   </head>
   <body>
+    <div class="now-strip">
+      <span class="now-strip-dot"></span>
+      something shipped. something broken. something learned.
+    </div>
     <Nav />
     <main>
       <slot />
     </main>
     <Footer />
+
+    <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+    <script is:inline>
+      (function() {
+        var els = document.querySelectorAll('.reveal');
+        if (!els.length) return;
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var parent = entry.target.parentElement;
+              if (parent) {
+                var siblings = Array.from(parent.querySelectorAll('.reveal'));
+                var idx = siblings.indexOf(entry.target);
+                entry.target.style.transitionDelay = (idx * 0.06) + 's';
+              }
+              entry.target.classList.add('visible');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+        els.forEach(function(el) { io.observe(el); });
+      })();
+    </script>
   </body>
 </html>

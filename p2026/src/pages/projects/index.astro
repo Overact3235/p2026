@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const projects = await getCollection('projects');
@@ -30,7 +30,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
                 <p class="project-desc">{project.data.description}</p>
               </div>
               <div class="project-right">
-                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
+                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, c => c.toUpperCase())}</span>
                 {project.data.metric && <span class="project-metric">{project.data.metric}</span>}
               </div>
             </a>
@@ -52,7 +52,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
                 <p class="project-desc">{project.data.description}</p>
               </div>
               <div class="project-right">
-                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
+                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, c => c.toUpperCase())}</span>
               </div>
             </a>
           ))}
@@ -73,7 +73,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
                 <p class="project-desc">{project.data.description}</p>
               </div>
               <div class="project-right">
-                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
+                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, c => c.toUpperCase())}</span>
               </div>
             </a>
           ))}
@@ -82,4 +82,3 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
     )}
   </div>
 </BaseLayout>
-

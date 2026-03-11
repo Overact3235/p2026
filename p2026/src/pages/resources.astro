@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Edit this data directly to add/remove resources
 const resources = [
   {
     category: 'My Sites',
@@ -33,28 +32,32 @@ const resources = [
 ---
 
 <BaseLayout title="Resources" description="Tools, cheatsheets, and references I keep coming back to.">
-  <div class="container" style="max-width: 52rem;">
-    <div class="page-header">
-      <span class="label">// resources</span>
-      <h1>Resources</h1>
-      <p>Tools, cheatsheets, and links I keep coming back to. Curated, not exhaustive.</p>
+  <div class="content">
+    <div class="page-header" style="margin-top: 3rem; margin-bottom: 2rem;">
+      <span class="hero-label">// resources</span>
+      <h1 style="margin-top: 1rem; margin-bottom: 1rem;">Resources</h1>
+      <p class="hero-sub" style="margin-bottom: 0;">Tools, cheatsheets, and links I keep coming back to. Curated, not exhaustive.</p>
     </div>
 
     {resources.map(group => (
-      <div class="resource-group">
-        <h2 class="resource-group-title">{group.category}</h2>
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">{group.category}</h2>
+        </div>
         {group.items.map(item => (
-          <div class="resource-item">
-            <div>
-              <a href={item.url} target="_blank" rel="noopener" class="resource-item-name">{item.name}</a>
-              <span class="resource-item-desc">{item.desc}</span>
+          <div class="project-row">
+            <div class="project-left">
+              <a href={item.url} target="_blank" rel="noopener" class="project-name" style="text-decoration:none;">{item.name}</a>
+              <p class="project-desc">{item.desc}</p>
             </div>
-            <a href={item.url} target="_blank" rel="noopener" class="resource-item-link">
-              {new URL(item.url).hostname.replace('www.', '')} ↗
-            </a>
+            <div class="project-right">
+              <a href={item.url} target="_blank" rel="noopener" class="badge" style="color:var(--ink-faint); text-decoration:none; letter-spacing:0.06em;">
+                {new URL(item.url).hostname.replace('www.', '')} ↗
+              </a>
+            </div>
           </div>
         ))}
-      </div>
+      </section>
     ))}
   </div>
 </BaseLayout>

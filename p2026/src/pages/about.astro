@@ -1,77 +1,174 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
-// Your projects — update this list as you add subdomains/projects
-const projects: { name: string; desc: string; url?: string; status: 'live' | 'wip' | 'planned' }[] = [
-  // Add more as you launch them:
-  { name: 'P2026', desc: 'This site. The hub.', url: 'https://Overact3235.github.io/p2026', status: 'live' },
-];
-
-const statusLabel: Record<string, string> = {
-  live: 'live',
-  wip: 'wip',
-  planned: 'planned',
-};
-
-const statusClass: Record<string, string> = {
-  live: 'tag-launch',
-  wip: 'tag-update',
-  planned: 'tag-note',
-};
+const projects = await getCollection('projects');
 ---
 
-<BaseLayout title="About" description="About this site and the projects behind it.">
-  <div class="container" style="max-width: 52rem;">
-    <div class="page-header">
-      <span class="label">// about</span>
-      <h1>About</h1>
+<BaseLayout title="About & CV" description="The builder behind P2026. Software engineer documenting projects, self-hosting, and experiments in public.">
+  <header class="hero">
+    <div class="hero-content">
+      <p class="hero-label">About & CV</p>
+      <h1>The builder<br>behind <em>P2026.</em></h1>
+      <p class="hero-sub">Software engineer. Self-hoster. Documenting the process of building in public — one project at a time. Anonymous by choice.</p>
+      <div class="cv-actions">
+        <a href="/cv.pdf" class="btn-cv" download aria-label="Download CV as PDF">↓ Download CV</a>
+        <a href="https://github.com" class="btn-secondary" target="_blank" rel="noopener" aria-label="GitHub profile (opens in new tab)">GitHub ↗</a>
+        <!-- <a href="https://linkedin.com" class="btn-secondary" target="_blank" rel="noopener" aria-label="LinkedIn profile (opens in new tab)">LinkedIn ↗</a> -->
+      </div>
     </div>
+  </header>
 
-    <div class="prose" style="margin-bottom: 3rem;">
-      <p>
-        P2026 is my personal hub for the year — a place to log what I'm building,
-        link out to projects, and keep a running record of ideas and launches.
-      </p>
-      <p>
-        I'm not a developer by trade, but I build things. This site is the connective
-        tissue between those experiments.
-      </p>
-      <p>
-        The site is built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>,
-        deployed on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>,
-        and written in plain markdown. No CMS, no database — just files.
-      </p>
-    </div>
+  <main class="content">
 
-    <section>
-      <h2 style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:1.25rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">
-        Projects
-      </h2>
-      <div>
-        {projects.map(p => (
-          <div style="display:flex; justify-content:space-between; align-items:baseline; padding:0.9rem 0; border-bottom:1px solid var(--bg-3);">
-            <div>
-              {p.url
-                ? <a href={p.url} style="font-family:var(--font-mono); font-size:0.88rem; color:#e8e8f0;">{p.name}</a>
-                : <span style="font-family:var(--font-mono); font-size:0.88rem; color:#e8e8f0;">{p.name}</span>
-              }
-              <span style="display:block; font-size:0.83rem; color:var(--text-muted); margin-top:0.15rem;">{p.desc}</span>
-            </div>
-            <span class={`tag ${statusClass[p.status]}`}>{statusLabel[p.status]}</span>
-          </div>
-        ))}
+    <!-- SKILLS -->
+    <section class="section" aria-labelledby="skills-heading">
+      <div class="section-header reveal">
+        <h2 class="section-title" id="skills-heading">Skills & Stack</h2>
+      </div>
+
+      <div class="skill-row hover-row reveal">
+        <span class="skill-label">Languages</span>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Go</span>
+          <span class="skill-tag">Bash</span>
+        </div>
+      </div>
+
+      <div class="skill-row hover-row reveal">
+        <span class="skill-label">Frameworks</span>
+        <div class="skill-tags">
+          <span class="skill-tag">Astro</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">FastAPI</span>
+          <span class="skill-tag">Node.js</span>
+        </div>
+      </div>
+
+      <div class="skill-row hover-row reveal">
+        <span class="skill-label">Infrastructure</span>
+        <div class="skill-tags">
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Nginx</span>
+          <span class="skill-tag">Proxmox</span>
+          <span class="skill-tag">Linux</span>
+        </div>
+      </div>
+
+      <div class="skill-row hover-row reveal">
+        <span class="skill-label">Tools</span>
+        <div class="skill-tags">
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">GitHub Actions</span>
+          <span class="skill-tag">VS Code</span>
+          <span class="skill-tag">Figma</span>
+        </div>
       </div>
     </section>
 
-    <section style="margin-top: 3rem;">
-      <h2 style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">
-        Contact
-      </h2>
-      <p class="text-muted" style="font-size:0.9rem;">
-        Find me on GitHub
-        <!-- <a href="https://github.com/Overact3235" target="_blank" rel="noopener">GitHub</a> -->
-        <!-- Add more links here -->
-      </p>
+    <!-- EXPERIENCE -->
+    <section class="section" aria-labelledby="experience-heading">
+      <div class="section-header reveal">
+        <h2 class="section-title" id="experience-heading">Work Experience</h2>
+      </div>
+
+      <div class="exp-row hover-row reveal">
+        <div class="exp-period">
+          <span class="year">2024</span>
+          Present
+        </div>
+        <div class="exp-body">
+          <p class="exp-role">Senior Software Engineer</p>
+          <p class="exp-company">// Redacted</p>
+          <p class="exp-desc">Building backend services and internal tooling. Leading infrastructure migrations and owning reliability across distributed systems.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">Python</span>
+            <span class="exp-tag">Docker</span>
+            <span class="exp-tag">Postgres</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row hover-row reveal">
+        <div class="exp-period">
+          <span class="year">2022</span>
+          2024
+        </div>
+        <div class="exp-body">
+          <p class="exp-role">Software Engineer</p>
+          <p class="exp-company">// Redacted</p>
+          <p class="exp-desc">Full-stack development across web products. Shipped features used by thousands of users, improved CI pipelines, and reduced deploy times by 60%.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">TypeScript</span>
+            <span class="exp-tag">React</span>
+            <span class="exp-tag">Node.js</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row hover-row reveal">
+        <div class="exp-period">
+          <span class="year">2020</span>
+          2022
+        </div>
+        <div class="exp-body">
+          <p class="exp-role">Junior Developer</p>
+          <p class="exp-company">// Redacted</p>
+          <p class="exp-desc">First engineering role. Built internal dashboards, wrote automated tests, and got obsessed with self-hosting on the side.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">JavaScript</span>
+            <span class="exp-tag">Python</span>
+            <span class="exp-tag">Linux</span>
+          </div>
+        </div>
+      </div>
     </section>
-  </div>
+
+    <!-- PROJECTS -->
+    <section class="section" aria-labelledby="projects-heading">
+      <div class="section-header reveal">
+        <h2 class="section-title" id="projects-heading">Projects</h2>
+      </div>
+
+      {projects.map(project => (
+        <a class="project-row hover-row reveal" href={project.data.link || `/projects/${project.slug}`}>
+          <div class="project-left">
+            <p class="project-name">{project.data.name}</p>
+            <p class="project-desc">{project.data.description}</p>
+          </div>
+          <div class="project-right">
+            <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
+            {project.data.metric && <span class="project-metric">{project.data.metric}</span>}
+          </div>
+        </a>
+      ))}
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" aria-labelledby="contact-heading">
+      <div class="section-header reveal">
+        <h2 class="section-title" id="contact-heading">Contact</h2>
+      </div>
+
+      <a href="https://github.com" class="contact-row hover-row reveal" target="_blank" rel="noopener">
+        <span class="contact-label">GitHub</span>
+        <span class="contact-value">github.com</span>
+      </a>
+
+      <!--
+      <a href="https://linkedin.com" class="contact-row hover-row reveal" target="_blank" rel="noopener">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value">linkedin.com/in/...</span>
+      </a>
+      -->
+
+      <a href="mailto:contact@p2026.xyz" class="contact-row hover-row reveal">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">contact@p2026.xyz</span>
+      </a>
+    </section>
+
+  </main>
 </BaseLayout>

@@ -1,67 +1,45 @@
 ---
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const homeHref = base || '/';
-const currentPath = Astro.url.pathname;
-
-function normalizePath(path: string) {
-  const normalized = path.replace(/\/+$/, '');
-  return normalized === '' ? '/' : normalized;
-}
-
-const navLinks = [
-  { href: `${base}/`, label: 'Home' },
-  { href: `${base}/blog`, label: 'Blog' },
-  { href: `${base}/timeline`, label: 'Timeline' },
-  { href: `${base}/resources`, label: 'Resources' },
-  { href: `${base}/about`, label: 'About' },
-];
+const activeRoute = Astro.url.pathname;
 ---
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href={homeHref} class="nav-logo">P<span>2026</span></a>
-    <div class="nav-right">
-      <ul class="nav-links">
-        {navLinks.map(link => {
-          const current = normalizePath(currentPath);
-          const href = normalizePath(link.href);
-          const isActive = href === '/'
-            ? current === '/'
-            : current === href || current.startsWith(`${href}/`);
-          return (
-            <li>
-              <a href={link.href} aria-current={isActive ? 'page' : undefined}>
-                {link.label}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
-        ◐
-      </button>
-    </div>
+<nav class="main-nav">
+  <a href="/" class="nav-logo">P<span>2026</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a></li>
+      <li><a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a></li>
+      <li><a href="/projects" class={activeRoute.startsWith('/projects') ? 'active' : ''}>Projects</a></li>
+      <li><a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About & CV</a></li>
+    </ul>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle light and dark theme">◑</button>
   </div>
 </nav>
 
-<script is:inline>
-  (() => {
-    const root = document.documentElement;
-    const button = document.querySelector('[data-theme-toggle]');
-    if (!(button instanceof HTMLButtonElement)) return;
+<!-- Mobile nav: .mobile-nav class keeps it separate from .main-nav styles -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+  <a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a>
+  <a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a>
+  <a href="/projects" class={activeRoute.startsWith('/projects') ? 'active' : ''}>Projects</a>
+  <a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About & CV</a>
+</nav>
 
-    const getTheme = () =>
-      root.getAttribute('data-theme') ||
-      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+<script>
+  const btn = document.getElementById('themeToggle') as HTMLButtonElement | null;
+  const root = document.documentElement;
 
-    // Sync button pressed state on every page load
-    button.setAttribute('aria-pressed', String(getTheme() === 'light'));
+  btn?.addEventListener('click', () => {
+    const dark = root.getAttribute('data-theme') === 'dark';
+    root.setAttribute('data-theme', dark ? 'light' : 'dark');
+    localStorage.setItem('theme', dark ? 'light' : 'dark');
+  });
 
-    button.addEventListener('click', () => {
-      const next = getTheme() === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      button.setAttribute('aria-pressed', String(next === 'light'));
-      try { localStorage.setItem('theme', next); } catch {}
-    });
-  })();
+  const menuBtn = document.getElementById('mobileMenuBtn') as HTMLButtonElement | null;
+  const mobileNav = document.getElementById('mobileNav') as HTMLElement | null;
+
+  menuBtn?.addEventListener('click', () => {
+    const open = mobileNav?.classList.toggle('open') ?? false;
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.textContent = open ? '✕' : '☰';
+  });
 </script>
