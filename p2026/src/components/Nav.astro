@@ -16,6 +16,9 @@ const activeRoute = Astro.url.pathname;
   </div>
 </nav>
 
+<!-- Mobile nav: uses nav element with .mobile-nav class.
+     CSS targets nav:not(.mobile-nav) for desktop layout,
+     so this one only gets .mobile-nav rules. -->
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
   <a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a>
   <a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a>
