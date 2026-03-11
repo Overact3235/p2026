@@ -230,9 +230,9 @@ main {
   background: var(--now-bg);
   color: var(--now-text);
   text-align: center;
-  padding: 0.65rem 1.5rem;
+  padding: 0.35rem 1.5rem;
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.80rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: background 0.3s, color 0.3s;
