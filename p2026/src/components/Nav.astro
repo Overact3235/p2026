@@ -1,55 +1,44 @@
 ---
 const activeRoute = Astro.url.pathname;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const homeHref = base || '/';
-
-function isActive(path: string) {
-  const current = activeRoute.replace(/\/+$/, '') || '/';
-  const target = path.replace(/\/+$/, '') || '/';
-  if (target === '/') return current === '/';
-  return current === target || current.startsWith(`${target}/`);
-}
 ---
 
 <nav>
-  <a href={homeHref} class="nav-logo">P<span>2026</span></a>
+  <a href="/" class="nav-logo">P<span>2026</span></a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href={`${base}/blog`} class={isActive(`${base}/blog`) ? 'active' : ''}>Writing</a></li>
-      <li><a href={`${base}/projects`} class={isActive(`${base}/projects`) ? 'active' : ''}>Projects</a></li>
-      <li><a href={`${base}/resources`} class={isActive(`${base}/resources`) ? 'active' : ''}>Resources</a></li>
-      <li><a href={`${base}/about`} class={isActive(`${base}/about`) ? 'active' : ''}>About</a></li>
+      <li><a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a></li>
+      <li><a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a></li>
+      <li><a href="/projects" class={activeRoute.startsWith('/projects') ? 'active' : ''}>Projects</a></li>
+      <li><a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About & CV</a></li>
     </ul>
-    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu">☰</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false">☰</button>
     <button class="theme-btn" id="themeToggle" aria-label="Toggle light and dark theme">◑</button>
   </div>
 </nav>
 
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-  <a href={`${base}/blog`} class={isActive(`${base}/blog`) ? 'active' : ''}>Writing</a>
-  <a href={`${base}/projects`} class={isActive(`${base}/projects`) ? 'active' : ''}>Projects</a>
-  <a href={`${base}/resources`} class={isActive(`${base}/resources`) ? 'active' : ''}>Resources</a>
-  <a href={`${base}/about`} class={isActive(`${base}/about`) ? 'active' : ''}>About</a>
+  <a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a>
+  <a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a>
+  <a href="/projects" class={activeRoute.startsWith('/projects') ? 'active' : ''}>Projects</a>
+  <a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About & CV</a>
 </nav>
 
-<script lang="ts">
+<script>
   const btn = document.getElementById('themeToggle') as HTMLButtonElement | null;
   const root = document.documentElement;
 
   btn?.addEventListener('click', () => {
     const dark = root.getAttribute('data-theme') === 'dark';
     root.setAttribute('data-theme', dark ? 'light' : 'dark');
-    try { localStorage.setItem('theme', dark ? 'light' : 'dark'); } catch {}
+    localStorage.setItem('theme', dark ? 'light' : 'dark');
   });
 
   const menuBtn = document.getElementById('mobileMenuBtn') as HTMLButtonElement | null;
   const mobileNav = document.getElementById('mobileNav') as HTMLElement | null;
 
   menuBtn?.addEventListener('click', () => {
-    if (mobileNav && menuBtn) {
-      const open = mobileNav.classList.toggle('open');
-      menuBtn.setAttribute('aria-expanded', String(open));
-      menuBtn.textContent = open ? '✕' : '☰';
-    }
+    const open = mobileNav?.classList.toggle('open') ?? false;
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.textContent = open ? '✕' : '☰';
   });
 </script>
