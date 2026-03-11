@@ -253,9 +253,8 @@ main {
 }
 
 /* ── Navigation ──────────────────────────────────────────────────── */
-/* Scoped to :not(.mobile-nav) so the mobile nav element doesn't inherit
-   the desktop padding/max-width */
-nav:not(.mobile-nav) {
+/* .main-nav = desktop bar only. .mobile-nav is separate and unaffected. */
+.main-nav {
   max-width: 720px;
   margin: 0 auto;
   padding: 1.75rem 1.5rem 0;
@@ -1442,7 +1441,7 @@ footer {
 
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  nav:not(.mobile-nav) {
+  .main-nav {
     padding: 1.25rem 1rem 0;
   }
 
