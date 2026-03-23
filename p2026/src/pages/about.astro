@@ -5,12 +5,12 @@ import { getCollection } from 'astro:content';
 const projects = await getCollection('projects');
 ---
 
-<BaseLayout title="About" description="The builder behind P2026. Web development, self-hosting, and tooling experiments documented in public.">
+<BaseLayout title="About" description="The builder behind P2026. Web development, self-hosting, and tooling experiments, documented in public.">
   <header class="hero">
     <div class="hero-content">
       <p class="hero-label">About</p>
       <h1>The builder<br>behind <em>P2026.</em></h1>
-      <p class="hero-sub">Building in public through web development, self-hosting, and the small systems that make projects easier to run. Anonymous by choice.</p>
+      <p class="hero-sub">P2026 is where I write through the work: web development, self-hosting, and the small systems that make projects easier to run. Anonymous by choice.</p>
       <div class="cv-actions">
         <a href="https://github.com/Overact3235/p2026" class="btn-secondary" target="_blank" rel="noopener" aria-label="Open the P2026 repository on GitHub">View source ↗</a>
         <a href="mailto:contact@p2026.xyz" class="btn-secondary" aria-label="Email contact@p2026.xyz">Email</a>
@@ -24,50 +24,42 @@ const projects = await getCollection('projects');
     <!-- SKILLS -->
     <section class="section" aria-labelledby="skills-heading">
       <div class="section-header reveal">
-        <h2 class="section-title" id="skills-heading">Skills & Stack</h2>
+        <h2 class="section-title" id="skills-heading">What I Use</h2>
       </div>
 
       <div class="skill-row hover-row reveal">
-        <span class="skill-label">Languages</span>
+        <span class="skill-label">On the web</span>
         <div class="skill-tags">
           <span class="skill-tag">HTML</span>
           <span class="skill-tag">CSS</span>
           <span class="skill-tag">TypeScript</span>
           <span class="skill-tag">JavaScript</span>
-          <span class="skill-tag">Markdown / MDX</span>
         </div>
       </div>
 
       <div class="skill-row hover-row reveal">
-        <span class="skill-label">Site stack</span>
+        <span class="skill-label">Framework</span>
         <div class="skill-tags">
-          <span class="skill-tag">Astro 5</span>
-          <span class="skill-tag">Node.js</span>
-          <span class="skill-tag">Content Collections</span>
-          <span class="skill-tag">GitHub Pages</span>
-          <span class="skill-tag">RSS</span>
+          <span class="skill-tag">Astro</span>
         </div>
       </div>
 
       <div class="skill-row hover-row reveal">
-        <span class="skill-label">Infrastructure</span>
+        <span class="skill-label">Infra</span>
         <div class="skill-tags">
           <span class="skill-tag">Caddy</span>
           <span class="skill-tag">Nginx</span>
           <span class="skill-tag">Docker</span>
           <span class="skill-tag">Podman</span>
-          <span class="skill-tag">Linux</span>
         </div>
       </div>
 
       <div class="skill-row hover-row reveal">
-        <span class="skill-label">Tools</span>
+        <span class="skill-label">Workflow</span>
         <div class="skill-tags">
           <span class="skill-tag">Git</span>
           <span class="skill-tag">GitHub Actions</span>
           <span class="skill-tag">n8n</span>
-          <span class="skill-tag">VS Code</span>
-          <span class="skill-tag">Lighthouse CI</span>
         </div>
       </div>
     </section>
@@ -75,7 +67,7 @@ const projects = await getCollection('projects');
     <!-- CURRENT FOCUS -->
     <section class="section" aria-labelledby="experience-heading">
       <div class="section-header reveal">
-        <h2 class="section-title" id="experience-heading">Current Focus</h2>
+        <h2 class="section-title" id="experience-heading">What I'm Focused On</h2>
       </div>
 
       <div class="exp-row hover-row reveal">
@@ -84,9 +76,9 @@ const projects = await getCollection('projects');
           Web
         </div>
         <div class="exp-body">
-          <p class="exp-role">Website stack</p>
+          <p class="exp-role">Keeping the site close to the platform</p>
           <p class="exp-company">P2026</p>
-          <p class="exp-desc">This site is built close to the platform: Astro, content collections, static output, and plain CSS with only the JavaScript that earns its keep.</p>
+          <p class="exp-desc">I like building this site with as little abstraction as possible: Astro, static output, plain CSS, and only the JavaScript that actually earns its keep.</p>
           <div class="exp-tags">
             <span class="exp-tag">Astro</span>
             <span class="exp-tag">TypeScript</span>
@@ -103,9 +95,9 @@ const projects = await getCollection('projects');
           Infra
         </div>
         <div class="exp-body">
-          <p class="exp-role">Self-hosting and containers</p>
+          <p class="exp-role">Learning by running my own services</p>
           <p class="exp-company">Homelab / side projects</p>
-          <p class="exp-desc">Most of the learning happens around reverse proxies, containers, Linux hosts, and making services easy to ship, recover, and move around.</p>
+          <p class="exp-desc">A lot of the real learning happens in reverse proxies, containers, and Linux hosts: figuring out how to ship things cleanly, recover them, and keep them understandable.</p>
           <div class="exp-tags">
             <span class="exp-tag">Caddy</span>
             <span class="exp-tag">Nginx</span>
@@ -122,9 +114,9 @@ const projects = await getCollection('projects');
           Tools
         </div>
         <div class="exp-body">
-          <p class="exp-role">Automation and delivery</p>
+          <p class="exp-role">Keeping the workflow simple</p>
           <p class="exp-company">Build and publish workflow</p>
-          <p class="exp-desc">Git keeps the work trackable, GitHub Actions handles deploys, GitHub Pages ships the static site, and n8n fills in the automation gaps elsewhere.</p>
+          <p class="exp-desc">I try to keep the loop simple: Git for the work, GitHub Actions for deploys, GitHub Pages for hosting, and n8n where a little automation helps.</p>
           <div class="exp-tags">
             <span class="exp-tag">Git</span>
             <span class="exp-tag">GitHub Actions</span>
