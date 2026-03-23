@@ -1,4 +1,4 @@
-# CLAUDE.md — P2026 Project Context
+# AGENTS.md — P2026 Project Context
 
 This file exists to give AI assistants context about the project before making changes.
 
