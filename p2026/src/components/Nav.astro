@@ -9,7 +9,7 @@ const activeRoute = Astro.url.pathname;
       <li><a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a></li>
       <li><a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a></li>
       <li><a href="/projects" class={activeRoute.startsWith('/projects') ? 'active' : ''}>Projects</a></li>
-      <li><a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About & CV</a></li>
+      <li><a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About</a></li>
     </ul>
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false">☰</button>
     <button class="theme-btn" id="themeToggle" aria-label="Toggle light and dark theme">◑</button>
@@ -21,7 +21,7 @@ const activeRoute = Astro.url.pathname;
   <a href="/" class={activeRoute === '/' ? 'active' : ''}>Home</a>
   <a href="/blog" class={activeRoute.startsWith('/blog') ? 'active' : ''}>Writing</a>
   <a href="/projects" class={activeRoute.startsWith('/projects') ? 'active' : ''}>Projects</a>
-  <a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About & CV</a>
+  <a href="/about" class={activeRoute === '/about' ? 'active' : ''}>About</a>
 </nav>
 
 <script>
