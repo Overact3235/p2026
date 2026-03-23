@@ -131,6 +131,14 @@ Timeline is a manual log — nothing auto-generates it. Add an entry for signifi
 
 ---
 
+## Git workflow
+
+- Preferred branch prefixes are `feature/` for new work and `fix/` for bug fixes.
+- Keep branch names short and descriptive, for example `feature/update-context` or `fix/nav-spacing`.
+- Tool-specific prefixes added by external assistants are not part of the repo convention.
+
+---
+
 ## What to keep in mind
 
 - The site is intentionally anonymous — do not suggest linking to personal social profiles or real name
