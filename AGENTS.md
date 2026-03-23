@@ -1,4 +1,4 @@
-# CLAUDE.md — P2026 Project Context
+# AGENTS.md — P2026 Project Context
 
 This file exists to give AI assistants context about the project before making changes.
 
@@ -28,7 +28,7 @@ Live at: **p2026.xyz**
 | Framework | Astro 5 | Zero JS by default, component model, content collections |
 | Content | Markdown / MDX | Simple, portable, no CMS |
 | Styling | Custom CSS | Single `global.css`, no framework |
-| Fonts | Local woff2 | No external requests, privacy |
+| Fonts | Local bundled fonts via `@fontsource` | No external requests, privacy, fast static delivery |
 | Hosting | GitHub Pages | Free, fast, simple |
 | CI/CD | GitHub Actions | Auto-deploy on push to main |
 | Domain | p2026.xyz (Spaceship) | Apex domain, DNS via Spaceship |
@@ -69,7 +69,7 @@ p2026/                          ← repo root
     │   │   └── about.astro
     │   └── styles/
     │       ├── global.css      ← all styling lives here
-    │       └── fonts.css       ← @font-face declarations for local fonts
+    │       └── fonts.css       ← local `@fontsource` font imports
     ├── astro.config.mjs        ← site: https://p2026.xyz, no base set
     ├── lighthouse-limits.json  ← Lighthouse score thresholds (90+ all categories)
     ├── lighthouserc.json       ← Lighthouse CI config, targets live site
@@ -117,7 +117,15 @@ Timeline is a manual log — nothing auto-generates it. Add an entry for signifi
 - **Dark mode:** default
 - **Light mode:** automatic via `prefers-color-scheme: light`. Warm off-white bg, darker accent (`#8a4800`) for contrast compliance.
 - **Fonts:** JetBrains Mono (headings, UI, code), Lora serif (body). Latin subset only.
-- **No JavaScript** shipped to the browser. CSS-only light mode toggle.
+- **Fonts are loaded locally** through `src/styles/fonts.css`, not from Google Fonts.
+
+---
+
+## Active notes
+
+- The local font migration is complete and should be preserved.
+- Other layout and infrastructure suggestions are intentionally deferred in `roadmap.md`.
+- If you revisit timeline/projects structure, footer permalink strategy, or hosting decisions, check `roadmap.md` first.
 
 ---
 
@@ -128,6 +136,14 @@ Timeline is a manual log — nothing auto-generates it. Add an entry for signifi
 - Output: `./p2026/dist` uploaded as GitHub Pages artifact
 - Node version: 24 (matches local dev)
 - Squash merging only on PRs — keeps main history clean
+
+---
+
+## Git workflow
+
+- Preferred branch prefixes are `feature/` for new work and `fix/` for bug fixes.
+- Keep branch names short and descriptive, for example `feature/update-context` or `fix/nav-spacing`.
+- Tool-specific prefixes added by external assistants are not part of the repo convention.
 
 ---
 

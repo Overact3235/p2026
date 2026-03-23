@@ -54,6 +54,15 @@ Pushes to `main` auto-deploy via GitHub Actions. To set up:
 2. Set source to **GitHub Actions**
 3. Push to `main`
 
+## Branch naming
+
+Use `feature/` for new work and `fix/` for bug fixes.
+
+Examples:
+
+- `feature/update-context`
+- `fix/mobile-nav-spacing`
+
 ## Structure
 
 ```
