@@ -404,6 +404,12 @@ footer {
   justify-content: space-between;
 }
 
+.footer-copy-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
 .footer-copy {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -411,10 +417,24 @@ footer {
   letter-spacing: 0.05em;
 }
 
+.footer-permalink {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+.footer-permalink:hover {
+  color: var(--amber);
+  opacity: 1;
+}
+
 .footer-links {
   display: flex;
   gap: 1.25rem;
   list-style: none;
+  flex-wrap: wrap;
 }
 
 .footer-links a {

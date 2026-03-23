@@ -1,11 +1,14 @@
 ---
-// Add @astrojs/rss + src/pages/rss.xml.ts when ready to activate the feed
+const repoUrl = 'https://github.com/Overact3235/p2026';
 ---
 
 <footer>
-  <span class="footer-copy">© Project 2026</span>
+  <div class="footer-copy-group">
+    <span class="footer-copy">© Project 2026</span>
+    <a class="footer-permalink" href={repoUrl} target="_blank" rel="noopener">github.com/Overact3235/p2026</a>
+  </div>
   <ul class="footer-links">
-    <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href={repoUrl} target="_blank" rel="noopener">Source repo</a></li>
     <li><a href="/rss.xml">RSS</a></li>
   </ul>
 </footer>
