@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const projects = await getCollection('projects');
-const repoUrl = 'https://github.com/Overact3235/p2026';
 ---
 
 <BaseLayout title="About & CV" description="The builder behind P2026. Software engineer documenting projects, self-hosting, and experiments in public.">
@@ -14,7 +13,7 @@ const repoUrl = 'https://github.com/Overact3235/p2026';
       <p class="hero-sub">Software engineer. Self-hoster. Documenting the process of building in public — one project at a time. Anonymous by choice.</p>
       <div class="cv-actions">
         <a href="/cv.pdf" class="btn-cv" download aria-label="Download CV as PDF">↓ Download CV</a>
-        <a href={repoUrl} class="btn-secondary" target="_blank" rel="noopener" aria-label="Source repository (opens in new tab)">Source repo ↗</a>
+        <a href="https://github.com" class="btn-secondary" target="_blank" rel="noopener" aria-label="GitHub profile (opens in new tab)">GitHub ↗</a>
         <!-- <a href="https://linkedin.com" class="btn-secondary" target="_blank" rel="noopener" aria-label="LinkedIn profile (opens in new tab)">LinkedIn ↗</a> -->
       </div>
     </div>
@@ -153,9 +152,9 @@ const repoUrl = 'https://github.com/Overact3235/p2026';
         <h2 class="section-title" id="contact-heading">Contact</h2>
       </div>
 
-      <a href={repoUrl} class="contact-row hover-row reveal" target="_blank" rel="noopener">
-        <span class="contact-label">Repository</span>
-        <span class="contact-value">github.com/Overact3235/p2026</span>
+      <a href="https://github.com" class="contact-row hover-row reveal" target="_blank" rel="noopener">
+        <span class="contact-label">GitHub</span>
+        <span class="contact-value">github.com</span>
       </a>
 
       <!--
