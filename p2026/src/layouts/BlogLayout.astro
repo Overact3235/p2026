@@ -11,7 +11,7 @@ const { title, description, ogImage } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} ogImage={ogImage}>
-  <div class="blog-layout container">
+  <div class="blog-layout">
     <!-- Main content -->
     <article class="blog-article">
       <slot />
@@ -110,10 +110,12 @@ const { title, description, ogImage } = Astro.props;
   /* ─── Layout ─────────────────────────────────────────────────────────────── */
   .blog-layout {
     display: grid;
-    grid-template-columns: 1fr 14rem;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: 2.75rem;
     align-items: start;
-    max-width: 80rem;
+    width: min(74rem, calc(100vw - 3rem));
+    margin: 0 auto;
+    padding: 0 1.5rem;
   }
 
   .blog-article {
