@@ -150,6 +150,7 @@ Projects are the primary publishing anchor. Blog posts can link back to a projec
 
 - Preferred branch prefixes are `feature/` for new work and `fix/` for bug fixes.
 - Keep branch names short and descriptive, for example `feature/update-context` or `fix/nav-spacing`.
+- Prefer many small, feature-scoped commits over one large branch-ending commit. Since PRs are squash-merged, each chat/work sequence should usually end with its own commit when the work is in a coherent state.
 - Tool-specific prefixes added by external assistants are not part of the repo convention.
 
 ---
