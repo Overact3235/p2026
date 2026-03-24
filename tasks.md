@@ -35,6 +35,12 @@
 - Leave n8n as a future automation layer until the content loop is stable enough to support it.
 - If open-source or VPS tooling comes up again, evaluate it separately so it does not distract from the publishing path.
 
+## Epic 6: Lightweight Interactions
+
+- Add small JS enhancements that improve usability without turning the site into an app.
+- Prefer plain scripts and Astro page/layout scripts over framework islands.
+- Start with status filters, heading copy-links, or other interactions that help readers navigate content.
+- Keep every interaction optional, fast, and respectful of the existing static-first approach.
 ## Sub-Agent Handoff
 
 - Give one sub-agent the docs/content-model cleanup.

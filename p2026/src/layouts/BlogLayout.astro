@@ -42,9 +42,35 @@ const { title, description, ogImage } = Astro.props;
     ul.className = 'toc-list';
 
     headings.forEach((h, i) => {
+      const headingText = h.textContent ?? '';
+
       // Ensure each heading has an id for anchor links
       if (!h.id) {
         h.id = 'heading-' + i;
+      }
+
+      if (!h.querySelector('.heading-anchor')) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'heading-anchor';
+        button.textContent = '#';
+        button.setAttribute('aria-label', 'Copy link to this section');
+        button.addEventListener('click', async () => {
+          const url = new URL(window.location.href);
+          url.hash = h.id;
+
+          try {
+            await navigator.clipboard.writeText(url.toString());
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = '#';
+            }, 1200);
+          } catch {
+            window.location.hash = h.id;
+          }
+        });
+
+        h.appendChild(button);
       }
 
       const li = document.createElement('li');
@@ -52,7 +78,7 @@ const { title, description, ogImage } = Astro.props;
 
       const a = document.createElement('a');
       a.href = '#' + h.id;
-      a.textContent = h.textContent ?? '';
+      a.textContent = headingText;
       a.className = 'toc-link';
 
       li.appendChild(a);
@@ -141,6 +167,40 @@ const { title, description, ogImage } = Astro.props;
     letter-spacing: 0.01em;
     margin-top: 2rem;
     margin-bottom: 0.5rem;
+  }
+
+  .blog-article :global(h2),
+  .blog-article :global(h3) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .blog-article :global(.heading-anchor) {
+    opacity: 0;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1;
+    padding: 0.25rem 0.45rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: opacity 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .blog-article :global(h2:hover .heading-anchor),
+  .blog-article :global(h3:hover .heading-anchor),
+  .blog-article :global(.heading-anchor:focus-visible) {
+    opacity: 1;
+  }
+
+  .blog-article :global(.heading-anchor:hover),
+  .blog-article :global(.heading-anchor:focus-visible) {
+    color: var(--amber);
+    border-color: var(--amber);
+    opacity: 1;
   }
 
   /* ─── Sidebar ────────────────────────────────────────────────────────────── */

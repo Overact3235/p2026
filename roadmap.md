@@ -4,6 +4,7 @@
 
 - Local bundled fonts are in place.
 - The site already has a clean Astro base, project collection, blog collection, and GitHub Actions deploy flow.
+- Lightweight interactions have started: project status filters and heading copy-links are now part of the static-first UI.
 
 ## Next
 
