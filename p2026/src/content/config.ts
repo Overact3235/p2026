@@ -20,6 +20,7 @@ const projects = defineCollection({
     date: z.coerce.date(),
     status: z.enum(['shipped', 'building', 'archived']),
     draft: z.boolean().default(false),
+    featured: z.boolean().default(false),
     metric: z.string().optional(),
     stack: z.array(z.string()).optional(),
     link: z.string().optional(),

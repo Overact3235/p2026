@@ -9,6 +9,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 const projects = (await getCollection('projects', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const shippedProjects = projects.filter((project) => project.data.status === 'shipped');
+const featuredProject = shippedProjects.find((project) => project.data.featured);
+const statusProject = featuredProject ?? shippedProjects[0];
 
 function formatPostDate(date: Date) {
   const parts = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).split(', ');
@@ -36,7 +38,7 @@ function formatPostDate(date: Date) {
         <div class="hero-divider"></div>
         <span class="status-pill">
           <span class="status-dot"></span>
-          {shippedProjects.length > 0 ? `Shipped: ${shippedProjects[0].data.name}` : `Shipped: P2026`}
+          {statusProject ? `Shipped: ${statusProject.data.name}` : `Shipped: P2026`}
         </span>
       </div>
       <div class="cta-strip">

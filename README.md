@@ -42,6 +42,7 @@ name: "Project name"
 description: "One sentence summary."
 date: 2026-02-01
 status: shipped
+featured: false
 link: "https://..."
 repo: "https://github.com/..."
 stack: ["Astro", "GitHub Actions"]

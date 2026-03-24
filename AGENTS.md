@@ -107,6 +107,7 @@ description: ""
 date: YYYY-MM-DD
 status: shipped | building | archived
 draft: false      # omit or set true to hide from build
+featured: false   # optional homepage/status priority
 link: ""          # optional live link
 repo: ""          # optional source link
 stack: []         # optional short stack list
