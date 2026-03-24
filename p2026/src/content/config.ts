@@ -17,10 +17,13 @@ const projects = defineCollection({
   schema: z.object({
     name: z.string(),
     description: z.string(),
+    date: z.coerce.date(),
     status: z.enum(['shipped', 'building', 'archived']),
+    draft: z.boolean().default(false),
     metric: z.string().optional(),
     stack: z.array(z.string()).optional(),
     link: z.string().optional(),
+    repo: z.string().optional(),
   }),
 });
 

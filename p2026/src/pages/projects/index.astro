@@ -2,7 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const projects = await getCollection('projects');
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const shippedProjects = projects.filter(p => p.data.status === 'shipped');
 const buildingProjects = projects.filter(p => p.data.status === 'building');
@@ -14,7 +15,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
     <div class="page-header" style="margin-top: 3rem; margin-bottom: 3rem;">
       <span class="label" style="font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.14em; text-transform: uppercase;">// all-projects</span>
       <h1 style="margin-top: 1rem; margin-bottom: 1rem;">Projects</h1>
-      <p style="color: var(--ink-muted); font-size: 0.975rem; max-width: 48ch;">A comprehensive list of projects, launches, and infrastructure.</p>
+      <p style="color: var(--ink-muted); font-size: 0.975rem; max-width: 48ch;">Projects get a stable home here, with launches, notes, and related writing connected around them.</p>
     </div>
 
     {shippedProjects.length > 0 && (
@@ -24,7 +25,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
         </div>
         <div class="project-list">
           {shippedProjects.map(project => (
-            <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
+            <a class="project-row reveal" href={`/projects/${project.slug}`}>
               <div class="project-left">
                 <p class="project-name">{project.data.name}</p>
                 <p class="project-desc">{project.data.description}</p>
@@ -46,7 +47,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
         </div>
         <div class="project-list">
           {buildingProjects.map(project => (
-            <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
+            <a class="project-row reveal" href={`/projects/${project.slug}`}>
               <div class="project-left">
                 <p class="project-name">{project.data.name}</p>
                 <p class="project-desc">{project.data.description}</p>
@@ -67,7 +68,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
         </div>
         <div class="project-list">
           {archivedProjects.map(project => (
-            <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
+            <a class="project-row reveal" href={`/projects/${project.slug}`}>
               <div class="project-left">
                 <p class="project-name">{project.data.name}</p>
                 <p class="project-desc">{project.data.description}</p>

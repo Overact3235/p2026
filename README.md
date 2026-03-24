@@ -1,56 +1,64 @@
 # Project 2026 - P2026
 
-Personal hub for 2026 — project log, blog, and launch tracker.
+Personal hub for 2026: project log, blog, and launch tracker.
 
 Built with [Astro](https://astro.build) and deployed on [GitHub Pages](https://pages.github.com). No CMS, no database, just files.
 
-→ [p2026.xyz](https://p2026.xyz)
+-> [p2026.xyz](https://p2026.xyz)
 
 ---
 
 ## Running locally
 
 ```bash
-npm install
-npm run dev       # localhost:4321
-npm run build     # production build
+pnpm install
+pnpm run dev
+pnpm run build
 ```
 
 ## Adding content
 
-**Blog post** — create a `.md` file in `src/content/blog/`:
+**Blog post** - create a `.md` file in `src/content/blog/`:
+
 ```yaml
 ---
 title: "Post title"
 description: "One sentence summary."
 pubDate: 2026-02-01
 tags: ["tag1", "tag2"]
-project: "optional-project-name"
+project: "optional-project-slug"
+draft: true
 ---
 
 Content here.
 ```
 
-**Timeline entry** — create a `.md` file in `src/content/timeline/`:
+**Project** - create a `.md` file in `src/content/projects/`:
+
 ```yaml
 ---
-title: "Launched something"
+slug: "project-slug"
+name: "Project name"
+description: "One sentence summary."
 date: 2026-02-01
-type: launch    # launch | milestone | post | update | note
-project: "myapp"
+status: shipped
 link: "https://..."
+repo: "https://github.com/..."
+stack: ["Astro", "GitHub Actions"]
 ---
+
+Short project notes here.
 ```
 
-**Resources** — edit the array in `src/pages/resources.astro`
+**Timeline** - `/timeline` is generated from projects and blog posts. There is no separate timeline content folder.
 
-**Projects** — edit the array in `src/pages/about.astro`
+**Resources** - edit the array in `src/pages/resources.astro`
 
 ## Deployment
 
 Pushes to `main` auto-deploy via GitHub Actions. To set up:
 
-1. Go to **Settings → Pages**
+1. Go to **Settings -> Pages**
 2. Set source to **GitHub Actions**
 3. Push to `main`
 
@@ -65,22 +73,24 @@ Examples:
 
 ## Structure
 
-```
+```text
 src/
-├── content/
-│   ├── blog/
-│   └── timeline/
-├── components/
-│   ├── Nav.astro
-│   └── Footer.astro
-├── layouts/
-│   └── BaseLayout.astro
-├── pages/
-│   ├── index.astro
-│   ├── blog/
-│   ├── timeline.astro
-│   ├── resources.astro
-│   └── about.astro
-└── styles/
-    └── global.css
+|-- content/
+|   |-- blog/
+|   `-- projects/
+|-- components/
+|   |-- Footer.astro
+|   `-- Nav.astro
+|-- layouts/
+|   |-- BaseLayout.astro
+|   `-- BlogLayout.astro
+|-- pages/
+|   |-- about.astro
+|   |-- blog/
+|   |-- index.astro
+|   |-- projects/
+|   |-- resources.astro
+|   `-- timeline.astro
+`-- styles/
+    `-- global.css
 ```

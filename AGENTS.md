@@ -27,7 +27,7 @@ Live at: **p2026.xyz**
 |---|---|---|
 | Framework | Astro 5 | Zero JS by default, component model, content collections |
 | Content | Markdown / MDX | Simple, portable, no CMS |
-| Styling | Custom CSS | Single `global.css`, no framework |
+| Styling | Custom CSS | Global styles plus page-scoped Astro styles where it improves readability |
 | Fonts | Local bundled fonts via `@fontsource` | No external requests, privacy, fast static delivery |
 | Hosting | GitHub Pages | Free, fast, simple |
 | CI/CD | GitHub Actions | Auto-deploy on push to main |
@@ -45,7 +45,8 @@ p2026/                          ← repo root
 │       ├── deploy.yml          ← auto-deploys on push to main
 │       └── lighthouse.yml      ← manual Lighthouse audit against live site
 ├── prompts/
-│   └── blog-post.md            ← master prompt for generating blog posts
+│   ├── blog_prompt.md          ← blog post drafting prompt
+│   └── timeline_prompt.md      ← timeline/log drafting prompt
 └── p2026/                      ← Astro project root
     ├── public/
     │   ├── CNAME               ← custom domain persistence
@@ -54,7 +55,7 @@ p2026/                          ← repo root
     ├── src/
     │   ├── content/
     │   │   ├── blog/           ← blog posts (.md / .mdx)
-    │   │   ├── timeline/       ← log entries (.md)
+    │   │   ├── projects/       ← project entries (.md)
     │   │   └── config.ts       ← Zod schemas for content collections
     │   ├── components/
     │   │   ├── Nav.astro
@@ -65,6 +66,7 @@ p2026/                          ← repo root
     │   │   ├── index.astro
     │   │   ├── blog/
     │   │   ├── timeline.astro
+    │   │   ├── projects/
     │   │   ├── resources.astro
     │   │   └── about.astro
     │   └── styles/
@@ -95,19 +97,23 @@ draft: false      # omit or set true to hide from build
 
 Target length: 600–1000 words (3–5 minute read).
 
-### Timeline entries (`src/content/timeline/`)
+### Projects (`src/content/projects/`)
 
 ```yaml
 ---
-title: ""
+slug: ""
+name: ""
+description: ""
 date: YYYY-MM-DD
-type: launch | milestone | post | update | note
-project: ""       # optional
-link: ""          # optional
+status: shipped | building | archived
+draft: false      # omit or set true to hide from build
+link: ""          # optional live link
+repo: ""          # optional source link
+stack: []         # optional short stack list
 ---
 ```
 
-Timeline is a manual log — nothing auto-generates it. Add an entry for significant events, launches, and milestones. Not every timeline entry needs a blog post, but most blog posts should have a corresponding timeline entry.
+Projects are the primary publishing anchor. Blog posts can link back to a project via its slug, and `/timeline` is generated from project dates plus blog post dates.
 
 ---
 
@@ -124,6 +130,7 @@ Timeline is a manual log — nothing auto-generates it. Add an entry for signifi
 ## Active notes
 
 - The local font migration is complete and should be preserved.
+- `/timeline` is generated from `projects` and `blog` content; there is no separate timeline collection right now.
 - Other layout and infrastructure suggestions are intentionally deferred in `roadmap.md`.
 - If you revisit timeline/projects structure, footer permalink strategy, or hosting decisions, check `roadmap.md` first.
 
@@ -161,4 +168,4 @@ Timeline is a manual log — nothing auto-generates it. Add an entry for signifi
 
 - **n8n** — self-hosted automation, used for content pipelines and workflow automation
 - **Lighthouse CI** — manual audit workflow via `lighthouse.yml`, runs against live site
-- Blog post generation prompt lives at `prompts/blog-post.md`
+- Blog drafting prompt lives at `prompts/blog_prompt.md`

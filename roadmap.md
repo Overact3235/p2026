@@ -1,34 +1,26 @@
 # Roadmap
 
-This file tracks follow-up ideas that came up during the March 22, 2026 context and layout review.
-
 ## Done
 
-- Switch site fonts from Google Fonts to local bundled assets via `@fontsource`.
-- Keep typography offline for better privacy, fewer external requests, and faster static delivery.
+- Local bundled fonts are in place.
+- The site already has a clean Astro base, project collection, blog collection, and GitHub Actions deploy flow.
 
-## Next up
+## Next
 
-- Reconcile the `timeline` and `projects` concepts.
-  Right now the site has both `/timeline` and `/projects`, but the current implementation makes them overlap heavily. Decide whether `timeline` should stay as a distinct log, redirect to `projects`, or be removed entirely.
+- Make `projects` the primary publishing trigger and keep AI-assisted content draft-first.
+- Add a real project/blog workflow for launch notes, writeups, and follow-up posts.
+- Fix the content model and docs so they describe the live site instead of older timeline assumptions.
+- Add lightweight validation helpers for SEO and performance so checks are repeatable.
+- Ship the missing RSS/feed and metadata basics before adding more automation.
 
-- Update project context docs to match the live Astro app.
-  `AGENTS.md` still contains some older assumptions about timeline content and local `woff2` files. It should eventually reflect the actual content collections, route structure, and font implementation more precisely.
+## Soon
 
-- Decide on the long-term permalink strategy.
-  Because `p2026.xyz` is only being kept for a year, consider surfacing the repository URL more prominently as a durable reference:
-  `https://github.com/Overact3235/p2026`
+- Decide whether `/timeline` should become a distinct log, a redirect, or be retired.
+- Improve project permalinks and outbound links so the repo stays a durable reference if the domain changes.
+- Keep automation limited to drafting, PR creation, or content scaffolding rather than auto-publishing to production.
+- Expand the lightweight interactive layer with plain JS where it genuinely improves navigation or usability.
 
-- Choose a hosting model based on workflow, not just simplicity.
-  GitHub Pages is still the simplest production host, but Netlify may be a better fit if the project wants a `main` production branch plus a stable `staging` branch and preview deploys.
+## Notes
 
-- Review footer and About page outbound links.
-  Decide whether they should keep pointing to generic GitHub destinations or move to the repo permalink above.
-
-## Validation notes
-
-- Preferred local validation environment: Node 24 with `pnpm`.
-- Typical flow:
-  - `pnpm install`
-  - `pnpm run dev`
-  - `pnpm run build`
+- GitHub Pages remains the default host unless workflow needs push us elsewhere.
+- Prefer small, readable content and build tooling over adding dependencies.
