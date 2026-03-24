@@ -2,83 +2,58 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const projects = await getCollection('projects');
+const projects = await getCollection('projects', ({ data }) => !data.draft);
+const posts = await getCollection('blog', ({ data }) => !data.draft);
 
-const shippedProjects = projects.filter(p => p.data.status === 'shipped');
-const buildingProjects = projects.filter(p => p.data.status === 'building');
-const archivedProjects = projects.filter(p => p.data.status === 'archived');
+const entries = [
+  ...projects.map((project) => ({
+    type: project.data.status === 'shipped' ? 'launch' : 'update',
+    label: project.data.status === 'shipped' ? 'Project launch' : 'Project update',
+    date: project.data.date,
+    title: project.data.name,
+    body: project.data.description,
+    href: `/projects/${project.slug}`,
+  })),
+  ...posts.map((post) => ({
+    type: 'post',
+    label: 'Blog post',
+    date: post.data.pubDate,
+    title: post.data.title,
+    body: post.data.description,
+    href: `/blog/${post.slug}`,
+  })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
 ---
 
-<BaseLayout title="Projects" description="A comprehensive list of projects, launches, and infrastructure.">
+<BaseLayout title="Timeline" description="A chronological view of project launches, updates, and blog posts across P2026.">
   <div class="content">
     <div class="page-header" style="margin-top: 3rem; margin-bottom: 3rem;">
-      <span class="label" style="font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.14em; text-transform: uppercase;">// all-projects</span>
-      <h1 style="margin-top: 1rem; margin-bottom: 1rem;">Projects</h1>
-      <p style="color: var(--ink-muted); font-size: 0.975rem; max-width: 48ch;">A comprehensive list of projects, launches, and infrastructure.</p>
+      <span class="label" style="font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.14em; text-transform: uppercase;">// timeline</span>
+      <h1 style="margin-top: 1rem; margin-bottom: 1rem;">Timeline</h1>
+      <p style="color: var(--ink-muted); font-size: 0.975rem; max-width: 48ch;">A generated log of project launches, updates, and posts so the site keeps one timeline without duplicate content entry points.</p>
     </div>
 
-    {shippedProjects.length > 0 && (
-      <section class="section">
-        <div class="section-header reveal">
-          <h2 class="section-title">Shipped</h2>
-        </div>
-        <div class="project-list">
-          {shippedProjects.map(project => (
-            <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
-              <div class="project-left">
-                <p class="project-name">{project.data.name}</p>
-                <p class="project-desc">{project.data.description}</p>
-              </div>
-              <div class="project-right">
-                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
-                {project.data.metric && <span class="project-metric">{project.data.metric}</span>}
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-
-    {buildingProjects.length > 0 && (
-      <section class="section">
-        <div class="section-header reveal">
-          <h2 class="section-title">Building</h2>
-        </div>
-        <div class="project-list">
-          {buildingProjects.map(project => (
-            <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
-              <div class="project-left">
-                <p class="project-name">{project.data.name}</p>
-                <p class="project-desc">{project.data.description}</p>
-              </div>
-              <div class="project-right">
-                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-    
-    {archivedProjects.length > 0 && (
-      <section class="section">
-        <div class="section-header reveal">
-          <h2 class="section-title">Archived</h2>
-        </div>
-        <div class="project-list">
-          {archivedProjects.map(project => (
-            <a class="project-row reveal" href={project.data.link || `/projects/${project.slug}`}>
-              <div class="project-left">
-                <p class="project-name">{project.data.name}</p>
-                <p class="project-desc">{project.data.description}</p>
-              </div>
-              <div class="project-right">
-                <span class={`badge badge-${project.data.status}`}>{project.data.status.replace(/^\w/, (c: string) => c.toUpperCase())}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
+    <div class="timeline">
+      {entries.map((entry) => (
+        <article class={`timeline-entry ${entry.type === 'launch' ? 'launch' : ''}`}>
+          <div class="timeline-meta">
+            <time datetime={entry.date.toISOString()}>{formatDate(entry.date)}</time>
+            <span>{entry.label}</span>
+          </div>
+          <p class="timeline-title">
+            <a href={entry.href}>{entry.title}</a>
+          </p>
+          <p class="timeline-body">{entry.body}</p>
+        </article>
+      ))}
+    </div>
   </div>
 </BaseLayout>

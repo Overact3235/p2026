@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const projects = await getCollection('projects');
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <BaseLayout title="About" description="The builder behind P2026. Web development, self-hosting, and tooling experiments, documented in public.">
@@ -134,7 +135,7 @@ const projects = await getCollection('projects');
       </div>
 
       {projects.map(project => (
-        <a class="project-row hover-row reveal" href={project.data.link || `/projects/${project.slug}`}>
+        <a class="project-row hover-row reveal" href={`/projects/${project.slug}`}>
           <div class="project-left">
             <p class="project-name">{project.data.name}</p>
             <p class="project-desc">{project.data.description}</p>

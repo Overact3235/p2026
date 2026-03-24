@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+const relatedPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((post) => post.data.project === project.slug)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<BaseLayout title={project.data.name} description={project.data.description}>
+  <div class="content project-detail">
+    <div class="project-header">
+      <div class="project-header-meta">
+        <a href="/projects">← Projects</a>
+        <time datetime={project.data.date.toISOString()}>{formatDate(project.data.date)}</time>
+        <span class={`badge badge-${project.data.status}`}>{project.data.status}</span>
+      </div>
+      <h1>{project.data.name}</h1>
+      <p class="project-header-desc">{project.data.description}</p>
+
+      {(project.data.link || project.data.repo) && (
+        <div class="project-actions">
+          {project.data.link && (
+            <a href={project.data.link} target="_blank" rel="noopener" class="project-action">
+              Open project →
+            </a>
+          )}
+          {project.data.repo && (
+            <a href={project.data.repo} target="_blank" rel="noopener" class="project-action secondary">
+              Source code ↗
+            </a>
+          )}
+        </div>
+      )}
+
+      {project.data.stack && project.data.stack.length > 0 && (
+        <div class="project-stack">
+          {project.data.stack.map((item: string) => <span class="tag">{item}</span>)}
+        </div>
+      )}
+    </div>
+
+    <div class="project-grid">
+      <article class="prose project-prose">
+        <Content />
+      </article>
+
+      <aside class="project-side">
+        <p class="project-side-label">// related blog</p>
+        {relatedPosts.length > 0 ? (
+          <div class="post-list">
+            {relatedPosts.map((post) => (
+              <a class="post-row" href={`/blog/${post.slug}`}>
+                <span class="post-date">
+                  {post.data.pubDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </span>
+                <div class="post-info">
+                  <p class="post-title">{post.data.title}</p>
+                  <p class="post-desc">{post.data.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="project-side-empty">No linked blog posts yet. This project page is ready for launch notes and follow-up writeups.</p>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .project-detail {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .project-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .project-header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .project-header-desc {
+    max-width: 58ch;
+    color: var(--ink-muted);
+  }
+
+  .project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+
+  .project-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .project-action.secondary {
+    border-color: var(--rule);
+    color: var(--ink-muted);
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .project-prose {
+    min-width: 0;
+  }
+
+  .project-side {
+    position: sticky;
+    top: 5.5rem;
+  }
+
+  .project-side-label {
+    margin-bottom: 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--amber);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .project-side-empty {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-side {
+      position: static;
+    }
+  }
+</style>

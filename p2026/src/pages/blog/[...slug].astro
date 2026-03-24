@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
@@ -12,9 +12,15 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const currentIndex = allPosts.findIndex(entry => entry.id === post.id);
+const projects = await getCollection('projects', ({ data }) => !data.draft);
+const relatedProject = post.data.project
+  ? projects.find((project) => project.slug === post.data.project)
+  : undefined;
+
+const currentIndex = allPosts.findIndex((entry) => entry.id === post.id);
 const previousPost = currentIndex >= 0 && currentIndex < allPosts.length - 1
   ? allPosts[currentIndex + 1]
   : undefined;
@@ -22,7 +28,9 @@ const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
-    year: 'numeric', month: 'long', day: 'numeric',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 }
 ---
@@ -33,7 +41,11 @@ function formatDate(date: Date) {
       <a href="/blog" style="color:var(--text-dim);">← Blog</a>
       <a href="/resources" style="color:var(--text-dim);">Resources</a>
       <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-      {post.data.project && <span class="tag tag-launch">{post.data.project}</span>}
+      {relatedProject && (
+        <a href={`/projects/${relatedProject.slug}`} class="tag tag-launch">
+          {relatedProject.data.name}
+        </a>
+      )}
     </div>
     <h1>{post.data.title}</h1>
     <p class="post-header-desc">{post.data.description}</p>
@@ -46,7 +58,7 @@ function formatDate(date: Date) {
     <Content />
   </div>
 
-  <div style="margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
+  <div style="margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
     <div>
       {previousPost
         ? <a href={`/blog/${previousPost.slug}`} style="color:var(--text-dim);">← {previousPost.data.title}</a>

@@ -687,8 +687,8 @@ footer {
 /* ── Prose ───────────────────────────────────────────────────────── */
 .prose {
   max-width: var(--col);
-  font-size: 1.05rem;
-  line-height: 1.85;
+  font-size: 1rem;
+  line-height: 1.78;
 }
 
 .prose h2 {
@@ -700,7 +700,7 @@ footer {
 }
 
 .prose p {
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 .prose ul,
@@ -754,9 +754,10 @@ footer {
 }
 
 .post-header-desc {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--ink-muted);
   margin-bottom: 1rem;
+  max-width: 46rem;
 }
 
 /* ── Utilities ───────────────────────────────────────────────────── */

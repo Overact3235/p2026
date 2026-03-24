@@ -3,7 +3,7 @@ title: "Hosting a Minecraft server"
 description: "How I designed a private Minecraft host for resilience, recoverability, and safer network exposure."
 pubDate: 2026-02-28
 tags: ["minecraft", "networking", "security"]
-project: "p2026"
+project: "mc-server"
 ---
 
 Starting a Minecraft server is easy now: pick a flavor, expose port `25565`, and run it. The hard part is operating it safely. For `mc.p2026.xyz`, the objective was a private server that is predictable, recoverable, and harder to abuse.
