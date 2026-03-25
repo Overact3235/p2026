@@ -139,7 +139,8 @@ const { title, description, ogImage } = Astro.props;
     grid-template-columns: minmax(0, 1fr) 13rem;
     gap: 2.75rem;
     align-items: start;
-    width: min(74rem, calc(100vw - 3rem));
+    width: 100%;
+    max-width: var(--max-w);
     margin: 0 auto;
     padding: 0 1.5rem;
   }

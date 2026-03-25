@@ -14,7 +14,8 @@
   --mono: 'JetBrains Mono', monospace;
   --now-bg: #1a1814;
   --now-text: #c47a1e;
-  --max-w: min(860px, 92vw);
+  --shell-w: min(74rem, calc(100vw - 3rem));
+  --max-w: var(--shell-w);
   --col: 54rem;
 }
 
@@ -1453,10 +1454,6 @@ footer {
 
 /* Large screens — breathe a bit more */
 @media (min-width: 1200px) {
-  :root {
-    --max-w: min(960px, 88vw);
-  }
-
   .hero {
     padding: 5.5rem 2rem 4rem;
   }
