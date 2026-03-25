@@ -10,7 +10,10 @@ const buildingProjects = projects.filter(p => p.data.status === 'building');
 const archivedProjects = projects.filter(p => p.data.status === 'archived');
 ---
 
-<BaseLayout title="Projects" description="A comprehensive list of projects, launches, and infrastructure.">
+<BaseLayout
+  title="Projects, Launches, and Infrastructure"
+  description="A structured archive of shipped projects, active builds, and infrastructure experiments across P2026."
+>
   <div class="content">
     <div class="page-header" style="margin-top: 3rem; margin-bottom: 3rem;">
       <span class="label">// all-projects</span>
