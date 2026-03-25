@@ -851,6 +851,12 @@ footer {
   grid-template-columns: 1fr;
 }
 
+.hero.hero-compact {
+  padding-top: 3.25rem;
+  padding-bottom: 2.75rem;
+  gap: 1.5rem;
+}
+
 .hero-content {
   display: flex;
   flex-direction: column;
@@ -1469,6 +1475,10 @@ footer {
     padding: 5.5rem 2rem 4rem;
   }
 
+  .hero.hero-compact {
+    padding: 3.75rem 2rem 3rem;
+  }
+
   .content {
     padding: 0 2rem;
   }
@@ -1498,6 +1508,10 @@ footer {
   .hero {
     grid-template-columns: 1fr;
     padding: 3rem 1rem 2.5rem;
+  }
+
+  .hero.hero-compact {
+    padding: 2.5rem 1rem 2.25rem;
   }
 
   .ascii-block {
