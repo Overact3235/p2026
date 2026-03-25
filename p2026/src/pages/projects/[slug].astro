@@ -93,6 +93,42 @@ function formatDate(date: Date) {
   </div>
 </BaseLayout>
 
+<script>
+  const proseRoot = document.querySelector('.project-prose');
+  const headings = proseRoot ? Array.from(proseRoot.querySelectorAll('h2, h3')) : [];
+
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `project-heading-${index}`;
+    }
+
+    if (heading.querySelector('.heading-anchor')) {
+      return;
+    }
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'heading-anchor';
+    button.textContent = '#';
+    button.setAttribute('aria-label', 'Copy link to this section');
+    button.addEventListener('click', async () => {
+      const url = new URL(window.location.href);
+      url.hash = heading.id;
+
+      try {
+        await navigator.clipboard.writeText(url.toString());
+        button.textContent = 'Copied';
+        window.setTimeout(() => {
+          button.textContent = '#';
+        }, 1200);
+      } catch {
+        window.location.hash = heading.id;
+      }
+    });
+
+    heading.appendChild(button);
+  });
+</script>
 <style>
   .project-detail {
     padding-top: 3rem;
@@ -183,6 +219,39 @@ function formatDate(date: Date) {
     font-size: 0.9rem;
   }
 
+  .project-prose :global(h2),
+  .project-prose :global(h3) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .project-prose :global(.heading-anchor) {
+    opacity: 0;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    line-height: 1;
+    padding: 0.25rem 0.45rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: opacity 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .project-prose :global(h2:hover .heading-anchor),
+  .project-prose :global(h3:hover .heading-anchor),
+  .project-prose :global(.heading-anchor:focus-visible) {
+    opacity: 1;
+  }
+
+  .project-prose :global(.heading-anchor:hover),
+  .project-prose :global(.heading-anchor:focus-visible) {
+    color: var(--amber);
+    border-color: var(--amber);
+    opacity: 1;
+  }
   @media (max-width: 900px) {
     .project-grid {
       grid-template-columns: 1fr;

@@ -10,16 +10,26 @@ const buildingProjects = projects.filter(p => p.data.status === 'building');
 const archivedProjects = projects.filter(p => p.data.status === 'archived');
 ---
 
-<BaseLayout title="Projects" description="A comprehensive list of projects, launches, and infrastructure.">
+<BaseLayout
+  title="Projects, Launches, and Infrastructure"
+  description="A structured archive of shipped projects, active builds, and infrastructure experiments across P2026."
+>
   <div class="content">
     <div class="page-header" style="margin-top: 3rem; margin-bottom: 3rem;">
-      <span class="label" style="font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.14em; text-transform: uppercase;">// all-projects</span>
-      <h1 style="margin-top: 1rem; margin-bottom: 1rem;">Projects</h1>
+      <span class="label">// all-projects</span>
+      <h1>Projects</h1>
       <p style="color: var(--ink-muted); font-size: 0.975rem; max-width: 48ch;">Projects get a stable home here, with launches, notes, and related writing connected around them.</p>
     </div>
 
+    <div class="project-filters" aria-label="Filter projects by status">
+      <button type="button" class="project-filter-btn is-active" data-project-filter="all">All</button>
+      <button type="button" class="project-filter-btn" data-project-filter="shipped">Shipped</button>
+      <button type="button" class="project-filter-btn" data-project-filter="building">Building</button>
+      <button type="button" class="project-filter-btn" data-project-filter="archived">Archived</button>
+    </div>
+
     {shippedProjects.length > 0 && (
-      <section class="section">
+      <section class="section" data-project-group="shipped">
         <div class="section-header reveal">
           <h2 class="section-title">Shipped</h2>
         </div>
@@ -41,7 +51,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
     )}
 
     {buildingProjects.length > 0 && (
-      <section class="section">
+      <section class="section" data-project-group="building">
         <div class="section-header reveal">
           <h2 class="section-title">Building</h2>
         </div>
@@ -62,7 +72,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
     )}
     
     {archivedProjects.length > 0 && (
-      <section class="section">
+      <section class="section" data-project-group="archived">
         <div class="section-header reveal">
           <h2 class="section-title">Archived</h2>
         </div>
@@ -83,3 +93,55 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
     )}
   </div>
 </BaseLayout>
+
+<script>
+  const filterButtons = Array.from(document.querySelectorAll('[data-project-filter]'));
+  const groups = Array.from(document.querySelectorAll('[data-project-group]'));
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-project-filter');
+      if (!filter) return;
+
+      filterButtons.forEach((item) => {
+        item.classList.toggle('is-active', item === button);
+      });
+
+      groups.forEach((group) => {
+        const matches = filter === 'all' || group.getAttribute('data-project-group') === filter;
+        group.toggleAttribute('hidden', !matches);
+      });
+    });
+  });
+</script>
+
+<style>
+  .project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+
+  .project-filter-btn {
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .project-filter-btn:hover,
+  .project-filter-btn:focus-visible,
+  .project-filter-btn.is-active {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: var(--amber-dim);
+  }
+</style>
