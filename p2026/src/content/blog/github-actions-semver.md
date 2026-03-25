@@ -4,7 +4,7 @@ description: "How I deploy the site and keep releases simple with GitHub Actions
 pubDate: 2026-03-23
 tags: ["github-actions", "semantic-release", "ci"]
 project: "p2026"
-draft: true
+draft: false
 ---
 
 I have a soft spot for build pipelines that stay out of the way. If I have to think about the deployment too much, I probably built the wrong thing. For P2026, the goal is not to have a fancy release platform. The goal is to have a boring, dependable path from commit to live site.
