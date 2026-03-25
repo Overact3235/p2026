@@ -267,7 +267,7 @@ main {
 
 .nav-logo {
   font-family: var(--mono);
-  font-size: 0.875rem;
+  font-size: 0.96rem;
   font-weight: 500;
   color: var(--ink);
   text-decoration: none;
