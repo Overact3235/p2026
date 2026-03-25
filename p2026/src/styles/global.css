@@ -458,6 +458,17 @@ footer {
   border-bottom: 1px solid var(--rule);
 }
 
+.page-header h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 1rem 0;
+}
+
 .page-header .label {
   font-family: var(--mono);
   font-size: 0.72rem;
