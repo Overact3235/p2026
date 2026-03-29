@@ -12,7 +12,7 @@
 - Evaluate whether the site even needs a CMS before adding one, and keep Git plus Markdown as the source of truth either way.
 - Add lightweight validation helpers for SEO and performance so checks are repeatable.
 - Add a small planning layer: `roadmap.md` for direction, `tasks.md` for active work, and `backlog/` for parked ideas.
-- Define a `develop` branch plus Netlify preview flow so staged work can be reviewed live without changing production hosting.
+- Keep the branch flow simple: use `main` as the integration and production branch for now, and use a disposable preview branch for selective Netlify deploys.
 
 ## Soon
 
@@ -20,10 +20,19 @@
 - Improve project permalinks and outbound links so the repo stays a durable reference if the domain changes.
 - Keep automation limited to drafting, PR creation, or content scaffolding rather than auto-publishing to production.
 - Expand the lightweight interactive layer with plain JS where it genuinely improves navigation or usability.
-- Decide whether Netlify stays preview-only or becomes part of a longer-term multi-environment workflow.
+- Revisit a true `develop` integration branch only if the site starts batching multiple concurrent changes often enough to justify it.
 
 ## Notes
 
 - GitHub Pages remains the public production host for `main`.
-- Netlify can be added as a preview and staging host for `develop` without replacing the current production path.
+- Netlify can be used for preview deploys without replacing the current production path.
+- The current recommendation is to keep `main` as both integration and production, then selectively overwrite a `preview` branch when a stable Netlify test URL is useful.
 - Prefer small, readable content and build tooling over adding dependencies.
+
+## Branch Workflow
+
+- `main` is the default branch and the production release branch.
+- `main` also acts as the integration branch unless the project grows complex enough to justify a separate `develop` branch.
+- `feature/*` branches stay short-lived and are squash-merged when ready.
+- `preview` can be force-updated from a chosen feature branch when a stable Netlify deployment is useful for testing.
+- A long-lived `develop` branch is deferred for now and should only be introduced if it solves a real coordination problem.

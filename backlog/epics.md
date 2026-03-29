@@ -7,7 +7,7 @@
 
 ## Preview and Staging Infrastructure
 
-- Decide how `develop`, Netlify previews, and feature branches should interact.
+- Decide whether a disposable `preview` branch is enough or whether a true `develop` branch is eventually needed.
 - Keep preview infrastructure useful for review and validation without creating release confusion.
 
 ## Information Architecture

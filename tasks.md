@@ -27,11 +27,11 @@ This file tracks active work. Use `roadmap.md` for direction and `backlog/` for 
 
 ## Epic 4: Preview Environments and Branch Flow
 
-- Add a persistent `develop` branch for staging and preview builds.
-- Keep `main` as the public production branch and source for GitHub Pages.
-- Connect `develop` to Netlify so staged work can be reviewed live before release.
-- Decide whether feature branches should be previewed by Netlify directly or force-synced onto `develop` for a shared staging state.
-- Define a safe workflow for syncing `feature/*` branches onto `develop` without muddying production history.
+- Keep `main` as the public production branch and integration branch unless the project complexity proves otherwise.
+- Add a disposable `preview` branch for selective Netlify deploys when a stable test URL is useful.
+- Decide when Netlify PR previews are enough versus when the `preview` branch should be updated manually.
+- Define a safe workflow for syncing a chosen `feature/*` branch onto `preview` without muddying production history.
+- Document when a true `develop` branch would be worth introducing later.
 - Use the preview environment for SEO, plugin, and build checks before changes reach `main`.
 
 ## Epic 5: Site Quality
