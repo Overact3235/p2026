@@ -69,11 +69,10 @@ Pushes to `main` auto-deploy to GitHub Pages. To set up:
 
 The repo also supports a lightweight preview flow with Netlify:
 
-- `main` stays public production on GitHub Pages
+- `main` stays the integration branch and public production branch on GitHub Pages
 - Netlify can still build `main` without becoming the public production host
-- `develop` is the persistent staging branch
-- Netlify should be treated as a preview and staging host, not the public production site
-- `develop` should be enabled as a Netlify branch deploy for a stable staging URL
+- `preview` is the disposable Netlify branch deploy for a stable test URL when needed
+- Netlify should be treated as a preview host, not the public production site
 - Feature branches can use Netlify branch deploys or PR deploy previews
 
 The root `netlify.toml` is configured for this repo's nested Astro app:
@@ -88,10 +87,10 @@ To connect Netlify:
 1. Import the GitHub repo into Netlify
 2. Let Netlify read `netlify.toml`
 3. Keep Netlify connected to `main`
-4. Enable branch deploys for `develop`
+4. Enable branch deploys for `preview`
 5. Keep GitHub Pages serving `main` and `p2026.xyz` as the public production site
 
-If you want a shared staging URL, update `develop` with the branch you want to review and let Netlify rebuild. For one-off previews, opening a PR into `develop` is usually cleaner than force-updating the branch.
+If you want a stable preview URL, update `preview` with the branch you want to review and let Netlify rebuild. For one-off previews, Netlify PR deploys can still be enough without touching `preview`.
 
 ## Branch naming
 
@@ -102,7 +101,7 @@ Examples:
 - `feature/update-context`
 - `fix/mobile-nav-spacing`
 
-Use `develop` as the long-lived staging branch when preview hosting is needed.
+Use `main` as the default integration and production branch. Use `preview` only when you want a stable Netlify deployment for a selected change.
 
 ## Structure
 
