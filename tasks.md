@@ -6,13 +6,19 @@ This file tracks active work. Use `roadmap.md` for direction and `backlog/` for 
 
 - Create a clear path from project update to blog draft, including metadata, slug, and review state.
 - Decide which content source is authoritative for new work: `projects`, `blog`, or both with one as the trigger.
+- Prefer `projects` as the publishing trigger and treat blog posts as derived draft artifacts.
+- Define a seed-note format for each project so bullet points, links, and angle notes can be turned into a post later.
+- Add a scaffold or generator command that reads project metadata plus seed notes and writes a `draft: true` blog post file.
 - Add or update project detail pages so a project can have a stable home.
 - Keep RSS/feed and metadata basics wired into the homepage and footer.
+- Keep human review in the loop so automation drafts content without auto-publishing it.
 
 ## Epic 2: CMS Evaluation and Authoring UX
 
 - Keep the repo and Markdown content collections as the source of truth.
 - Compare the lightest authoring options first: plain file workflow, Front Matter CMS, and Pages CMS.
+- Add Keystatic to the comparison only if a richer in-repo admin layer becomes necessary.
+- Keep EmDash on the watchlist, but treat it as a future platform evaluation rather than the default next step.
 - Treat a browser CMS as an authoring layer, not a separate content platform or database.
 - If a CMS is added, make sure its output still lands in Git so the existing build flow remains the publish trigger.
 - Prefer draft-first writing and review over direct production publishing.
@@ -22,6 +28,8 @@ This file tracks active work. Use `roadmap.md` for direction and `backlog/` for 
 - Reconcile `/timeline` with the current project/blog structure.
 - Update README and AGENTS content to match the live Astro app and planning workflow.
 - Review frontmatter schemas for blog and projects so they are aligned with the publishing workflow.
+- Align blog writing guidance across `AGENTS.md`, `README.md`, and `prompts/blog_prompt.md`, especially target length and required frontmatter.
+- Confirm whether project `slug` should remain a reserved content-entry slug or be documented and validated differently.
 - Document how `roadmap.md`, `tasks.md`, and `backlog/` are meant to work together.
 - Make sure any new automation writes draft content first, not production-ready posts.
 
@@ -52,7 +60,7 @@ This file tracks active work. Use `roadmap.md` for direction and `backlog/` for 
 
 - Draft a blog post about GitHub Actions and semantic versioning using the current repo workflows as source material.
 - Keep the post human and practical, focused on what the workflow does and why it exists.
-- Leave n8n as a future automation layer until the content loop is stable enough to support it.
+- Leave n8n as a future wrapper around a local draft-generation workflow until the content loop is stable enough to support it.
 - If open-source or VPS tooling comes up again, evaluate it separately so it does not distract from the publishing path.
 
 ## Epic 8: Lightweight Interactions

@@ -1,183 +1,107 @@
 # AGENTS.md - P2026 Project Context
 
-This file exists to give AI assistants context about the project before making changes.
+Use this file as the quick operating context for the repo. For deeper planning, check `roadmap.md`, `tasks.md`, and `backlog/`.
+For a generated repo tree snapshot, check `notes/repo-structure.md`.
 
----
+## Project
 
-## What this is
+P2026 is a personal tech hub and build log for 2026 at **p2026.xyz**.
 
-P2026 is a personal tech hub and build log for 2026. It serves as a public-facing portfolio and writing outlet for someone learning web development and self-hosting while building out a broader personal infrastructure stack.
+Goals:
 
-Live at: **p2026.xyz**
+- document projects, launches, and experiments as they happen
+- build in public without exposing unnecessary infrastructure detail
+- learn web development hands-on with a fast, readable, low-dependency site
 
----
+## Stack
 
-## Goals
+- Astro 5
+- Markdown and MDX content collections
+- custom CSS
+- local bundled fonts via `@fontsource`
+- GitHub Pages for production
+- Netlify for previews
+- GitHub Actions for deploys and release automation
 
-- Document projects, launches, and experiments as they happen
-- Build in public without disclosing specifics about the underlying infrastructure
-- Develop web development skills hands-on - HTML, CSS, JavaScript, TypeScript
-- Maintain a clean, fast, readable site that reflects technical taste
+## Key paths
 
----
-
-## Tech stack
-
-| Layer | Choice | Why |
-|---|---|---|
-| Framework | Astro 5 | Zero JS by default, component model, content collections |
-| Content | Markdown / MDX | Simple, portable, no CMS |
-| Styling | Custom CSS | Global styles plus page-scoped Astro styles where it improves readability |
-| Fonts | Local bundled fonts via `@fontsource` | No external requests, privacy, fast static delivery |
-| Production hosting | GitHub Pages | Free, fast, simple |
-| Preview hosting | Netlify | Branch deploys and preview URLs |
-| CI/CD | GitHub Actions plus Netlify builds | GitHub Pages deploys on `main`; Netlify handles preview deploys |
-| Domain | p2026.xyz (Spaceship) | Apex domain, DNS via Spaceship |
-
----
-
-## Repo structure
-
-```text
-p2026/                          <- repo root
-|- .github/
-|  `- workflows/
-|     |- deploy.yml            <- auto-deploys on push to main
-|     `- lighthouse.yml        <- manual Lighthouse audit against live site
-|- notes/                      <- handoff notes, strategy notes, archived references
-|- prompts/
-|  |- blog_prompt.md           <- blog post drafting prompt
-|  `- timeline_prompt.md       <- timeline/log drafting prompt
-`- p2026/                      <- Astro project root
-   |- public/
-   |  |- CNAME                 <- custom domain persistence for GitHub Pages
-   |  |- favicon.svg
-   |  `- fonts/                <- self-hosted woff2 font files
-   |- src/
-   |  |- content/
-   |  |  |- blog/              <- blog posts (.md / .mdx)
-   |  |  |- projects/          <- project entries (.md)
-   |  |  `- config.ts          <- Zod schemas for content collections
-   |  |- components/
-   |  |  |- Nav.astro
-   |  |  `- Footer.astro
-   |  |- layouts/
-   |  |  |- BaseLayout.astro
-   |  |  `- BlogLayout.astro
-   |  |- pages/
-   |  |  |- index.astro
-   |  |  |- blog/
-   |  |  |- timeline.astro
-   |  |  |- projects/
-   |  |  |- resources.astro
-   |  |  `- about.astro
-   |  `- styles/
-   |     |- global.css         <- all styling lives here
-   |     `- fonts.css          <- local `@fontsource` font imports
-   |- astro.config.mjs         <- site: https://p2026.xyz, no base set
-   |- lighthouse-limits.json   <- Lighthouse score thresholds (90+ all categories)
-   |- lighthouserc.json        <- Lighthouse CI config, targets live site
-   `- package.json
-```
-
----
+- `p2026/src/content/blog/` for blog posts
+- `p2026/src/content/projects/` for project entries
+- `p2026/src/content/config.ts` for content schemas
+- `p2026/src/pages/` for routes including `blog`, `projects`, `timeline`, `resources`, and `about`
+- `p2026/src/styles/global.css` for global styling
+- `prompts/blog_prompt.md` for blog drafting
+- `notes/repo-structure.md` for the generated repo tree snapshot
+- `roadmap.md`, `tasks.md`, and `backlog/` for planning
 
 ## Content model
 
-### Blog posts (`src/content/blog/`)
+Blog posts:
 
-```yaml
----
-title: ""
-description: ""   # one sentence, max 15 words, shown in post cards
-pubDate: YYYY-MM-DD
-tags: []          # 1-3 lowercase tags
-project: ""       # optional, omit if not project-specific
-draft: false      # omit or set true to hide from build
----
-```
+- required fields: `title`, `description`, `pubDate`
+- common fields: `tags`, `project`, `draft`
+- `description` should stay to one sentence and roughly 15 words max
+- `project` links a post to a project slug when relevant
 
-Target length: 600-1000 words (3-5 minute read).
+Projects:
 
-### Projects (`src/content/projects/`)
+- required fields: `name`, `description`, `date`, `status`
+- common fields: `draft`, `featured`, `link`, `repo`, `stack`
+- `status` is `shipped`, `building`, or `archived`
 
-```yaml
----
-slug: ""
-name: ""
-description: ""
-date: YYYY-MM-DD
-status: shipped | building | archived
-draft: false      # omit or set true to hide from build
-featured: false   # optional homepage/status priority
-link: ""          # optional live link
-repo: ""          # optional source link
-stack: []         # optional short stack list
----
-```
+Publishing notes:
 
-Projects are the primary publishing anchor. Blog posts can link back to a project via its slug, and `/timeline` is generated from project dates plus blog post dates.
+- projects are the primary publishing anchor
+- blog posts can link back to projects by slug
+- `/timeline` is generated from project dates plus blog post dates
+- prefer draft-first workflows and human review over direct auto-publishing
 
----
+## Design and content tone
 
-## Design
+- aesthetic: terminal-editorial dark with amber accent
+- dark mode is the default; light mode follows `prefers-color-scheme`
+- fonts: JetBrains Mono for headings and UI, Lora for body copy
+- keep the site lightweight and avoid unnecessary dependencies or heavy third-party scripts
+- content should sound like a person, not a content generator
+- when making writing-related changes, favor clarity over polish-for-polish's-sake
 
-- **Aesthetic:** terminal-editorial dark. Amber accent (`#e8a020`). Minimal.
-- **Dark mode:** default
-- **Light mode:** automatic via `prefers-color-scheme: light`. Warm off-white bg, darker accent (`#8a4800`) for contrast compliance.
-- **Fonts:** JetBrains Mono (headings, UI, code), Lora serif (body). Latin subset only.
-- **Fonts are loaded locally** through `src/styles/fonts.css`, not from Google Fonts.
+## Current state
 
----
-
-## Active notes
-
-- The local font migration is complete and should be preserved.
-- `/timeline` is generated from `projects` and `blog` content; there is no separate timeline collection right now.
-- Other layout and infrastructure suggestions are intentionally deferred in `roadmap.md`.
-- If you revisit timeline/projects structure, footer permalink strategy, or hosting decisions, check `roadmap.md` first.
-- The current branch model is simple by design: `main` is the integration and production branch; `preview` is the disposable Netlify branch used for stable preview deploys.
-- The site is meant to remain separate from the author's professional identity unless that decision changes deliberately.
-- If the site is ever going to be referenced from a professional portfolio, resume, or known personal account, treat that as a privacy checkpoint before adding more cross-links or public repo references.
-
----
+- local font migration is complete and should be preserved
+- the site already has project pages, blog pages, RSS, and generated timeline support
+- `astro.config.mjs` has no `base` set because the site runs at the apex domain
+- if the site ever returns to `github.io`, re-evaluate whether `base: '/p2026'` should be restored
 
 ## Deployment
 
-- Push to `main` triggers `deploy.yml`
-- Build: `pnpm run build` in `./p2026`
-- Output: `./p2026/dist` uploaded as GitHub Pages artifact
-- Node version: 24 (matches local dev)
-- Squash merging only on PRs keeps main history clean
-- Netlify is for preview infrastructure, not the primary public site
-- `preview` can be updated when a stable Netlify URL is useful for testing
-
----
+- pushing to `main` triggers the Pages deploy workflow
+- build command: `pnpm run build` from `./p2026`
+- output directory: `./p2026/dist`
+- Node version: 24
+- Netlify is preview infrastructure, not the public production host
 
 ## Git workflow
 
-- Preferred branch prefixes are `feature/` for new work and `fix/` for bug fixes.
-- Keep branch names short and descriptive, for example `feature/update-context` or `fix/nav-spacing`.
-- Prefer many small, feature-scoped commits over one large branch-ending commit. Since PRs are squash-merged, each chat/work sequence should usually end with its own commit when the work is in a coherent state.
-- Tool-specific prefixes added by external assistants are not part of the repo convention.
+- use `feature/` for new work and `fix/` for bug fixes
+- keep branches short-lived and descriptive
+- `main` is both the integration and production branch for now
+- `preview` is the disposable Netlify branch when a stable preview URL is useful
+- prefer small, feature-scoped commits because PRs are squash-merged
+- tool-specific branch prefixes are not part of the repo convention
 
----
+## Codex sub-agents
 
-## What to keep in mind
+- if Codex uses sub-agents in this repo, default to `gpt-5.3-codex` with `medium` reasoning effort unless the user asks otherwise
+- keep sub-agent tasks narrow, file-scoped where possible, and safe to run in parallel
 
-- The site is intentionally anonymous. Do not suggest linking to personal social profiles or real name.
-- Do not create easy bridges between this anonymous site and the author's professional identity.
-- If professional linkage is being considered, recommend disabling GitHub and repo links on the site and re-evaluating whether the repo should become private.
-- If the repo becomes private for privacy separation, prefer a static-only production setup on Netlify rather than depending on a public GitHub Pages workflow.
-- Keep the site lightweight. No unnecessary dependencies, no heavy third-party scripts.
-- The author is learning web development. Prefer explaining changes rather than just making them.
-- Content should sound like a person, not a content generator. Avoid AI-ism language.
-- `astro.config.mjs` has no `base` set. The site runs at the apex domain. If reverting to `github.io`, uncomment `base: '/p2026'`.
+## Privacy and decision guardrails
 
----
+- the site is intentionally anonymous
+- do not suggest linking personal social profiles, real names, or easy bridges to a professional identity
+- if professional linkage is being considered, treat that as a privacy checkpoint before adding more cross-links or public repo references
+- if the repo ever becomes private for privacy separation, prefer a static production setup that does not depend on a public GitHub Pages workflow
 
 ## Related tools
 
-- **n8n** - self-hosted automation, used for content pipelines and workflow automation
-- **Lighthouse CI** - manual audit workflow via `lighthouse.yml`, runs against live site
-- Blog drafting prompt lives at `prompts/blog_prompt.md`
+- `n8n` is the future automation layer for content pipelines and workflow automation
+- Lighthouse CI is available through `lighthouse.yml` for manual live-site audits
