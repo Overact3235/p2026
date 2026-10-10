@@ -15,6 +15,15 @@ This plan comes from a full repo scan done on 2026-10-10. It covers bugs, CI pro
 - Starting point: `main` at `v1.2.7`.
 - Step status is one of `todo`, `in progress`, `done`, or `dropped`.
 
+## For the session running this plan
+
+- Read `AGENTS.md`, this file, and `decisions.md` before starting a step.
+- Check `git config user.name` and `git config user.email` on the machine first. A missing identity is how D-009's placeholder author happened.
+- Start each step from an up-to-date `main`. Run `pnpm run build` in `p2026/` before opening the PR.
+- Do not start a step that depends on an Open decision (D-006 blocks the theme wording in 3.1 and all of Phase 4). Ask instead.
+- Do not merge PRs, push to `main`, or delete remote branches without the author's go-ahead.
+- After each step, update its Status here and bump this file's version per D-010. Same for `decisions.md` when a status changes.
+
 ## Phase 0: Clear open branches
 
 | Step | Branch | Site release | Status | Notes |
