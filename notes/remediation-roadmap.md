@@ -1,6 +1,6 @@
 # Remediation Roadmap
 
-- Version: 1.0.0
+- Version: 1.0.1
 - Last updated: 2026-10-10
 - Versioning rules: see D-010 in [`decisions.md`](../decisions.md)
 
@@ -16,6 +16,14 @@ This plan comes from a full repo scan done on 2026-10-10. It covers bugs, CI pro
 - Step status is one of `todo`, `in progress`, `done`, or `dropped`.
 
 ## For the session running this plan
+
+From 2026-10-10 on, this plan runs in a remote Claude Code session, not on the machine that did the scan. The author chats and approves from there. What that means:
+
+- The session's container is temporary. Commit and push each step's branch before stopping, or the work is lost.
+- The container starts from a fresh clone. Run `git fetch origin` before starting a step so local `main` and branch refs are current.
+- `gh` is not installed there. PRs, reviews, and CI checks go through the GitHub integration instead.
+- Git identity was checked in that session on 2026-10-10: `Overact3235` with the GitHub noreply email. Check it again if the session moves to a new environment.
+- `pnpm install --frozen-lockfile` and `pnpm run build` in `p2026/` both work there (checked 2026-10-10).
 
 - Read `AGENTS.md`, this file, and `decisions.md` before starting a step.
 - Check `git config user.name` and `git config user.email` on the machine first. A missing identity is how D-009's placeholder author happened.
@@ -81,4 +89,5 @@ If the theme stays as it is, the `v1.3.0` tag can still mark the end of remediat
 
 ## Changelog
 
+- 1.0.1 (2026-10-10): Work moves to a remote Claude Code session. Added how that session works, and recorded the identity and build checks.
 - 1.0.0 (2026-10-10): First version. Phases 0 to 4 from the 2026-10-10 repo scan.
