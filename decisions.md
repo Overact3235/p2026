@@ -1,5 +1,9 @@
 # Decisions
 
+- Version: 1.0.0
+- Last updated: 2026-10-10
+- Versioning rules: see D-010
+
 A running log of project decisions and the reasons behind them. New entries go at the bottom. When a decision changes, add a new entry that replaces the old one instead of rewriting history.
 
 Statuses:
@@ -14,11 +18,11 @@ Statuses:
 ## D-001: Git tags are the version of record
 
 - Date: 2026-10-10
-- Status: Accepted
+- Status: Proposed
 
 **Context:** Releases are cut by semantic-release as `vX.Y.Z` tags and GitHub releases. The latest is `v1.2.7`. `package.json` still says `0.1.1` because nothing updates it.
 
-**Decision:** Use semantic versioning. The git tag is the site's version. `package.json` is not a source of truth for the version.
+**Decision:** The git tag is the site's version. `package.json` is not a source of truth for the version.
 
 **Consequences:** Anyone checking "what version is live" looks at tags or GitHub releases. D-008 covers what to do with the `package.json` field.
 
@@ -29,7 +33,7 @@ Statuses:
 - Date: 2026-10-10
 - Status: Accepted
 
-**Context:** `release.config.js` forces every commit type to a patch bump. This was a deliberate choice (Strategy 1 in `notes/semantic-release-strategies.md`), and the GitHub Actions blog post describes it. Remediation work is mostly small fixes.
+**Context:** `release.config.js` forces every commit type to a patch bump. This entry records existing practice rather than a new choice. Patch-lock was picked (Strategy 1 in `notes/semantic-release-strategies.md`), and the GitHub Actions blog post describes it. Remediation work is mostly small fixes.
 
 **Decision:** Keep patch-lock. Every merge to `main` makes a patch release. Minor and major versions are moved by hand with a tag (for example `git tag v1.3.0 && git push origin v1.3.0`), and the next automatic release continues from there.
 
@@ -40,7 +44,7 @@ Statuses:
 ## D-003: Branch prefix shows the intended size of a change
 
 - Date: 2026-10-10
-- Status: Accepted
+- Status: Proposed
 
 **Context:** The repo already uses `feature/` and `fix/` prefixes. With patch-lock, the prefix does not change the release number, but it still says how big a change is meant to be.
 
@@ -53,7 +57,7 @@ Statuses:
 ## D-004: Ship remediation as small single-concern PRs
 
 - Date: 2026-10-10
-- Status: Accepted
+- Status: Proposed
 
 **Context:** The 2026-10-10 scan found about 15 issues across CSS, markup, CI, dependencies, docs, and repo hygiene.
 
@@ -140,3 +144,36 @@ Statuses:
 **Decision:** Not made yet.
 
 **Consequences:** Whichever machine made that commit needs `git config user.name` and `user.email` set before it commits again.
+
+---
+
+## D-010: Planning docs carry their own semantic version
+
+- Date: 2026-10-10
+- Status: Accepted
+
+**Context:** `decisions.md` and `notes/remediation-roadmap.md` will change often as work moves forward. Git history shows every edit, but not which edits matter.
+
+**Decision:** Each of these files has a `Version` line at the top and a `Changelog` section at the bottom. Every change bumps the version and adds one changelog line. Most changes are patch bumps.
+
+For `decisions.md`:
+
+- Patch: status changes (for example Proposed to Accepted), wording fixes, added context or consequences.
+- Minor: a new decision entry, or an entry replaced by a new one.
+- Major: the format or status scheme changes.
+
+For `notes/remediation-roadmap.md`:
+
+- Patch: step status updates, expected site versions updated, scope wording.
+- Minor: a step or phase added, removed, or reordered.
+- Major: the plan is replaced or restructured.
+
+Doc versions are labels inside the files, not git tags. Git tags stay reserved for site releases (D-001), so the two version lines never collide.
+
+**Consequences:** Anyone reading a planning doc can see how current it is and what changed without reading the git log. Edits take one extra line.
+
+---
+
+## Changelog
+
+- 1.0.0 (2026-10-10): First version. D-001 to D-010 from the 2026-10-10 repo scan.
