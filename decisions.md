@@ -1,6 +1,6 @@
 # Decisions
 
-- Version: 1.1.0
+- Version: 1.1.1
 - Last updated: 2026-10-10
 - Versioning rules: see D-010
 
@@ -143,7 +143,7 @@ Statuses:
 
 **Decision:** Keep it. Reword the commit with the right author, open a PR, and merge the note. The note is the starting point for the site's first article. Home lab posts come later and get their own discussion.
 
-**Consequences:** Whichever machine made that commit needs `git config user.name` and `user.email` set before it commits again. Before the note becomes a public post, review what it shares: it names the public server endpoint, the VPS size, and the protection setup (TCPShield, CrowdSec, firewall approach).
+**Consequences:** Whichever machine made that commit needs `git config user.name` and `user.email` set before it commits again. The note was reviewed for publishing on 2026-10-10. The server domain was removed, the plan was resized for a 2 vCPU / 4 GB VPS, and the TCPShield and CrowdSec setup stays in as a recommendation for future architectures.
 
 ---
 
@@ -189,6 +189,7 @@ Doc versions are labels inside the files, not git tags. Git tags stay reserved f
 
 ## Changelog
 
+- 1.1.1 (2026-10-10): D-009 records the publishing review of the mc26 note.
 - 1.1.0 (2026-10-10): Added D-011 (Astro 7 and EmDash sub-epic). D-007 points to it.
 - 1.0.1 (2026-10-10): D-009 accepted (keep the branch, the note becomes the first article). Added where `package-lock.json` came from and what reads it to D-008.
 - 1.0.0 (2026-10-10): First version. D-001 to D-010 from the 2026-10-10 repo scan.
