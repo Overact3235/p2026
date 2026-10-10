@@ -1,6 +1,6 @@
 # Decisions
 
-- Version: 1.0.0
+- Version: 1.0.1
 - Last updated: 2026-10-10
 - Versioning rules: see D-010
 
@@ -121,7 +121,7 @@ Statuses:
 - Date: 2026-10-10
 - Status: Proposed
 
-**Context:** The deploy workflow and Netlify use pnpm with `pnpm-lock.yaml`. The release workflow uses npm with a separate `package-lock.json` and installs semantic-release on every run, which edits `package.json` in CI.
+**Context:** The deploy workflow and Netlify use pnpm with `pnpm-lock.yaml`. Netlify gets pnpm from the `packageManager` field in `package.json`. The release workflow uses npm with a separate `package-lock.json` and installs semantic-release on every run, which edits `package.json` and `package-lock.json` on the CI runner. Those edits are thrown away when the job ends, so nothing is committed back. `package-lock.json` was committed once, on 2026-03-07, in the same commit that switched the build to pnpm. Nothing regenerates it. The only thing that reads it is the npm cache step in `release.yml`. Local builds and agent preview builds don't need it.
 
 **Decision:** Use pnpm everywhere. Remove `package-lock.json`. Run semantic-release through pnpm. Set the `package.json` version to `0.0.0-semantic-release` so nobody mistakes it for the real version (see D-001).
 
@@ -132,7 +132,7 @@ Statuses:
 ## D-009: `feature/mc26-transition` branch
 
 - Date: 2026-10-10
-- Status: Open
+- Status: Accepted
 
 **Context:** The remote branch holds one commit from 2026-04-05 that adds a placeholder note, `notes/minecraft-mc26-transition.md`. The commit author is git's placeholder identity (`Your Name <you@example.com>`), so that machine had no git name or email set.
 
@@ -141,9 +141,9 @@ Statuses:
 - Reword the commit with the right author, open a PR, and merge it as a parked note.
 - Delete the branch if the idea is no longer active.
 
-**Decision:** Not made yet.
+**Decision:** Keep it. Reword the commit with the right author, open a PR, and merge the note. The note is the starting point for the site's first article. Home lab posts come later and get their own discussion.
 
-**Consequences:** Whichever machine made that commit needs `git config user.name` and `user.email` set before it commits again.
+**Consequences:** Whichever machine made that commit needs `git config user.name` and `user.email` set before it commits again. Before the note becomes a public post, review what it shares: it names the public server endpoint, the VPS size, and the protection setup (TCPShield, CrowdSec, firewall approach).
 
 ---
 
@@ -176,4 +176,5 @@ Doc versions are labels inside the files, not git tags. Git tags stay reserved f
 
 ## Changelog
 
+- 1.0.1 (2026-10-10): D-009 accepted (keep the branch, the note becomes the first article). Added where `package-lock.json` came from and what reads it to D-008.
 - 1.0.0 (2026-10-10): First version. D-001 to D-010 from the 2026-10-10 repo scan.

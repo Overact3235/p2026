@@ -1,6 +1,6 @@
 # Remediation Roadmap
 
-- Version: 1.0.1
+- Version: 1.0.2
 - Last updated: 2026-10-10
 - Versioning rules: see D-010 in [`decisions.md`](../decisions.md)
 
@@ -24,11 +24,12 @@ From 2026-10-10 on, this plan runs in a remote Claude Code session, not on the m
 - `gh` is not installed there. PRs, reviews, and CI checks go through the GitHub integration instead.
 - Git identity was checked in that session on 2026-10-10: `Overact3235` with the GitHub noreply email. Check it again if the session moves to a new environment.
 - `pnpm install --frozen-lockfile` and `pnpm run build` in `p2026/` both work there (checked 2026-10-10).
+- Each step uses the branch named in its row. The session may start on a default branch of its own (for example `feat/p2026-main`). Don't do plan work on that branch, because the plan spans many branches.
 
 - Read `AGENTS.md`, this file, and `decisions.md` before starting a step.
 - Check `git config user.name` and `git config user.email` on the machine first. A missing identity is how D-009's placeholder author happened.
 - Start each step from an up-to-date `main`. Run `pnpm run build` in `p2026/` before opening the PR.
-- Do not start a step that depends on an Open decision (D-006 blocks the theme wording in 3.1 and all of Phase 4). Ask instead.
+- Do not start a step that depends on an Open decision. Ask instead. D-006 (theme default) blocks two things: the theme sentences in 3.1, because the docs should describe the theme the site will actually ship, and all of Phase 4, which only happens if the theme code changes. The rest of 3.1 can go ahead.
 - Do not merge PRs, push to `main`, or delete remote branches without the author's go-ahead.
 - After each step, update its Status here and bump this file's version per D-010. Same for `decisions.md` when a status changes.
 
@@ -38,7 +39,7 @@ From 2026-10-10 on, this plan runs in a remote Claude Code session, not on the m
 |---|---|---|---|---|
 | 0.1 | `fix/remediation-roadmap` | v1.2.8 | in progress | This plan and the decisions log. |
 | 0.2 | `feature/trim-agents-context` (PR #25) | v1.2.9 | todo | Merge after fixes listed in D-005. |
-| 0.3 | `feature/mc26-transition` | none, or patch | todo | Open PR or delete. See D-009. |
+| 0.3 | `feature/mc26-transition` | patch | todo | Keep. Fix the placeholder author, then open a PR. The note becomes the first article (D-009). |
 
 Before PR #25 merges, fix on its branch:
 
@@ -89,5 +90,6 @@ If the theme stays as it is, the `v1.3.0` tag can still mark the end of remediat
 
 ## Changelog
 
+- 1.0.2 (2026-10-10): Step 0.3 set to keep (D-009). Clarified what D-006 blocks. Each step uses its own branch, not the session's default branch.
 - 1.0.1 (2026-10-10): Work moves to a remote Claude Code session. Added how that session works, and recorded the identity and build checks.
 - 1.0.0 (2026-10-10): First version. Phases 0 to 4 from the 2026-10-10 repo scan.
