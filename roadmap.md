@@ -8,6 +8,7 @@
 
 ## Next
 
+- Work through the remediation plan in `notes/remediation-roadmap.md`. Decisions behind it live in `decisions.md`.
 - Ship publishing workflow v1 so project updates can reliably turn into draft blog posts and stable project pages.
 - Evaluate whether the site even needs a CMS before adding one, and keep Git plus Markdown as the source of truth either way.
 - Add lightweight validation helpers for SEO and performance so checks are repeatable.
