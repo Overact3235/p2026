@@ -1,6 +1,6 @@
 # Remediation Roadmap
 
-- Version: 1.0.2
+- Version: 1.1.0
 - Last updated: 2026-10-10
 - Versioning rules: see D-010 in [`decisions.md`](../decisions.md)
 
@@ -82,14 +82,34 @@ Only if D-006 goes toward changing the code:
 
 If the theme stays as it is, the `v1.3.0` tag can still mark the end of remediation after Phase 3.
 
+## Phase 5: Astro 7 and EmDash (sub-epic)
+
+A separate sub-epic that starts after Phase 3 (D-011). It does not depend on D-006. Site versions are not predicted here because they depend on whether Phase 4 runs.
+
+| Step | Branch | Site release | Status | Scope |
+|---|---|---|---|---|
+| 5.1 | `fix/perf-baseline` | patch | todo | Record a performance baseline on Astro 5 after 2.3: build time, `dist/` size, JS and CSS bytes per page, and Lighthouse scores for the home, blog post, and project pages. Save it in `notes/astro-7-evaluation.md`. |
+| 5.2 | `feature/astro-7-upgrade` | patch, then a manual minor tag | todo | Upgrade `astro` and `@astrojs/mdx` from 5 to 7, following the v6 and v7 upgrade guides in order. Re-run the 5.1 measurements and add the before and after numbers to the evaluation note and the PR. |
+| 5.3 | `fix/emdash-evaluation` | patch | todo | Evaluate EmDash (Cloudflare's Astro-based CMS) for future publishing. Try it on a throwaway branch that never merges. Merge only the write-up, `notes/emdash-evaluation.md`. |
+
+Questions the EmDash write-up must answer:
+
+- Content source: EmDash stores content in a database (D1 or SQLite). Can posts still end up as Markdown in Git, which `tasks.md` Epic 2 keeps as the source of truth?
+- Hosting: EmDash runs on Cloudflare Workers or a Node server. What happens to the static GitHub Pages and Netlify setup?
+- Cost: which features need a paid Cloudflare plan (for example the plugin sandbox)?
+- Astro version: which Astro version does it need? This is why 5.3 comes after 5.2.
+- Authoring: is it better for this site than the plain file workflow, Front Matter CMS, or Pages CMS?
+- Verdict: adopt, revisit later, or drop.
+
 ## Not in scope
 
-- Astro 7 upgrade. Parked in the backlog as its own project (D-007).
+- Astro 7 upgrade during Phases 0 to 4. It is Phase 5 instead (D-011).
 - Linking `/timeline` from the nav. Waits on the existing roadmap question of what `/timeline` should become.
 - Privacy wording changes on the home page and About page. These are content calls, not bugs.
 
 ## Changelog
 
+- 1.1.0 (2026-10-10): Added Phase 5, the Astro 7 upgrade with a performance comparison and an EmDash evaluation (D-011).
 - 1.0.2 (2026-10-10): Step 0.3 set to keep (D-009). Clarified what D-006 blocks. Each step uses its own branch, not the session's default branch.
 - 1.0.1 (2026-10-10): Work moves to a remote Claude Code session. Added how that session works, and recorded the identity and build checks.
 - 1.0.0 (2026-10-10): First version. Phases 0 to 4 from the 2026-10-10 repo scan.

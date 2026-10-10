@@ -1,6 +1,6 @@
 # Decisions
 
-- Version: 1.0.1
+- Version: 1.1.0
 - Last updated: 2026-10-10
 - Versioning rules: see D-010
 
@@ -112,7 +112,7 @@ Statuses:
 
 **Decision:** Bump to the latest Astro 5.x patch release as part of remediation. Treat Astro 7 as a separate project in the backlog.
 
-**Consequences:** Some advisories may remain until the major upgrade. The remaining list should be recorded in the PR that does the bump.
+**Consequences:** Some advisories may remain until the major upgrade. The remaining list should be recorded in the PR that does the bump. The Astro 7 upgrade itself is scheduled as Phase 5 of the remediation roadmap (D-011).
 
 ---
 
@@ -174,7 +174,21 @@ Doc versions are labels inside the files, not git tags. Git tags stay reserved f
 
 ---
 
+## D-011: Astro 7 and EmDash as a remediation sub-epic
+
+- Date: 2026-10-10
+- Status: Accepted
+
+**Context:** D-007 keeps remediation on Astro 5 and parks Astro 7 as its own project. The author wants that project tracked now, with two additions: measure whether Astro 7 changes performance, and decide whether EmDash, Cloudflare's Astro-based CMS, is useful for future publishing.
+
+**Decision:** Add Phase 5 to `notes/remediation-roadmap.md`, after Phase 3: take a performance baseline, upgrade from Astro 5 to 7, compare, then evaluate EmDash. Only the write-up from the EmDash evaluation gets merged. Any trial setup stays on a throwaway branch.
+
+**Consequences:** D-007 still holds for Phases 0 to 4. The EmDash evaluation has to weigh its database-backed content against the Git and Markdown source of truth in `tasks.md` Epic 2, and its server runtime against the current static hosting.
+
+---
+
 ## Changelog
 
+- 1.1.0 (2026-10-10): Added D-011 (Astro 7 and EmDash sub-epic). D-007 points to it.
 - 1.0.1 (2026-10-10): D-009 accepted (keep the branch, the note becomes the first article). Added where `package-lock.json` came from and what reads it to D-008.
 - 1.0.0 (2026-10-10): First version. D-001 to D-010 from the 2026-10-10 repo scan.
