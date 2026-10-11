@@ -107,7 +107,8 @@ function categorizeCommit(parsed) {
 
 function groupCommits(commits) {
   const groups = Object.fromEntries(CATEGORY_ORDER.map((key) => [key, []]));
-  const parsedCommits = commits.map(parseCommit);
+  // Skip "Merge branch main into ..." commits: they bring in base changes, not this PR's work.
+  const parsedCommits = commits.map(parseCommit).filter((commit) => !/^Merge (branch|pull request|remote-tracking branch) /.test(commit.line));
 
   for (const parsed of parsedCommits) {
     groups[categorizeCommit(parsed)].push(parsed);
