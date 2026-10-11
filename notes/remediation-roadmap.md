@@ -1,7 +1,7 @@
 # Remediation Roadmap
 
-- Version: 1.1.0
-- Last updated: 2026-10-10
+- Version: 1.1.1
+- Last updated: 2026-10-11
 - Versioning rules: see D-010 in [`decisions.md`](../decisions.md)
 
 This plan comes from a full repo scan done on 2026-10-10. It covers bugs, CI problems, outdated docs, and repo clutter found during the scan. Decisions behind this plan are logged in [`decisions.md`](../decisions.md).
@@ -12,7 +12,7 @@ This plan comes from a full repo scan done on 2026-10-10. It covers bugs, CI pro
 - Most work goes through `fix/` branches, and each merge to `main` cuts one patch release of the site (see D-002 and D-003).
 - PR titles use a conventional prefix (`fix:`, `docs:`, `ci:`, `chore:`), because the squash-merge title is the commit semantic-release reads.
 - Site release versions below are expected, not promised. They assume the PRs merge in this order and nothing else lands on `main` in between.
-- Starting point: `main` at `v1.2.7`.
+- Starting point: `main` at `v1.2.8`. The plan started at `v1.2.7`. PR #27 (`fix/no-ai-attribution`, AI attribution off and auto-filled PR descriptions) merged first, outside the plan, and released `v1.2.8`.
 - Step status is one of `todo`, `in progress`, `done`, or `dropped`.
 
 ## For the session running this plan
@@ -37,8 +37,8 @@ From 2026-10-10 on, this plan runs in a remote Claude Code session, not on the m
 
 | Step | Branch | Site release | Status | Notes |
 |---|---|---|---|---|
-| 0.1 | `fix/remediation-roadmap` | v1.2.8 | in progress | This plan and the decisions log. |
-| 0.2 | `feature/trim-agents-context` (PR #25) | v1.2.9 | todo | Merge after fixes listed in D-005. |
+| 0.1 | `fix/remediation-roadmap` | v1.2.9 | in progress | This plan and the decisions log. |
+| 0.2 | `feature/trim-agents-context` (PR #25) | v1.2.10 | todo | Merge after fixes listed in D-005. |
 | 0.3 | `feature/mc26-transition` | patch | todo | Keep. Fix the placeholder author, then open a PR. The note becomes the first article (D-009). |
 
 Before PR #25 merges, fix on its branch:
@@ -52,23 +52,23 @@ Before PR #25 merges, fix on its branch:
 
 | Step | Branch | Site release | Status | Scope |
 |---|---|---|---|---|
-| 1.1 | `fix/blog-theme-vars` | v1.2.10 | todo | Replace undefined CSS variables (`--accent`, `--font-mono`, `--text-dim`, `--text-muted`) with the ones `global.css` defines. Make blog heading colours follow `[data-theme]` instead of `prefers-color-scheme`. |
-| 1.2 | `fix/page-structure` | v1.2.11 | todo | Remove the nested `<main>` in `index.astro` and `about.astro`. Fix the home "Posts" count so it counts all posts, not the first five. |
+| 1.1 | `fix/blog-theme-vars` | v1.2.11 | todo | Replace undefined CSS variables (`--accent`, `--font-mono`, `--text-dim`, `--text-muted`) with the ones `global.css` defines. Make blog heading colours follow `[data-theme]` instead of `prefers-color-scheme`. |
+| 1.2 | `fix/page-structure` | v1.2.12 | todo | Remove the nested `<main>` in `index.astro` and `about.astro`. Fix the home "Posts" count so it counts all posts, not the first five. |
 
 ## Phase 2: CI and dependencies
 
 | Step | Branch | Site release | Status | Scope |
 |---|---|---|---|---|
-| 2.1 | `fix/lighthouse-assertions` | v1.2.12 | todo | Move score thresholds into `assert.assertions` in `lighthouserc.json`. The current `budgetFile` setup never checks scores. |
-| 2.2 | `fix/release-workflow` | v1.2.13 | todo | Run semantic-release with pnpm, drop the `npm install --save-dev` step, use `fetch-depth: 0`, remove `package-lock.json`. Settle the `package.json` version (D-008). |
-| 2.3 | `fix/astro-5-security` | v1.2.14 | todo | Bump `astro` and `@astrojs/mdx` to the latest 5.x releases. Re-run `pnpm audit` and note what remains. |
+| 2.1 | `fix/lighthouse-assertions` | v1.2.13 | todo | Move score thresholds into `assert.assertions` in `lighthouserc.json`. The current `budgetFile` setup never checks scores. |
+| 2.2 | `fix/release-workflow` | v1.2.14 | todo | Run semantic-release with pnpm, drop the `npm install --save-dev` step, use `fetch-depth: 0`, remove `package-lock.json`. Settle the `package.json` version (D-008). |
+| 2.3 | `fix/astro-5-security` | v1.2.15 | todo | Bump `astro` and `@astrojs/mdx` to the latest 5.x releases. Re-run `pnpm audit` and note what remains. |
 
 ## Phase 3: Docs and cleanup
 
 | Step | Branch | Site release | Status | Scope |
 |---|---|---|---|---|
-| 3.1 | `fix/docs-alignment` | v1.2.15 | todo | Update `AGENTS.md` and `README.md` to match the code: theme behaviour (after D-006), accent colours, fonts, repo structure, release workflow. Refresh `notes/session-handoff.md`. |
-| 3.2 | `fix/repo-cleanup` | v1.2.16 | todo | Remove the `notes/*.zip` snapshots and the empty `notes/archive` file. Move `p2026/revamp_v9b/` under `notes/`. Add `.netlify/` to `.gitignore`. Remove commented-out steps in `deploy.yml`. |
+| 3.1 | `fix/docs-alignment` | v1.2.16 | todo | Update `AGENTS.md` and `README.md` to match the code: theme behaviour (after D-006), accent colours, fonts, repo structure, release workflow. Refresh `notes/session-handoff.md`. |
+| 3.2 | `fix/repo-cleanup` | v1.2.17 | todo | Remove the `notes/*.zip` snapshots and the empty `notes/archive` file. Move `p2026/revamp_v9b/` under `notes/`. Add `.netlify/` to `.gitignore`. Remove commented-out steps in `deploy.yml`. |
 | 3.3 | (no branch) | none | todo | Delete merged or abandoned remote branches. |
 
 ## Phase 4: Optional minor release
@@ -77,7 +77,7 @@ Only if D-006 goes toward changing the code:
 
 | Step | Branch | Site release | Status | Scope |
 |---|---|---|---|---|
-| 4.1 | `feature/theme-system-preference` | v1.2.17 | todo | Dark by default, follow `prefers-color-scheme` when no choice is saved, keep the toggle. |
+| 4.1 | `feature/theme-system-preference` | v1.2.18 | todo | Dark by default, follow `prefers-color-scheme` when no choice is saved, keep the toggle. |
 | 4.2 | (manual tag) | v1.3.0 | todo | Tag the end of remediation as a minor release, per the patch-lock strategy. The next automatic release after that is `v1.3.1`. |
 
 If the theme stays as it is, the `v1.3.0` tag can still mark the end of remediation after Phase 3.
@@ -109,6 +109,7 @@ Questions the EmDash write-up must answer:
 
 ## Changelog
 
+- 1.1.1 (2026-10-11): PR #27 released `v1.2.8` outside the plan, so every expected site version moves up by one.
 - 1.1.0 (2026-10-10): Added Phase 5, the Astro 7 upgrade with a performance comparison and an EmDash evaluation (D-011).
 - 1.0.2 (2026-10-10): Step 0.3 set to keep (D-009). Clarified what D-006 blocks. Each step uses its own branch, not the session's default branch.
 - 1.0.1 (2026-10-10): Work moves to a remote Claude Code session. Added how that session works, and recorded the identity and build checks.
