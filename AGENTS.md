@@ -160,6 +160,8 @@ Projects are the primary publishing anchor. Blog posts can link back to a projec
 - Keep branch names short and descriptive, for example `feature/update-context` or `fix/nav-spacing`.
 - Prefer many small, feature-scoped commits over one large branch-ending commit. Since PRs are squash-merged, each chat/work sequence should usually end with its own commit when the work is in a coherent state.
 - Tool-specific prefixes added by external assistants are not part of the repo convention.
+- PR descriptions start from `.github/pull_request_template.md`. `.github/workflows/pr-notes.yml` rewrites only the section between the `pr-summary` markers, built from the PR's commit subjects, so write clear conventional commit subjects. Anything outside the markers is kept.
+- No AI attribution: never add `Co-Authored-By:` trailers naming an AI tool (Claude, Codex, etc.) or "Generated with ..." lines to commit messages or PR descriptions, whichever agent you are. Commits are authored by the repo owner. `.claude/settings.json` enforces this for Claude Code (`attribution` set to empty). For Codex and other tools, this rule is what covers it.
 
 ---
 
