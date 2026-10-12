@@ -1,0 +1,42 @@
+name: Pull Request Notes
+# Fills the generated summary section of a PR body from its commits.
+# Adapted from htpc-2026 `.github/workflows/pr-notes.yml`.
+#
+# pull_request_target runs the workflow and script from the base branch, never the PR's code,
+# so it is safe for PRs from forks. It also means changes to this workflow take effect only
+# after they merge.
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+      - edited
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  update-pr-notes:
+    name: Update PR Notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Generate and apply PR notes
+        run: node scripts/pr-notes/update-pr-body.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_API_URL: ${{ github.api_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
