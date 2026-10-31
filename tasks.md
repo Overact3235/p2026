@@ -13,6 +13,7 @@ This file tracks active work. Use `roadmap.md` for direction and `backlog/` for 
 
 - Keep the repo and Markdown content collections as the source of truth.
 - Compare the lightest authoring options first: plain file workflow, Front Matter CMS, and Pages CMS.
+- Evaluate EmDash as part of the Astro 7 sub-epic (Phase 5 in `notes/remediation-roadmap.md`).
 - Treat a browser CMS as an authoring layer, not a separate content platform or database.
 - If a CMS is added, make sure its output still lands in Git so the existing build flow remains the publish trigger.
 - Prefer draft-first writing and review over direct production publishing.
