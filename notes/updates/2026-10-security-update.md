@@ -2,7 +2,7 @@
 
 - Date: 2026-10-31
 - Site release at time of check: `v1.2.8`
-- Related: D-007 and D-011 in `decisions.md`, steps 2.3 and Phase 5 in `notes/remediation-roadmap.md` (on `fix/remediation-roadmap` until that merges)
+- Related: D-012 in `decisions.md` (replaces D-007), step 5.1 in `notes/remediation-roadmap.md`
 
 A check of the Astro version the site runs on, what the latest Astro is, and whether upgrading brings security fixes or performance gains. Nothing is upgraded here. This is the record the upgrade work starts from.
 
@@ -73,10 +73,14 @@ What to expect from Astro 7 here: faster builds and dev server, but on a 2-secon
 
 ## Recommendation
 
-1. **Go straight to Astro 7 instead of bumping within 5.x.** Roadmap step 2.3 (latest 5.x) would only clear one low advisory. That is a reason to revisit D-007: fold step 2.3 into the Phase 5 upgrade, or move Phase 5 earlier.
+1. **Go straight to Astro 7 instead of bumping within 5.x.** Roadmap step 2.3 (latest 5.x) would only clear one low advisory. Accepted as D-012: step 2.3 is dropped, and the Astro 7 upgrade (roadmap step 5.2) is the next site change after this update.
 2. **Upgrade `@astrojs/mdx` with it** (4.x to 8.x).
 3. **Follow the v6 and v7 upgrade guides in order**, and re-run the baseline above afterwards to record the before and after.
 4. **Re-run `pnpm audit` after the upgrade** and record what's left in the PR.
+
+## Astro 7 comparison
+
+To be filled in by roadmap step 5.2 (`feature/astro-7-upgrade`): the same measurements on Astro 7, Lighthouse scores for both versions, and the `pnpm audit` result after the upgrade.
 
 ## Sources
 

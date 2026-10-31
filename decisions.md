@@ -1,7 +1,7 @@
 # Decisions
 
-- Version: 1.1.1
-- Last updated: 2026-10-10
+- Version: 1.2.0
+- Last updated: 2026-10-31
 - Versioning rules: see D-010
 
 A running log of project decisions and the reasons behind them. New entries go at the bottom. When a decision changes, add a new entry that replaces the old one instead of rewriting history.
@@ -106,7 +106,7 @@ Statuses:
 ## D-007: Stay on Astro 5 for now
 
 - Date: 2026-10-10
-- Status: Proposed
+- Status: Replaced by D-012
 
 **Context:** `pnpm audit` reports 56 advisories, including a critical one in Astro image optimisation. The site is static and does not use the image pipeline, so the real exposure is limited to build time. Astro 7 is available but is two major versions ahead.
 
@@ -187,8 +187,23 @@ Doc versions are labels inside the files, not git tags. Git tags stay reserved f
 
 ---
 
+## D-012: Upgrade to Astro 7 instead of patching Astro 5
+
+- Date: 2026-10-31
+- Status: Accepted
+- Replaces: D-007
+
+**Context:** The October 2026 security update (`notes/updates/2026-10-security-update.md`) found 63 advisories, up from 56. Of the 12 in `astro` itself, only one (low) is fixed on the 5.x line. The rest are fixed only in Astro 6 or 7, and the critical one only in 7.2.8 or later. The latest release is Astro 7.4.4. The site's real exposure is low, because it is fully static and uses none of the affected features, but staying on Astro 5 means those advisories never clear.
+
+**Decision:** Drop the plan to bump within Astro 5 (roadmap step 2.3). Upgrade `astro` to 7.x and `@astrojs/mdx` to 8.x as the next site change after the October security update merges. The Astro 5 baseline in the October update is the "before" for the speed and size comparison.
+
+**Consequences:** The upgrade lands before the Phase 1 to 3 fixes, so those are built and tested on Astro 7. The EmDash evaluation (5.3) can follow the upgrade without waiting for Phase 3. D-011 still holds, with the upgrade moved earlier.
+
+---
+
 ## Changelog
 
+- 1.2.0 (2026-10-31): Added D-012 (upgrade to Astro 7). D-007 replaced by it.
 - 1.1.1 (2026-10-10): D-009 records the publishing review of the mc26 note.
 - 1.1.0 (2026-10-10): Added D-011 (Astro 7 and EmDash sub-epic). D-007 points to it.
 - 1.0.1 (2026-10-10): D-009 accepted (keep the branch, the note becomes the first article). Added where `package-lock.json` came from and what reads it to D-008.
