@@ -13,6 +13,10 @@ Goals:
 - build in public without exposing unnecessary infrastructure detail
 - learn web development hands-on with a fast, readable, low-dependency site
 
+Working with the author:
+
+- the author is learning web development, so explain changes rather than just making them
+
 ## Stack
 
 - Astro 7
