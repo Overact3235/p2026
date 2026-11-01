@@ -48,7 +48,8 @@ Prefer a companion seed file over stuffing long drafting notes into project fron
 Example direction:
 
 - public metadata stays in `p2026/src/content/projects/<entry>.md`
-- draft inputs live in something like `notes/publishing/<project-slug>.md`
+- draft inputs live in `notes/private/<project-slug>.md`, which is gitignored so they never reach this public repo
+- anything that should be shared publicly gets copied into the project entry or the draft post on purpose, not committed from the seed note
 
 That seed file can hold:
 
