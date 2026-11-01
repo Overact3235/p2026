@@ -1,7 +1,7 @@
 # Decisions
 
-- Version: 1.2.0
-- Last updated: 2026-10-31
+- Version: 1.3.0
+- Last updated: 2026-11-01
 - Versioning rules: see D-010
 
 A running log of project decisions and the reasons behind them. New entries go at the bottom. When a decision changes, add a new entry that replaces the old one instead of rewriting history.
@@ -201,8 +201,22 @@ Doc versions are labels inside the files, not git tags. Git tags stay reserved f
 
 ---
 
+## D-013: `v1.3.0` marks the Astro 7 upgrade
+
+- Date: 2026-11-01
+- Status: Accepted
+
+**Context:** The Astro 7 upgrade (PR #31) moved the site across two major Astro versions, but under patch-lock (D-002) it released as `v1.2.12`. The roadmap had reserved `v1.3.0` for the end of remediation (step 4.2).
+
+**Decision:** Tag the Astro 7 commit (`425eef8`) as `v1.3.0`, alongside `v1.2.12`, with release notes describing the upgrade. The end-of-remediation tag moves to `v1.4.0`.
+
+**Consequences:** Automatic releases continue from `v1.3.x`; the first one was `v1.3.1` (PR #32). A minor tag goes on a change only after it has merged and released, so the tag never runs ahead of the code it describes.
+
+---
+
 ## Changelog
 
+- 1.3.0 (2026-11-01): Added D-013 (`v1.3.0` marks Astro 7, end of remediation moves to `v1.4.0`).
 - 1.2.0 (2026-10-31): Added D-012 (upgrade to Astro 7). D-007 replaced by it.
 - 1.1.1 (2026-10-10): D-009 records the publishing review of the mc26 note.
 - 1.1.0 (2026-10-10): Added D-011 (Astro 7 and EmDash sub-epic). D-007 points to it.
