@@ -4,7 +4,9 @@
 - Change: `astro` 5.17.3 to 7.4.4, `@astrojs/mdx` 4.3.13 to 8.1.2 (roadmap step 5.2, D-012)
 - Related: the security side and the Astro 5 baseline are in [`2026-10-security-update.md`](2026-10-security-update.md)
 
-What the upgrade changed for speed and size, measured on this site. Short version: **builds are about a third faster, the pages visitors download are about the same, and the dev server got slower to start** when run by an agent.
+What the upgrade changed for speed and size, measured on this site. Short version: **builds are about a third faster, and the pages visitors download are about the same.** The upgrade was done for security (D-012); the speed is a bonus.
+
+The site is static and hosted on GitHub Pages, so only the files in `dist/` reach visitors. Build speed only affects how long a deploy takes, and the dev server only affects local editing.
 
 ## What changed under the hood
 
@@ -57,16 +59,9 @@ Visitors shouldn't notice a speed difference. Lighthouse scores haven't been mea
 
 ### Dev server
 
-Time from starting `astro dev` until the home page first returns, 3 runs each:
+The dev server doesn't affect the deployed site, so this is just a note for local work. Run by an agent (no terminal attached), Astro 7's `astro dev` was about 1.4s slower to serve its first page than Astro 5: about 3.1s against 1.7s with warm caches. That's probably because Astro 7 starts the server as a background process in that case. It's a one-off wait per session, since edits reload without a restart.
 
-| Start | Astro 5.17.3 | Astro 7.4.4 |
-|---|---|---|
-| Cold (Vite and Astro caches cleared) | 2.13–2.20s | 3.45–3.60s |
-| Warm (caches kept) | 1.69–1.79s | 3.09–3.13s |
-
-**Astro 7 was slower to start here, by about 1.4s.** One likely reason: when `astro dev` runs without a terminal attached (as when an AI agent runs it), Astro 7 starts the server as a background process with JSON output and returns straight away. That adds a process hand-off that Astro 5 didn't have. Started from a normal terminal, it may be faster. That wasn't measured, because a simulated terminal stopped the Astro 5 server from starting at all.
-
-Background mode also changes how you stop it: use `npx astro dev stop`, or `astro dev status` and `astro dev logs` to check on it.
+In background mode, stop the server with `npx astro dev stop`. `astro dev status` and `astro dev logs` check on it.
 
 ## Settings chosen for performance versus looks
 
@@ -74,14 +69,13 @@ Background mode also changes how you stop it: use `npx astro dev stop`, or `astr
 
 ## Not measured yet
 
-- **Lighthouse scores.** The machine that ran these checks has no browser. `lighthouse.yml` audits the live site, so run it once before the upgrade deploys (Astro 5) and once after (Astro 7), and add the scores here.
-- **Dev server start from a real terminal**, to see whether the slower start is only the background hand-off.
+- **Lighthouse scores.** The machine that ran these checks has no browser, and the live site was already on Astro 7 before `lighthouse.yml` was run, so there is no live Astro 5 score to compare against. Run `lighthouse.yml` to record the Astro 7 scores here. An Astro 5 score would have to come from a local build of `v1.2.11`.
 
 ## How these were measured
 
 - **Builds:** `pnpm run build` in `p2026/`, timed from start to finish. Each run started with `dist/`, `.astro/` and `node_modules/.vite` removed, after one warm-up build.
 - **Astro 5 numbers:** a separate copy of `main` at `v1.2.11`, with its own `pnpm install --frozen-lockfile`.
-- **Dev server:** `astro dev` on a free port, polling `/` until it returned 200.
+- **Dev server:** `astro dev` on a free port, polling `/` until it returned 200, 3 runs each with caches cleared and kept.
 - **Output comparison:** visible text, inline CSS rules and inline scripts compared page by page between the two `dist/` folders.
 
 ## Sources

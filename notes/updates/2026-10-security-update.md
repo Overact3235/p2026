@@ -69,7 +69,7 @@ Measured in the remote session, three runs of `pnpm run build`:
 | HTML total | 374 KB over 12 files (home page 28.9 KB, blog posts 32–37 KB) |
 | Separate JS / CSS files | 0 / 0 (styles and scripts are inlined, `inlineStylesheets: 'always'`) |
 
-What to expect from Astro 7 here: faster builds and dev server, but on a 2-second, 12-page build that's small in absolute terms. Page weight and load speed for visitors should barely move, since the site already ships no separate JS or CSS. The performance case is weaker than the security case.
+What to expect from Astro 7 here: faster builds, but on a 2-second, 12-page build that's small in absolute terms. Page weight and load speed for visitors should barely move, since the site already ships no separate JS or CSS. The performance case is weaker than the security case.
 
 ## Recommendation
 
@@ -79,6 +79,8 @@ What to expect from Astro 7 here: faster builds and dev server, but on a 2-secon
 4. **Re-run `pnpm audit` after the upgrade** and record what's left in the PR.
 
 ## Astro 7 comparison
+
+Full performance write-up: [`2026-11-astro-7-performance.md`](2026-11-astro-7-performance.md).
 
 Filled in by roadmap step 5.2 (`feature/astro-7-upgrade`) on 2026-11-01: `astro` 5.17.3 to 7.4.4, `@astrojs/mdx` 4.3.13 to 8.1.2. Same machine and method as the baseline above.
 
@@ -120,7 +122,7 @@ All four are in build tooling that Astro pulls in. None ship to visitors, and no
 
 ### Not measured yet
 
-- **Lighthouse scores.** The machine running this check has no browser. `lighthouse.yml` audits the live site, so run it once before this upgrade deploys (Astro 5) and once after (Astro 7), and add the scores here.
+- **Lighthouse scores.** Still to do. See the Lighthouse note in [`2026-11-astro-7-performance.md`](2026-11-astro-7-performance.md).
 
 ## Sources
 
