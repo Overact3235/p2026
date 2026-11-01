@@ -23,7 +23,8 @@ export default {
         { release: 'patch' }, // catch-all for squash merges with non-conventional PR titles
       ]
     }],
-    '@semantic-release/release-notes-generator',
+    // Release notes come from the merged PRs' generated summaries (scripts/release).
+    '../scripts/release/release-notes-plugin.mjs',
     ['@semantic-release/github', {
       releaseNameTemplate: '<%= nextRelease.gitTag %>',
       // successComment: false,

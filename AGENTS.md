@@ -15,7 +15,7 @@ Goals:
 
 ## Stack
 
-- Astro 5
+- Astro 7
 - Markdown and MDX content collections
 - custom CSS
 - local bundled fonts via `@fontsource`
@@ -27,7 +27,7 @@ Goals:
 
 - `p2026/src/content/blog/` for blog posts
 - `p2026/src/content/projects/` for project entries
-- `p2026/src/content/config.ts` for content schemas
+- `p2026/src/content.config.ts` for content collections (glob loaders and schemas)
 - `p2026/src/pages/` for routes including `blog`, `projects`, `timeline`, `resources`, and `about`
 - `p2026/src/styles/global.css` for global styling
 - `prompts/blog_prompt.md` for blog drafting
@@ -88,6 +88,8 @@ Publishing notes:
 - `preview` is the disposable Netlify branch when a stable preview URL is useful
 - prefer small, feature-scoped commits because PRs are squash-merged
 - tool-specific branch prefixes are not part of the repo convention
+- PR descriptions start from `.github/pull_request_template.md`. `.github/workflows/pr-notes.yml` rewrites only the section between the `pr-summary` markers, built from the PR's commit subjects, so write clear conventional commit subjects. Anything outside the markers is kept, and release notes are built from the same summary
+- no AI attribution: never add `Co-Authored-By:` trailers naming an AI tool (Claude, Codex, etc.) or "Generated with ..." lines to commit messages or PR descriptions, whichever agent you are. Commits are authored by the repo owner. `.claude/settings.json` enforces this for Claude Code (`attribution` set to empty). For Codex and other tools, this rule is what covers it
 
 ## Codex sub-agents
 
