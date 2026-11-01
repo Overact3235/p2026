@@ -57,11 +57,40 @@ Short project notes here.
 
 ## Deployment
 
-Pushes to `main` auto-deploy via GitHub Actions. To set up:
+### Production
+
+Pushes to `main` auto-deploy to GitHub Pages. To set up:
 
 1. Go to **Settings -> Pages**
 2. Set source to **GitHub Actions**
 3. Push to `main`
+
+### Preview and staging
+
+The repo also supports a lightweight preview flow with Netlify:
+
+- `main` stays the integration branch and public production branch on GitHub Pages
+- Netlify can still build `main` without becoming the public production host
+- `preview` is the disposable Netlify branch deploy for a stable test URL when needed
+- Netlify should be treated as a preview host, not the public production site
+- Feature branches can use Netlify branch deploys or PR deploy previews
+
+The root `netlify.toml` is configured for this repo's nested Astro app:
+
+- Base directory: `p2026`
+- Build command: `pnpm run build`
+- Publish directory: `dist`
+- Node version: `24`
+
+To connect Netlify:
+
+1. Import the GitHub repo into Netlify
+2. Let Netlify read `netlify.toml`
+3. Keep Netlify connected to `main`
+4. Enable branch deploys for `preview`
+5. Keep GitHub Pages serving `main` and `p2026.xyz` as the public production site
+
+If you want a stable preview URL, update `preview` with the branch you want to review and let Netlify rebuild. For one-off previews, Netlify PR deploys can still be enough without touching `preview`.
 
 ## Branch naming
 
@@ -71,6 +100,8 @@ Examples:
 
 - `feature/update-context`
 - `fix/mobile-nav-spacing`
+
+Use `main` as the default integration and production branch. Use `preview` only when you want a stable Netlify deployment for a selected change.
 
 ## Structure
 
