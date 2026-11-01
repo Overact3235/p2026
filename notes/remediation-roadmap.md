@@ -37,7 +37,7 @@ From 2026-10-10 on, this plan runs in a remote Claude Code session, not on the m
 
 | Step | Branch | Site release | Status | Notes |
 |---|---|---|---|---|
-| 0.1 | `fix/remediation-roadmap` | v1.2.9 | in progress | This plan and the decisions log. |
+| 0.1 | `fix/remediation-roadmap` (PR #26) | v1.2.9 | done | This plan and the decisions log. |
 | 0.2 | `feature/trim-agents-context` (PR #25) | v1.2.12 | todo | Merge after fixes listed in D-005. |
 | 0.3 | `feature/mc26-transition` | patch | todo | Keep. Fix the placeholder author, then open a PR. The note becomes the first article (D-009). |
 
@@ -108,7 +108,7 @@ Questions the EmDash write-up must answer:
 
 ## Changelog
 
-- 1.2.0 (2026-10-31): Astro 7 moves ahead of Phases 1 to 4 (D-012). Step 2.3 dropped. Step 5.1 is now the October security update. Expected site versions updated.
+- 1.2.0 (2026-10-31): Astro 7 moves ahead of Phases 1 to 4 (D-012). Step 2.3 dropped. Step 5.1 is now the October security update. Expected site versions updated. Step 0.1 done (PR #26, `v1.2.9`).
 - 1.1.1 (2026-10-11): PR #27 released `v1.2.8` outside the plan, so every expected site version moves up by one.
 - 1.1.0 (2026-10-10): Added Phase 5, the Astro 7 upgrade with a performance comparison and an EmDash evaluation (D-011).
 - 1.0.2 (2026-10-10): Step 0.3 set to keep (D-009). Clarified what D-006 blocks. Each step uses its own branch, not the session's default branch.
