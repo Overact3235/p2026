@@ -80,7 +80,47 @@ What to expect from Astro 7 here: faster builds and dev server, but on a 2-secon
 
 ## Astro 7 comparison
 
-To be filled in by roadmap step 5.2 (`feature/astro-7-upgrade`): the same measurements on Astro 7, Lighthouse scores for both versions, and the `pnpm audit` result after the upgrade.
+Filled in by roadmap step 5.2 (`feature/astro-7-upgrade`) on 2026-11-01: `astro` 5.17.3 to 7.4.4, `@astrojs/mdx` 4.3.13 to 8.1.2. Same machine and method as the baseline above.
+
+| Measure | Astro 5.17.3 | Astro 7.4.4 | Change |
+|---|---|---|---|
+| Pages built | 12 | 12 | same pages, same URLs |
+| Astro build time | 1.93s, 1.95s, 1.99s | 1.15s, 1.16s, 1.14s | about 41% faster |
+| `dist/` size | 768 KB | 764 KB | |
+| HTML total | 373,764 bytes | 371,463 bytes | 0.6% smaller |
+| Home page | 28,854 bytes | 28,693 bytes | |
+| Blog posts | 32,095–37,149 bytes | 31,870–36,924 bytes | |
+| Separate JS / CSS files | 0 / 0 | 0 / 0 | |
+| `pnpm audit` | 63 (1 critical, 28 high, 27 moderate, 7 low) | 4 (2 high, 1 moderate, 1 low) | 59 cleared |
+
+### What changed in the output
+
+Checked by building both versions and comparing every page:
+
+- **Visible text is identical** on every page. The one difference is a dropped space next to an HTML comment on the About page, which doesn't show.
+- **CSS and inline scripts are equivalent, just shorter.** Astro 7's minifier writes the same rules more compactly (`transparent` as `#0000`, default `ease` dropped, animation shorthands reordered) and renames variables in the inline scripts. The two semi-transparent amber colours round to within 0.2% of the old values.
+- **Whitespace needed one setting.** Astro 7 defaults to JSX whitespace rules, which glued neighbouring text together across the site (for example "learned.P2026"). `compressHTML: true` in `astro.config.mjs` keeps the HTML rules, and with it the text matches Astro 5.
+- **The dev server works.** All pages and `rss.xml` return 200 from `astro dev`. In Astro 7, `astro dev` runs in the background: stop it with `astro dev stop`.
+
+### Code changes the upgrade needed
+
+- Content collections moved from `src/content/config.ts` to `src/content.config.ts`, with `glob` loaders and `z` imported from `astro/zod` (Astro 6 removed the legacy setup).
+- `entry.slug` became `entry.id`, and `entry.render()` became `render(entry)`. Project URLs (`/projects/p2026`, `/projects/mc-server`) are unchanged because their frontmatter `slug` sets the ID.
+
+### Advisories left after the upgrade
+
+All four are in build tooling that Astro pulls in. None ship to visitors, and none can be fixed from this repo without overriding Astro's own dependency versions.
+
+| Severity | Package | Issue | Path |
+|---|---|---|---|
+| High | `picomatch` | ReDoS via extglob quantifiers ([GHSA-c2c7-rcm5-vvqj](https://github.com/advisories/GHSA-c2c7-rcm5-vvqj)) | `astro > unstorage > anymatch > picomatch` |
+| High | `source-map-js` | Event-loop denial of service via source-map offsets ([GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q)) | `astro > magicast > source-map-js` |
+| Moderate | `picomatch` | Method injection in POSIX character classes ([GHSA-3v7f-55p6-f55p](https://github.com/advisories/GHSA-3v7f-55p6-f55p)) | `astro > unstorage > anymatch > picomatch` |
+| Low | `esbuild` | Arbitrary file read from the dev server on Windows ([GHSA-g7r4-m6w7-qqqr](https://github.com/advisories/GHSA-g7r4-m6w7-qqqr)) | `astro > vite > esbuild` |
+
+### Not measured yet
+
+- **Lighthouse scores.** The machine running this check has no browser. `lighthouse.yml` audits the live site, so run it once before this upgrade deploys (Astro 5) and once after (Astro 7), and add the scores here.
 
 ## Sources
 
