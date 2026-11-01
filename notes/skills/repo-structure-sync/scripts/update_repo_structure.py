@@ -2,23 +2,20 @@
 
 from __future__ import annotations
 
+import subprocess
 from datetime import date
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[4]
 OUTPUT = ROOT / "notes" / "repo-structure.md"
 MAX_DEPTH = 4
 
-IGNORE_NAMES = {
-    ".git",
-    ".DS_Store",
-    "node_modules",
-    "dist",
-}
-
+# The tree is built from `git ls-files`, so only committed files appear. Anything
+# git ignores (`.env`, `.astro/`, `node_modules/`, `dist/`) can never show up.
+# These lists only trim tracked paths that would add noise.
 IGNORE_DIRS = {
-    ROOT / "notes" / "archive",
-    ROOT / "p2026" / "revamp_v9b",
+    PurePosixPath("notes/archive"),
+    PurePosixPath("p2026/revamp_v9b"),
 }
 
 ROOT_PRIORITY = [
@@ -26,6 +23,7 @@ ROOT_PRIORITY = [
     "README.md",
     "roadmap.md",
     "tasks.md",
+    "decisions.md",
     "backlog",
     "notes",
     "prompts",
@@ -36,45 +34,59 @@ ROOT_PRIORITY = [
 ]
 
 
-def should_skip(path: Path) -> bool:
-    if path.name in IGNORE_NAMES:
-        return True
+def tracked_files() -> list[PurePosixPath]:
+    output = subprocess.run(
+        ["git", "ls-files", "-z"], cwd=ROOT, check=True, capture_output=True
+    ).stdout.decode("utf-8")
+    return [PurePosixPath(name) for name in output.split("\0") if name]
+
+
+def should_skip(path: PurePosixPath) -> bool:
     if path.suffix == ".zip":
         return True
     return any(path == ignored or ignored in path.parents for ignored in IGNORE_DIRS)
 
 
-def sort_key(path: Path) -> tuple[int, int, str]:
-    priority_index = ROOT_PRIORITY.index(path.name) if path.parent == ROOT and path.name in ROOT_PRIORITY else len(ROOT_PRIORITY)
-    return (priority_index, 0 if path.is_dir() else 1, path.name.lower())
+def build_tree(paths: list[PurePosixPath]) -> dict:
+    # Nested dicts: a directory maps names to children, a file maps to None.
+    tree: dict = {}
+    for path in paths:
+        if should_skip(path):
+            continue
+        node = tree
+        for part in path.parts[:-1]:
+            node = node.setdefault(part, {})
+        node[path.parts[-1]] = None
+    return tree
 
 
-def iter_children(path: Path) -> list[Path]:
-    children = [child for child in path.iterdir() if not should_skip(child)]
-    return sorted(children, key=sort_key)
+def sort_key(name: str, children: dict | None, at_root: bool) -> tuple[int, int, str]:
+    priority_index = ROOT_PRIORITY.index(name) if at_root and name in ROOT_PRIORITY else len(ROOT_PRIORITY)
+    return (priority_index, 0 if children is not None else 1, name.lower())
 
 
-def render_tree(path: Path, prefix: str = "", depth: int = 0) -> list[str]:
-    if depth >= MAX_DEPTH or not path.is_dir():
+def render_tree(tree: dict, prefix: str = "", depth: int = 0) -> list[str]:
+    if depth >= MAX_DEPTH:
         return []
 
-    children = iter_children(path)
+    names = sorted(tree, key=lambda name: sort_key(name, tree[name], depth == 0))
     lines: list[str] = []
 
-    for index, child in enumerate(children):
-        branch = "`- " if index == len(children) - 1 else "|- "
-        suffix = "/" if child.is_dir() else ""
-        lines.append(f"{prefix}{branch}{child.name}{suffix}")
+    for index, name in enumerate(names):
+        children = tree[name]
+        last = index == len(names) - 1
+        branch = "`- " if last else "|- "
+        lines.append(f"{prefix}{branch}{name}{'/' if children is not None else ''}")
 
-        if child.is_dir():
-            extension = "   " if index == len(children) - 1 else "|  "
-            lines.extend(render_tree(child, prefix + extension, depth + 1))
+        if children is not None:
+            extension = "   " if last else "|  "
+            lines.extend(render_tree(children, prefix + extension, depth + 1))
 
     return lines
 
 
 def main() -> None:
-    tree_lines = ["./", *render_tree(ROOT)]
+    tree_lines = ["./", *render_tree(build_tree(tracked_files()))]
     content = "\n".join(
         [
             "# Repo Structure Snapshot",
@@ -84,7 +96,7 @@ def main() -> None:
             "",
             f"Last updated: {date.today().isoformat()}",
             "",
-            "The snapshot is intentionally high-signal. It excludes dependency folders, build output, archives, and large binary artifacts.",
+            "The snapshot lists only files tracked by git, so ignored files never appear. It also leaves out zip archives, `notes/archive/`, and `p2026/revamp_v9b/`.",
             "",
             "```text",
             *tree_lines,

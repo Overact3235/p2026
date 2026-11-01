@@ -17,5 +17,6 @@ Use this skill when the repo structure needs to be documented or refreshed.
 ## Notes
 
 - The generated snapshot is intentionally high-signal, not exhaustive.
-- It excludes build output, dependency folders, zip archives, and other bulky artifacts.
+- It lists only files tracked by git (`git ls-files`), so ignored or local-only files such as `.env` and `.astro/` never appear.
+- It also leaves out zip archives, `notes/archive/`, and `p2026/revamp_v9b/`.
 - Keep `AGENTS.md` focused on operating context; keep the full tree here.
