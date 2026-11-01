@@ -135,7 +135,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
       </div>
 
       {projects.map(project => (
-        <a class="project-row hover-row reveal" href={`/projects/${project.slug}`}>
+        <a class="project-row hover-row reveal" href={`/projects/${project.id}`}>
           <div class="project-left">
             <p class="project-name">{project.data.name}</p>
             <p class="project-desc">{project.data.description}</p>

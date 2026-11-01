@@ -35,7 +35,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
         </div>
         <div class="project-list">
           {shippedProjects.map(project => (
-            <a class="project-row reveal" href={`/projects/${project.slug}`}>
+            <a class="project-row reveal" href={`/projects/${project.id}`}>
               <div class="project-left">
                 <p class="project-name">{project.data.name}</p>
                 <p class="project-desc">{project.data.description}</p>
@@ -57,7 +57,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
         </div>
         <div class="project-list">
           {buildingProjects.map(project => (
-            <a class="project-row reveal" href={`/projects/${project.slug}`}>
+            <a class="project-row reveal" href={`/projects/${project.id}`}>
               <div class="project-left">
                 <p class="project-name">{project.data.name}</p>
                 <p class="project-desc">{project.data.description}</p>
@@ -78,7 +78,7 @@ const archivedProjects = projects.filter(p => p.data.status === 'archived');
         </div>
         <div class="project-list">
           {archivedProjects.map(project => (
-            <a class="project-row reveal" href={`/projects/${project.slug}`}>
+            <a class="project-row reveal" href={`/projects/${project.id}`}>
               <div class="project-left">
                 <p class="project-name">{project.data.name}</p>
                 <p class="project-desc">{project.data.description}</p>

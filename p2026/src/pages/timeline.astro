@@ -12,7 +12,7 @@ const entries = [
     date: project.data.date,
     title: project.data.name,
     body: project.data.description,
-    href: `/projects/${project.slug}`,
+    href: `/projects/${project.id}`,
   })),
   ...posts.map((post) => ({
     type: 'post',
@@ -20,7 +20,7 @@ const entries = [
     date: post.data.pubDate,
     title: post.data.title,
     body: post.data.description,
-    href: `/blog/${post.slug}`,
+    href: `/blog/${post.id}`,
   })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 

@@ -17,7 +17,7 @@ export async function GET(context: { site?: URL }) {
   const channelLink = new URL('/blog', site).toString();
 
   const items = posts.map((post) => {
-    const url = new URL(`/blog/${post.slug}`, site).toString();
+    const url = new URL(`/blog/${post.id}`, site).toString();
 
     return `
       <item>
