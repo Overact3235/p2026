@@ -88,7 +88,7 @@ A separate sub-epic (D-011). Since D-012, steps 5.1 and 5.2 come right after 0.1
 
 | Step | Branch | Site release | Status | Scope |
 |---|---|---|---|---|
-| 5.1 | `fix/october-security-update` | v1.2.11 | in progress | October 2026 security update: Astro version check, advisories, and the Astro 5 performance baseline (build time, `dist/` size, page weight). Saved in `notes/updates/2026-10-security-update.md`. Lighthouse scores get added with the 5.2 comparison. |
+| 5.1 | `fix/october-security-update` | v1.2.11 | done | October 2026 security update: Astro version check, advisories, and the Astro 5 performance baseline (build time, `dist/` size, page weight). Saved in `notes/updates/2026-10-security-update.md`. Lighthouse scores get added with the 5.2 comparison. |
 | 5.2 | `feature/astro-7-upgrade` | v1.2.12 | todo | Upgrade `astro` to 7.x and `@astrojs/mdx` to 8.x, following the v6 and v7 upgrade guides in order. Re-run the 5.1 measurements and `pnpm audit`, check the Netlify deploy preview, and add the before and after numbers to the October update and the PR. |
 | 5.3 | `fix/emdash-evaluation` | patch | todo | Evaluate EmDash (Cloudflare's Astro-based CMS) for future publishing. Try it on a throwaway branch that never merges. Merge only the write-up, `notes/emdash-evaluation.md`. |
 
@@ -108,7 +108,7 @@ Questions the EmDash write-up must answer:
 
 ## Changelog
 
-- 1.2.0 (2026-10-31): Astro 7 moves ahead of Phases 1 to 4 (D-012). Step 2.3 dropped. Step 5.1 is now the October security update. Expected site versions updated. Step 0.1 done (PR #26, `v1.2.9`). PR #29 released `v1.2.10` outside the plan, so the versions after it move up by one.
+- 1.2.0 (2026-10-31): Astro 7 moves ahead of Phases 1 to 4 (D-012). Step 2.3 dropped. Step 5.1 is now the October security update. Expected site versions updated. Step 0.1 done (PR #26, `v1.2.9`). PR #29 released `v1.2.10` outside the plan, so the versions after it move up by one. Step 5.1 done with this update.
 - 1.1.1 (2026-10-11): PR #27 released `v1.2.8` outside the plan, so every expected site version moves up by one.
 - 1.1.0 (2026-10-10): Added Phase 5, the Astro 7 upgrade with a performance comparison and an EmDash evaluation (D-011).
 - 1.0.2 (2026-10-10): Step 0.3 set to keep (D-009). Clarified what D-006 blocks. Each step uses its own branch, not the session's default branch.
