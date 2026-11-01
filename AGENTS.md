@@ -25,7 +25,7 @@ Live at: **p2026.xyz**
 
 | Layer | Choice | Why |
 |---|---|---|
-| Framework | Astro 5 | Zero JS by default, component model, content collections |
+| Framework | Astro 7 | Zero JS by default, component model, content collections |
 | Content | Markdown / MDX | Simple, portable, no CMS |
 | Styling | Custom CSS | Global styles plus page-scoped Astro styles where it improves readability |
 | Fonts | Local bundled fonts via `@fontsource` | No external requests, privacy, fast static delivery |
@@ -54,10 +54,10 @@ p2026/                          <- repo root
    |  |- favicon.svg
    |  `- fonts/                <- self-hosted woff2 font files
    |- src/
+   |  |- content.config.ts     <- content collections: glob loaders and Zod schemas
    |  |- content/
    |  |  |- blog/              <- blog posts (.md / .mdx)
-   |  |  |- projects/          <- project entries (.md)
-   |  |  `- config.ts          <- Zod schemas for content collections
+   |  |  `- projects/          <- project entries (.md)
    |  |- components/
    |  |  |- Nav.astro
    |  |  `- Footer.astro

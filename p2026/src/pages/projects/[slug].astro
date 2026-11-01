@@ -1,21 +1,21 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => !data.draft);
 
   return projects.map((project) => ({
-    params: { slug: project.slug },
+    params: { slug: project.id },
     props: { project },
   }));
 }
 
 const { project } = Astro.props;
-const { Content } = await project.render();
+const { Content } = await render(project);
 
 const relatedPosts = (await getCollection('blog', ({ data }) => !data.draft))
-  .filter((post) => post.data.project === project.slug)
+  .filter((post) => post.data.project === project.id)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 function formatDate(date: Date) {
@@ -70,7 +70,7 @@ function formatDate(date: Date) {
         {relatedPosts.length > 0 ? (
           <div class="post-list">
             {relatedPosts.map((post) => (
-              <a class="post-row" href={`/blog/${post.slug}`}>
+              <a class="post-row" href={`/blog/${post.id}`}>
                 <span class="post-date">
                   {post.data.pubDate.toLocaleDateString('en-US', {
                     month: 'short',

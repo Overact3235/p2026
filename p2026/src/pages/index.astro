@@ -64,7 +64,7 @@ function formatPostDate(date: Date) {
       </div>
       <div class="post-list">
         {posts.map(post => (
-          <a class="post-row reveal" href={`/blog/${post.slug}`}>
+          <a class="post-row reveal" href={`/blog/${post.id}`}>
             <span class="post-date" set:html={formatPostDate(post.data.pubDate)}></span>
             <div class="post-info">
               <p class="post-title">{post.data.title}</p>
@@ -82,7 +82,7 @@ function formatPostDate(date: Date) {
       </div>
       <div class="project-list">
         {projects.map(project => (
-          <a class="project-row reveal" href={`/projects/${project.slug}`}>
+          <a class="project-row reveal" href={`/projects/${project.id}`}>
             <div class="project-left">
               <p class="project-name">{project.data.name}</p>
               <p class="project-desc">{project.data.description}</p>

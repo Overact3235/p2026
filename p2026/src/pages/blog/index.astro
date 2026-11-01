@@ -24,7 +24,7 @@ function formatPostDate(date: Date) {
 
     <div class="post-list">
       {posts.map(post => (
-        <a class="post-row" href={`/blog/${post.slug}`}>
+        <a class="post-row" href={`/blog/${post.id}`}>
           <span class="post-date" set:html={formatPostDate(post.data.pubDate)}></span>
           <div class="post-info">
             <p class="post-title">{post.data.title}</p>
