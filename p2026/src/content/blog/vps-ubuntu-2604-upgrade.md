@@ -10,10 +10,10 @@ I moved my VPS from Ubuntu 24.04.5 to 26.04.1 LTS in place. The upgrade itself t
 
 ## What's on the box
 
-- **Caddy 2.11.7** as the reverse proxy, from Caddy's own apt repo.
-- **CrowdSec 1.8.2** with the iptables firewall bouncer (0.0.36), reading Caddy's access logs.
+- **Caddy** as the reverse proxy, from Caddy's own apt repo.
+- **CrowdSec** with the iptables firewall bouncer, reading Caddy's access logs.
 - **Tailscale** for private access.
-- **Docker 29.9.2** running a small Compose stack: Uptime Kuma, n8n and a Minecraft server.
+- **Docker** running a small Compose stack: Uptime Kuma, n8n and a Minecraft server.
 - A monitoring agent, vnStat for traffic accounting, and a couple of tools from a PPA and NodeSource.
 
 So: a lot of software that doesn't come from Ubuntu. That's where release upgrades go wrong.
@@ -24,7 +24,7 @@ I didn't want to find out after the upgrade that the box had already drifted fro
 
 Then:
 
-1. **Patch 24.04 fully.** My patch workflow pulled two last updates (Docker Compose 5.6.1 → 5.7.0, Tailscale 1.104.4 → 1.104.5). After that, nothing upgradable and no reboot pending.
+1. **Patch 24.04 fully.** My patch workflow pulled the last couple of updates (Docker Compose and Tailscale). After that, nothing upgradable and no reboot pending.
 2. **Redeploy the Compose stack** and wait for every container to report healthy, so any later breakage would be the upgrade's fault, not something stale.
 3. **Take a snapshot** at the provider. That's the real rollback plan.
 4. **Release the Docker holds.** I normally pin Docker with `apt-mark hold` so routine patching can't restart my containers.
@@ -83,18 +83,26 @@ The upgrader disabled every third-party apt repo. My old one-line `.list` files 
 
 | Repo | On 26.04 |
 |---|---|
-| Docker, Tailscale, the fastfetch PPA | `resolute` exists, switch to it |
-| Caddy, Datadog, NodeSource | suite isn't tied to a release, no change |
-| CrowdSec | no `resolute` yet, but its `any` repo works |
+| Caddy, NodeSource, the monitoring agent | suite isn't tied to a release, no change |
+| CrowdSec | no `resolute` yet, but its release-agnostic `any` repo works |
+| Docker, Tailscale, the fastfetch PPA | only publish per-release suites, so switch to `resolute` |
 
-CrowdSec has a trap. Packagecloud's generic setup script writes a `resolute` suite that doesn't exist, which breaks `apt update`. CrowdSec's own installer writes a release-agnostic `any` repo with the same 1.8.2 build. Before trusting a 24.04 build on 26.04, I ran `ldd` on the binaries: CrowdSec, its bouncer and Caddy are all static, so a library change can't break them.
+The repos that didn't need touching all had one thing in common: their suite isn't named after an Ubuntu release. So that's my rule from now on. Where a vendor offers a release-agnostic suite, use it. Where it only publishes per-release suites, have the provisioning script read the codename from the system when it writes the `.sources` file, instead of hard-coding it:
 
-I rewrote every repo as a deb822 `.sources` file. Then `apt upgrade` swapped Docker 29.9.2 and containerd 2.4.2 from their 24.04 builds to the 26.04 builds of the same versions. That restarts the Docker daemon. The containers were healthy again inside two minutes.
+```bash
+codename=$(. /etc/os-release && echo "$VERSION_CODENAME")   # resolute on 26.04
+```
+
+Then the next release upgrade means re-enabling the release-agnostic repos and re-running the script for the rest, not hand-editing files.
+
+CrowdSec has a trap. Packagecloud's generic setup script writes a `resolute` suite that doesn't exist, which breaks `apt update`. CrowdSec's own installer writes the release-agnostic `any` repo, which carries the same build. Before trusting a 24.04 build on 26.04, I ran `ldd` on the binaries: CrowdSec, its bouncer and Caddy are all static, so a library change can't break them.
+
+I rewrote every repo as a deb822 `.sources` file. Then `apt upgrade` swapped Docker and containerd from their 24.04 builds to the 26.04 builds of the same versions. That restarts the Docker daemon. The containers were healthy again inside two minutes.
 
 ## Still to do
 
 - Run my CI deploy against the upgraded box to prove the sudo rules under `sudo-rs`.
 - After a few days on kernel 7.0: `apt autoremove`, then drop the snapshot.
-- Fix my provisioning script, which still hard-codes an old Ubuntu codename for one repo and uses packagecloud's generic script for CrowdSec.
+- Fix my provisioning script to follow that rule. It still hard-codes an old Ubuntu codename for one repo and uses packagecloud's generic script for CrowdSec.
 
 Next is my home server, same checklist, with staging first.
