@@ -1,77 +1,100 @@
 ---
 title: "Upgrading my VPS from Ubuntu 24.04 to 26.04"
-description: "What an in-place Ubuntu 24.04 to 26.04.1 upgrade changed, and what it broke."
+description: "How I checked, upgraded and re-verified a VPS on Ubuntu 26.04.1."
 pubDate: 2026-11-03
 tags: ["ubuntu", "vps", "self-hosting"]
 draft: true
 ---
 
-I moved my VPS from Ubuntu 24.04 to 26.04.1 LTS in place. The machine did about 25 minutes of work. I spent 72 minutes at the keyboard, and roughly 35 of those were the upgrader waiting for me to answer a question.
+I moved my VPS from Ubuntu 24.04.5 to 26.04.1 LTS in place. The upgrade itself took about 26 minutes of machine time. Most of the effort went into checking things before and after, and that's the part worth writing down.
 
-## Why 26.04, and why now
+## What's on the box
 
-I'd already decided to keep my servers on Ubuntu LTS rather than move them to Debian. My provisioning scripts assume Ubuntu, and 24.04 gets free security updates until 2029, so there was no rush. The rule I set was to wait for the first point release, 26.04.1, which usually means the worst launch bugs are fixed.
+- **Caddy 2.11.7** as the reverse proxy, from Caddy's own apt repo.
+- **CrowdSec 1.8.2** with the iptables firewall bouncer (0.0.36), reading Caddy's access logs.
+- **Tailscale** for private access.
+- **Docker 29.9.2** running a small Compose stack: Uptime Kuma, n8n and a Minecraft server.
+- A monitoring agent, vnStat for traffic accounting, and a couple of tools from a PPA and NodeSource.
 
-## The prep
+So: a lot of software that doesn't come from Ubuntu. That's where release upgrades go wrong.
 
-- A full snapshot from the VPS provider, so there's a way back if it goes wrong.
-- 24.04 fully patched first, with nothing left in `apt list --upgradable` and no pending reboot.
-- A `tmux` session logging everything to a file, so a dropped SSH connection can't kill the upgrade halfway.
-- Docker packages released from `apt-mark hold`, so the upgrader is allowed to touch them.
+## Before: prove the current state
+
+I didn't want to find out after the upgrade that the box had already drifted from my repo. So first I compared the live config against the repo: the Caddyfile matched apart from `caddy fmt` whitespace, and the CrowdSec acquisition and custom scenarios were byte-identical to their templates.
 
 Then:
 
+1. **Patch 24.04 fully.** My patch workflow pulled two last updates (Docker Compose 5.6.1 → 5.7.0, Tailscale 1.104.4 → 1.104.5). After that, nothing upgradable and no reboot pending.
+2. **Redeploy the Compose stack** and wait for every container to report healthy, so any later breakage would be the upgrade's fault, not something stale.
+3. **Take a snapshot** at the provider. That's the real rollback plan.
+4. **Release the Docker holds.** I normally pin Docker with `apt-mark hold` so routine patching can't restart my containers.
+5. **Start a logged tmux session**, so a dropped SSH connection can't kill the upgrade halfway:
+
 ```bash
+tmux new -s up2604
+tmux pipe-pane -o 'cat >> ~/up2604-$(date +%Y%m%d-%H%M).log'
+grep ^Prompt /etc/update-manager/release-upgrades   # Prompt=lts
+apt list --upgradable                                # empty
 sudo do-release-upgrade
 ```
 
-## The run
+## During: read every list
 
-The upgrader warned about "foreign packages" (Caddy, CrowdSec, Node.js and a couple of others from outside Ubuntu's repos) and said they'd stay at their current versions. Then it planned 765 upgrades, 147 installs and 4 removals: a 1.5 GB download.
+The upgrader planned 765 upgrades, 147 installs and 4 removals, a 1.5 GB download. It also warned about "foreign packages": Caddy, CrowdSec and Node.js, which stay at their current versions.
 
-The timing broke down like this:
+At each prompt I pressed `d` and read the details before answering. The removal list was harmless: a keyring daemon, two renamed libraries and a PackageKit tool. Near the end, "Remove obsolete packages?" offered 67 packages, including Python 3.12, byobu and an older 6.8 kernel. I'd assumed it would also offer my third-party packages, because their repos were now disabled. It didn't. It only offers packages that were pulled in automatically, and I'd installed the stack explicitly.
 
-- **Download:** under 3 minutes.
-- **Unpack and configure:** about 18 minutes.
-- **Removing obsolete packages:** 40 seconds.
-- **Reboot:** about a minute.
-
-The other 35 minutes went on two prompts I wasn't watching: "Remove obsolete packages?" and "Restart required". The upgrader stops and waits at every one, so **stay at the terminal until it finishes**.
-
-One self-inflicted moment: I pressed up-arrow and Enter at the wrong time and started `do-release-upgrade` a second time. I aborted it straight away, and it hadn't changed anything.
-
-## What changed
-
-- **Kernel** 6.8 → 7.0. The old kernel stays as a fallback in GRUB.
-- **OpenSSH** 9.6 → 10.2. My `sshd_config.d` hardening (custom port, no root login, no passwords) carried over untouched.
-- **`sudo` is now `sudo-rs`**, the Rust rewrite. `visudo -c` still parses my sudoers rules. I haven't proven them under a real CI run yet.
-- **Rust coreutils are the default.** GNU coreutils is still installed alongside.
-- **Python 3.14** replaced 3.12. Also new: apt 3.2 and bash 5.3.
-
-No config-file prompts appeared, and every service came back on its own after the reboot.
-
-## What broke: third-party repos
-
-The upgrader **disabled every third-party apt repo**: Docker, Caddy, CrowdSec, Tailscale and the rest. My old `.list` files couldn't be migrated to apt's newer deb822 format, so they were renamed to `*.list.disabled`.
-
-Re-enabling them wasn't one-size-fits-all:
-
-| Repo | What to use on 26.04 |
+| Phase | Time |
 |---|---|
-| Docker, Tailscale | Switch the suite to `resolute` |
-| Caddy | No change, its suite isn't tied to a release |
-| CrowdSec | No `resolute` suite yet, but its release-agnostic `any/any` repo has the same builds |
+| Download | under 3 min |
+| Unpack and configure | about 19 min |
+| Obsolete removal | 40 s |
+| Reboot to SSH | about 1 min |
 
-CrowdSec has one trap. The generic packagecloud setup script writes a `resolute` suite that doesn't exist, which breaks `apt update`. CrowdSec's own installer writes the `any/any` repo instead, and that one works.
+## After: check, don't assume
 
-I rewrote them all as deb822 `.sources` files. apt 3 still reads the old `.list` format, but the next release upgrade will only migrate deb822.
+After the reboot I went down a checklist:
 
-Once the repos were back, `apt upgrade` swapped Docker from its 24.04 build to the 26.04 build of the same version. The containers restarted and were healthy again within about two minutes.
+```bash
+uname -r                                     # 7.0.0-42-generic
+systemctl is-enabled ssh.socket ssh.service  # disabled / enabled
+sudo sshd -T | grep -E '^(port|permitrootlogin|passwordauthentication) '
+sudo ufw status
+systemctl is-active caddy crowdsec crowdsec-firewall-bouncer tailscaled docker
+sudo docker ps
+sudo visudo -c
+```
+
+The `ssh.socket` line matters on Ubuntu. Socket activation ignores a custom SSH port, so I keep it disabled, and I wanted proof the upgrade hadn't brought it back. It hadn't.
+
+What changed:
+
+- **Kernel** 6.8.0-147 → 7.0.0-42, with the 6.8 kernel kept in GRUB as a fallback.
+- **OpenSSH** 9.6p1 → 10.2p1. My hardening drop-ins carried over untouched.
+- **`sudo` is now `sudo-rs` 0.2.13**, the Rust rewrite. `visudo -c` parses my CI user's restricted rules, and `sudo -l` lists them correctly. A real CI deploy is the actual test, and that's still to do.
+- **Rust coreutils** are the default, with GNU coreutils installed alongside.
+- **Python 3.14**, apt 3.2, bash 5.3.
+
+Every service and container came back on its own.
+
+## The one real cleanup: third-party repos
+
+The upgrader disabled every third-party apt repo. My old one-line `.list` files couldn't be migrated to apt's deb822 format, so they were renamed to `*.list.disabled`. Before re-enabling anything, I checked which vendors actually publish a 26.04 (`resolute`) suite:
+
+| Repo | On 26.04 |
+|---|---|
+| Docker, Tailscale, the fastfetch PPA | `resolute` exists, switch to it |
+| Caddy, Datadog, NodeSource | suite isn't tied to a release, no change |
+| CrowdSec | no `resolute` yet, but its `any` repo works |
+
+CrowdSec has a trap. Packagecloud's generic setup script writes a `resolute` suite that doesn't exist, which breaks `apt update`. CrowdSec's own installer writes a release-agnostic `any` repo with the same 1.8.2 build. Before trusting a 24.04 build on 26.04, I ran `ldd` on the binaries: CrowdSec, its bouncer and Caddy are all static, so a library change can't break them.
+
+I rewrote every repo as a deb822 `.sources` file. Then `apt upgrade` swapped Docker 29.9.2 and containerd 2.4.2 from their 24.04 builds to the 26.04 builds of the same versions. That restarts the Docker daemon. The containers were healthy again inside two minutes.
 
 ## Still to do
 
-- Run my CI deploy against the upgraded host, to prove the sudo rules hold under `sudo-rs`.
-- After a day on 7.0, run `apt autoremove`, clear out the old kernel, and drop the snapshot.
-- Fix my provisioning script, which still hard-codes an older Ubuntu codename for the Tailscale repo.
+- Run my CI deploy against the upgraded box to prove the sudo rules under `sudo-rs`.
+- After a few days on kernel 7.0: `apt autoremove`, then drop the snapshot.
+- Fix my provisioning script, which still hard-codes an old Ubuntu codename for one repo and uses packagecloud's generic script for CrowdSec.
 
-Next is my home server. Same steps, but this time on staging first.
+Next is my home server, same checklist, with staging first.
