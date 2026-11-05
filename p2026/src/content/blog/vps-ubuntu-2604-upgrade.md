@@ -3,6 +3,7 @@ title: "Upgrading Ubuntu 24.04 to 26.04, step by step"
 description: "The steps, prompts and timings for an in-place upgrade to Ubuntu 26.04.1."
 pubDate: 2026-11-03
 tags: ["ubuntu", "vps", "self-hosting"]
+project: "remote-server"
 draft: false
 ---
 
