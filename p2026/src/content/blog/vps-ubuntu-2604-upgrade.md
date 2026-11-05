@@ -50,7 +50,6 @@ At each prompt I pressed `d` and read the details before answering. The removal 
 | Unpack and configure | about 19 min |
 | Obsolete removal | 40 s |
 | Reboot to SSH | about 1 min |
-| Wall clock, including me reading prompts | about 72 min |
 
 ## After: check, don't assume
 
