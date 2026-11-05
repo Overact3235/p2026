@@ -17,3 +17,6 @@ Thumbs.db
 # Editor
 .vscode/
 *.swp
+
+# Private drafting inputs (seed notes). This repo is public.
+notes/private/

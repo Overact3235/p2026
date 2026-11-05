@@ -5,3 +5,4 @@
 - Compare a direct feature-branch Netlify preview flow against a shared `develop` staging branch.
 - Revisit `/timeline` only after the publishing workflow and project pages feel stable.
 - Add a simple content scaffold command or template generator for new blog posts and projects.
+- Explore cross-posting only after the draft-generation workflow is stable and canonical URL rules are clear.
