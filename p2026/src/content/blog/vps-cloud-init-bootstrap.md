@@ -3,6 +3,7 @@ title: "Bootstrapping a VPS with cloud-init"
 description: "One file that turns a fresh VPS into a hardened, ready server on first boot."
 pubDate: 2026-11-05
 tags: ["vps", "cloud-init", "self-hosting"]
+project: "remote-server"
 draft: false
 ---
 
