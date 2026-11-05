@@ -56,7 +56,14 @@ Geekbench 7 uses a new scale. Compare its scores only with other Geekbench 7 run
 sudo apt install 7zip
 ```
 
-**Blender Benchmark.** Download the Linux command-line launcher from [opendata.blender.org](https://opendata.blender.org) into `~/bench` and extract it. On a headless server, Blender also needs a few X11 and GL libraries, even though nothing is drawn on screen. Without them, it fails at "Warming up monster" with `Did not receive Benchmark JSON Data`:
+**Blender Benchmark.** Download the Linux command-line launcher (3.3.0) from Blender's servers. Newer versions are listed on [opendata.blender.org](https://opendata.blender.org).
+
+```bash
+wget https://download.blender.org/release/BlenderBenchmark2.0/launcher/benchmark-launcher-cli-3.3.0-linux.tar.gz
+tar xf benchmark-launcher-cli-3.3.0-linux.tar.gz
+```
+
+On a headless server, Blender also needs a few X11 and GL libraries, even though nothing is drawn on screen. Without them, it fails at "Warming up monster" with `Did not receive Benchmark JSON Data`:
 
 ```bash
 sudo apt-get install -y libxfixes3 libxi6 libsm6 libice6 libgl1
