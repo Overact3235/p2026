@@ -1,20 +1,138 @@
 ---
-title: "Benchmarking a shared VPS: trust the median"
-description: "Five runs each of Geekbench, 7-Zip and Blender on my VPS after 26.04."
+title: "Benchmarking a shared VPS: five runs and the median"
+description: "How to benchmark a VPS with Geekbench, 7-Zip and Blender, and read results honestly."
 pubDate: 2026-11-05
 tags: ["vps", "benchmarks", "self-hosting"]
-draft: true
+draft: false
 ---
 
-After moving my VPS to Ubuntu 26.04.1, I wanted a performance baseline to compare against later. I expected to run Geekbench once and write down a number. I ended up running four benchmarks five times each, because the first thing I learned is that one run on a shared VPS tells you almost nothing.
+This is how to get a performance baseline for a VPS that you can compare against later, for example when you move to a new plan or provider. It uses four free benchmarks, runs each one five times, and compares medians.
 
-## The box
+Why five runs? On a shared VPS, other tenants use the same physical cores. On mine, the Geekbench 7 multi-core score moved 31% between two runs taken minutes apart. A single run can land anywhere in that range, so on its own it tells you very little.
 
-6 vCPU, about 12 GB of RAM, Ubuntu 26.04.1. It wasn't idle either. The Minecraft server, n8n and Uptime Kuma kept running throughout, because that's the load it actually carries.
+## What you'll run
 
-I couldn't even find out what CPU it has. `lscpu` reports `AMD EPYC Processor (with IBPB)`, which is QEMU's generic EPYC model. It hides the real host chip from the guest, and Geekbench can't see past it either. My notes had a "most likely" model written next to an old result. That was a guess, and I've marked it unconfirmed.
+| Benchmark | Measures | Time per run | Results |
+|---|---|---|---|
+| Geekbench 6 | Single- and multi-core CPU | about 8 min | Uploaded, read online |
+| Geekbench 7 | Single- and multi-core CPU, new scale | about 9 min | Uploaded, read online |
+| 7-Zip `7z b` | Compression and decompression | about 35 s | Printed locally |
+| Blender Benchmark | CPU rendering, three scenes | about 3 min | JSON, locally |
 
-## Five runs, back to back
+Five runs of everything takes about an hour and 45 minutes. Run the benchmarks on the server's normal load, not on an idle box, and write down what was running. My VPS kept its Minecraft server, n8n and Uptime Kuma running throughout, because that's the load it actually carries.
+
+## Step 1: Record the machine
+
+```bash
+lscpu | grep -E 'Model name|^CPU\(s\)|MHz'
+nproc
+free -h
+```
+
+Save the full `lscpu` output next to your results. Don't be surprised if it doesn't name a real CPU. Mine reports `AMD EPYC Processor (with IBPB)`, which is QEMU's generic EPYC model. It hides the host's actual chip from the guest, and Geekbench can't see past it either. Record it as "unknown" rather than guessing.
+
+## Step 2: Install the benchmarks
+
+Everything goes in one working directory:
+
+```bash
+mkdir -p ~/bench && cd ~/bench
+```
+
+**Geekbench 6 and 7.** Both need an internet connection, because the free editions upload every result to the Geekbench Browser:
+
+```bash
+wget https://cdn.geekbench.com/Geekbench-6.7.1-Linux.tar.gz
+wget https://cdn.geekbench.com/Geekbench-7.0.0-Linux.tar.gz
+tar xf Geekbench-6.7.1-Linux.tar.gz
+tar xf Geekbench-7.0.0-Linux.tar.gz
+```
+
+Geekbench 7 uses a new scale. Compare its scores only with other Geekbench 7 runs, never with Geekbench 6.
+
+**7-Zip.** On Ubuntu 26.04 it's in the `7zip` package:
+
+```bash
+sudo apt install 7zip
+```
+
+**Blender Benchmark.** Download the Linux command-line launcher from [opendata.blender.org](https://opendata.blender.org) into `~/bench` and extract it. On a headless server, Blender also needs a few X11 and GL libraries, even though nothing is drawn on screen. Without them, it fails at "Warming up monster" with `Did not receive Benchmark JSON Data`:
+
+```bash
+sudo apt-get install -y libxfixes3 libxi6 libsm6 libice6 libgl1
+```
+
+Then download a Blender version and the three standard scenes:
+
+```bash
+./benchmark-launcher-cli blender list
+./benchmark-launcher-cli blender download 5.2.0
+./benchmark-launcher-cli scenes download --blender-version 5.2.0 monster junkshop classroom
+```
+
+## Step 3: Run everything five times
+
+Save this as `~/bench/bench.sh`. It runs each benchmark five times back to back, keeps one log per run, and writes a summary:
+
+```bash
+#!/bin/bash
+# Five runs each of Geekbench 6, Geekbench 7, 7-Zip and Blender.
+cd ~/bench
+S=summary.log; : > "$S"
+lscpu > lscpu.txt
+for i in 1 2 3 4 5; do
+  ./Geekbench-6.7.1-Linux/geekbench6 > gb6-run$i.log 2>&1
+  grep -oE 'https://browser.geekbench.com/v6/cpu/[0-9]+$' gb6-run$i.log | sed "s/^/gb6 run$i /" >> "$S"
+done
+for i in 1 2 3 4 5; do
+  ./Geekbench-7.0.0-Linux/geekbench7 > gb7-run$i.log 2>&1
+  grep -oE 'https://browser.geekbench.com/v7/cpu/[0-9]+$' gb7-run$i.log | sed "s/^/gb7 run$i /" >> "$S"
+done
+for i in 1 2 3 4 5; do
+  7z b > 7z-run$i.log 2>&1
+  echo "7z run$i $(awk '/^Tot:/ {print $NF}' 7z-run$i.log)" >> "$S"
+done
+for i in 1 2 3 4 5; do
+  ./benchmark-launcher-cli benchmark --blender-version 5.2.0 --device-type CPU --json \
+    monster junkshop classroom > blender-run$i.json 2> blender-run$i.err
+  echo "blender run$i $(grep -oE '"samples_per_minute": *[0-9.]+' blender-run$i.json | tr '\n' ' ')" >> "$S"
+done
+echo "all done $(date -Is)" >> "$S"
+```
+
+Start it so that it survives a dropped SSH session or a closed laptop:
+
+```bash
+chmod +x ~/bench/bench.sh
+setsid nohup ~/bench/bench.sh > ~/bench/bench.out 2>&1 &
+tail -f ~/bench/summary.log
+```
+
+Only start it once. If two copies run at the same time, they compete for the same cores and every result is wrong.
+
+## Step 4: Collect the scores
+
+- **Geekbench:** neither free CLI prints scores locally, and Geekbench 7's local export is a paid feature. Open each link in `summary.log` and read the single-core and multi-core scores from the results page.
+- **7-Zip:** the summary has the total rating from each run's `Tot:` line, in MIPS. Higher is better.
+- **Blender:** the summary has samples per minute for each scene. Compare scene by scene, or add the three together.
+
+If a Geekbench upload fails, that run has no score at all. Five of my Geekbench 6.5.0 runs finished their workloads and then failed to upload with `unknown error (internal code 35)`, which left nothing to read. Check the summary for missing links and re-run those.
+
+## Step 5: Take the median and write down the spread
+
+For five numbers, the median is the middle one once they're sorted. The spread is how far apart the highest and lowest are. This prints both:
+
+```bash
+printf '%s\n' 3438 2857 3406 3181 3297 | sort -n |
+  awk '{v[NR]=$1} END {printf "median %s, spread %.0f%%\n", v[3], (v[NR]-v[1])/v[1]*100}'
+# median 3297, spread 20%
+```
+
+Compare medians between machines, never single runs. Keep the spread next to the median. A difference smaller than the spread is probably noise.
+
+## Example: my VPS on Ubuntu 26.04.1
+
+6 vCPU, about 12 GB of RAM, normal load:
 
 | Benchmark | Median | Spread across 5 runs |
 |---|---|---|
@@ -22,31 +140,13 @@ I couldn't even find out what CPU it has. `lscpu` reports `AMD EPYC Processor (w
 | Geekbench 6.7.1 multi-core | 3297 | 20% |
 | Geekbench 7.0.0 single-core | 941 | 10% |
 | Geekbench 7.0.0 multi-core | 3550 | 31% |
-| 7-Zip 26.00 `7z b`, total | 19917 MIPS | 23% |
+| 7-Zip 26.00 total | 19917 MIPS | 23% |
 | Blender 5.2.0, three scenes summed | 46.5 samples/min | 16% |
 
-Single-core numbers stay fairly tight. Anything that uses every core swings a lot, because other tenants on the same physical host share those cores. Geekbench 7 multi-core moved 31% between two runs taken minutes apart. 7-Zip's compression score alone moved 39%.
+Single-core scores stay fairly tight. Anything that uses every core swings much more, because that's where other tenants get in the way. 7-Zip's compression score alone moved 39% between runs.
 
-The old single result shows why this matters. In January I ran Geekbench 6.5.0 once and got 1056 single-core and 2922 multi-core. Next to this week's medians, that suggests single-core got worse and multi-core got better. Maybe something did change: a different host, a different version, a different neighbour. With one run from back then, I can't tell, and I'd have happily read a story into it.
+Here's why one run isn't enough. Months earlier, I ran Geekbench 6 once on the same VPS and got 1056 single-core and 2922 multi-core. Next to these medians, that suggests single-core got worse and multi-core got better. Maybe something changed, maybe not. With one run, there's no way to tell.
 
-So my rule now: run it five times, compare medians, and write down the range next to them.
+## Keep the raw data
 
-## Things that went wrong
-
-**Geekbench 7 prints no scores.** The free CLI only prints an upload link, and local export is a Pro feature. Every score in that table came from a results page.
-
-**Five Geekbench 6.5.0 runs produced nothing.** I wanted to compare 6.5.0 with 6.7.1 on the same box. All five runs finished their workloads, about 40 minutes of benchmarking, and then failed to upload with `unknown error (internal code 35)`. No upload means no score. That code matches curl's TLS-connect error, and other versions uploaded fine earlier the same day, so I still don't know whether it was the version or the upload service.
-
-**Blender needed desktop libraries.** On a headless server the benchmark died at "Warming up monster" with `Did not receive Benchmark JSON Data`. It needs a few X11 and GL libraries even when nothing is drawn on screen:
-
-```bash
-sudo apt-get install -y libxfixes3 libxi6 libsm6 libice6 libgl1
-```
-
-**I benchmarked against myself.** A second copy of my run script started by accident and overlapped two 7-Zip runs. They scored around 13,000 MIPS against roughly 20,000 for the clean runs. I threw them out and kept the logs as a reminder.
-
-One thing that did work: starting the long runs with `setsid nohup`, so closing my laptop didn't kill a nearly 50-minute Geekbench 7 batch.
-
-## What I kept
-
-Raw logs, `lscpu` output and the run scripts all went into my infrastructure repo, next to a notes file with the tables. When I replace this VPS, I'll run the same scripts on the new one and compare medians.
+Keep the logs, `lscpu.txt`, `summary.log` and the script together, ideally in a repo. When you move to a new server, run the same script there and compare medians against these.
