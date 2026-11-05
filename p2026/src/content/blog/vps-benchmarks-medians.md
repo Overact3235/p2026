@@ -3,6 +3,7 @@ title: "Benchmarking a shared VPS: five runs and the median"
 description: "How to benchmark a VPS with Geekbench, 7-Zip and Blender, and read results honestly."
 pubDate: 2026-11-05
 tags: ["vps", "benchmarks", "self-hosting"]
+project: "remote-server"
 draft: false
 ---
 
