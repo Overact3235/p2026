@@ -3,6 +3,7 @@ title: "A staging copy of my home media server"
 description: "Copying production into a test VM, and the rules that keep it harmless."
 pubDate: 2026-11-05
 tags: ["homelab", "proxmox", "docker"]
+project: "home-lab"
 draft: true
 ---
 
