@@ -19,13 +19,16 @@ Working with the author:
 
 ## Stack
 
-- Astro 7
-- Markdown and MDX content collections
-- custom CSS
-- local bundled fonts via `@fontsource`
-- GitHub Pages for production
-- Netlify for previews
-- GitHub Actions for deploys and release automation
+| Layer | Choice | Why |
+|---|---|---|
+| Framework | Astro 7 | Zero JS by default, component model, content collections |
+| Content | Markdown / MDX | Simple, portable, no CMS |
+| Styling | Custom CSS | Global styles plus page-scoped Astro styles where it improves readability |
+| Fonts | Local bundled fonts via `@fontsource` | No external requests, privacy, fast static delivery |
+| Production hosting | GitHub Pages | Free, fast, simple |
+| Preview hosting | Netlify | Branch deploys and preview URLs |
+| CI/CD | GitHub Actions plus Netlify builds | GitHub Pages deploys on `main`; Netlify handles preview deploys; semantic-release cuts releases |
+| Domain | p2026.xyz (Spaceship) | Apex domain, DNS via Spaceship |
 
 ## Key paths
 
@@ -65,6 +68,7 @@ Publishing notes:
 - aesthetic: terminal-editorial dark with amber accent
 - dark mode is the default; light mode follows `prefers-color-scheme`
 - fonts: JetBrains Mono for headings and UI, Lora for body copy
+- fonts are Latin subset only and load locally through `p2026/src/styles/fonts.css`, never from Google Fonts
 - keep the site lightweight and avoid unnecessary dependencies or heavy third-party scripts
 - content should sound like a person, not a content generator
 - when making writing-related changes, favor clarity over polish-for-polish's-sake
