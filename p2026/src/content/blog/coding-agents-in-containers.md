@@ -3,6 +3,7 @@ title: "Giving each coding agent its own container"
 description: "Why Claude Code and Codex now run in locked-down LXCs instead of my laptop."
 pubDate: 2026-11-05
 tags: ["homelab", "ai-agents", "proxmox"]
+project: "home-lab"
 draft: true
 ---
 
