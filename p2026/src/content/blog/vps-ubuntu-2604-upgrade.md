@@ -3,10 +3,10 @@ title: "Upgrading my VPS from Ubuntu 24.04 to 26.04"
 description: "How I checked, upgraded and re-verified a VPS on Ubuntu 26.04.1."
 pubDate: 2026-11-03
 tags: ["ubuntu", "vps", "self-hosting"]
-draft: true
+draft: false
 ---
 
-I moved my VPS from Ubuntu 24.04.5 to 26.04.1 LTS in place. The upgrade itself took about 26 minutes of machine time. Most of the effort went into checking things before and after, and that's the part worth writing down.
+I moved my VPS from Ubuntu 24.04.5 to 26.04.1 LTS in place. The upgrade itself took about 25 minutes of machine time. Most of the effort went into checking things before and after, and that's the part worth writing down.
 
 ## What's on the box
 
@@ -50,6 +50,7 @@ At each prompt I pressed `d` and read the details before answering. The removal 
 | Unpack and configure | about 19 min |
 | Obsolete removal | 40 s |
 | Reboot to SSH | about 1 min |
+| Wall clock, including me reading prompts | about 72 min |
 
 ## After: check, don't assume
 
